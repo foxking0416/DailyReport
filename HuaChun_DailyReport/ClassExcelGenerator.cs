@@ -8,7 +8,6 @@ using Excel = Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.ComponentModel;
-using System.Threading;
 
 namespace HuaChun_DailyReport
 {
@@ -24,12 +23,15 @@ namespace HuaChun_DailyReport
         string g_strProjectName;
         string g_strComputeType;
         string g_strComputeHoliday;
+        string g_strRainyDayCountType;
         string g_strPath;
         string g_strSavePath;
+
         float g_fCellWidth = 30.75f;
         float g_fStartPositionH = 37;
         float g_fCellHeight = 39.75f;
         float g_fStartPositionV = 174;
+        int g_iChartType = 0;
         Excel.Worksheet xlWorkSheet;
         Excel.Workbook xlWorkBook;
         
@@ -40,20 +42,19 @@ namespace HuaChun_DailyReport
             dbPass = AppSetting.LoadInitialSetting("DB_PASSWORD", "123");
             dbName = AppSetting.LoadInitialSetting("DB_NAME", "huachun");
             SQL = new MySQL(dbHost, dbUser, dbPass, dbName);
-            
 
-
-            string strComputeType = SQL.Read_SQL_data("computetype", "project_info", "project_no = '" + strProjectNo + "'");
-            g_strComputeType = strComputeType;
-
-            string strComputeHoliday = SQL.Read_SQL_data("holiday", "project_info", "project_no = '" + strProjectNo + "'");
-            g_strComputeHoliday = strComputeHoliday;
-
+            g_strComputeType = SQL.Read_SQL_data("computetype", "project_info", "project_no = '" + strProjectNo + "'");
+            g_strComputeHoliday = SQL.Read_SQL_data("holiday", "project_info", "project_no = '" + strProjectNo + "'");
+            g_strRainyDayCountType = SQL.Read_SQL_data("rainyday", "project_info", "project_no = '" + strProjectNo + "'");
 
             g_strProjectNo = strProjectNo;
             g_strPath = Directory.GetCurrentDirectory();
             g_strSavePath = strSavePath;
+            g_iChartType = iType;
+        }
 
+        public void GenerateExcel()
+        {
             var xlApp = new Excel.Application();
             Excel.Workbooks xlWorkBooks = xlApp.Workbooks;
             xlWorkBook = xlWorkBooks.Open(g_strPath + "\\晴雨暨工期表.xls");
@@ -67,11 +68,11 @@ namespace HuaChun_DailyReport
             DateTime dtEndDate = new DateTime();
             DateTime dtContractEndDate = Functions.TransferSQLDateToDateTime(strContractEndDate);
 
-            if (iType == (int)ChartType.WeatherChart)
+            if (g_iChartType == (int)ChartType.WeatherChart)
             {
                 dtEndDate = ComputeValidFinishDate(dtStartDate);
             }
-            else if (iType == (int)ChartType.ExpectFinishChart)
+            else if (g_iChartType == (int)ChartType.ExpectFinishChart)
             {
                 dtEndDate = dtContractEndDate;
             }
@@ -82,21 +83,21 @@ namespace HuaChun_DailyReport
             {
                 xlWorkSheet.Copy(Type.Missing, xlWorkBook.Sheets[xlWorkBook.Sheets.Count]); // copy
             }
-            if (iType == (int) ChartType.WeatherChart)
+            if (g_iChartType == (int)ChartType.WeatherChart)
             {
                 WriteDataIntoExcel(dtStartDate,
                                    dtEndDate,
                                    dtContractEndDate,
                                    false);
             }
-            else if (iType == (int)ChartType.ExpectFinishChart)
+            else if (g_iChartType == (int)ChartType.ExpectFinishChart)
             {
                 WriteDataIntoExcel(dtStartDate,
                                    dtEndDate,
                                    dtContractEndDate,
                                    true);
             }
-            
+
 
             xlApp.DisplayAlerts = false;
             xlWorkBook.SaveAs(g_strSavePath);
@@ -115,8 +116,6 @@ namespace HuaChun_DailyReport
 
         private void WriteDataIntoExcel(DateTime dtDateStart, DateTime dtDateEnd, DateTime dtContractDateEnd, bool bWriteEmptyChart)
         {
-            //dateEnd = dateStart.AddDays(2);
-
             int iYearStart = dtDateStart.Year;
             int iYearEnd = dtDateEnd.Year;
 
@@ -128,6 +127,46 @@ namespace HuaChun_DailyReport
 
                 xlWorkSheet.Name = (iYear - 1911).ToString() + "年度" + g_strProjectName + "工期晴雨表";
 
+                string strPS = "";
+                if (g_strComputeType == "1")//工期計算方式為：限期完工
+                {
+                    strPS += "工期計算方式為限期完工";
+                }
+                else if (g_strComputeType == "2")//工期計算方式為：日曆天
+                {
+                    strPS += "工期計算方式為日曆天";
+                }
+                else if (g_strComputeType == "3")//工期計算方式為：工作天，無週休二日
+                {
+                    strPS += "工期計算方式為工作工，無週休二日";
+                }
+                else if (g_strComputeType == "4")//工期計算方式為：工作天，週休一日
+                {
+                    strPS += "工期計算方式為工作工，週休一日";
+                }
+                else if (g_strComputeType == "5")//工期計算方式為：工作天，週休二日
+                {
+                    strPS += "工期計算方式為工作工，週休二日";
+                }
+
+                if (g_strComputeHoliday == "0")//國定假日照常施工
+                {
+                    strPS += "，國定假日照常施工";
+                }
+                else if (g_strComputeHoliday == "1")//國定假日不施工
+                {
+                    strPS += "，國定假日不施工";
+                }
+
+                if (g_strRainyDayCountType == "1")
+                {
+                    strPS += "(需豪雨才不計工期)";
+                }
+                else if (g_strRainyDayCountType == "0")
+                {
+                    strPS += "(下雨即不計工期)";
+                }
+                xlWorkSheet.Cells[33, 3] = strPS;
 
                 for (int iMonth = 1; iMonth <= 12; iMonth++)
                 {
@@ -227,9 +266,29 @@ namespace HuaChun_DailyReport
                             #region 例假日
                             if (g_strComputeType == "1")//工期計算方式為限期完工
                             {
+                                ComputeNonWorkingDay(false,
+                                                     iMonth,
+                                                     iDateIndex,
+                                                     strMorningWeather,
+                                                     strAfternoonWeather,
+                                                     strMorningCondition,
+                                                     strAfternoonCondition,
+                                                     ref fWeatherNonWorkingDaysInMonth,
+                                                     ref fConditionNonWorkingDaysInMonth,
+                                                     bWriteEmptyChart);
                             }
                             else if (g_strComputeType == "2")//工期計算方式為日曆天
                             {
+                                ComputeNonWorkingDay(false,
+                                                     iMonth,
+                                                     iDateIndex,
+                                                     strMorningWeather,
+                                                     strAfternoonWeather,
+                                                     strMorningCondition,
+                                                     strAfternoonCondition,
+                                                     ref fWeatherNonWorkingDaysInMonth,
+                                                     ref fConditionNonWorkingDaysInMonth,
+                                                     bWriteEmptyChart);
                             }
                             else if (g_strComputeType == "3")//工期計算方式為工作天，無週休二日
                             {
@@ -606,7 +665,11 @@ namespace HuaChun_DailyReport
                                               g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))), 
                                               g_fStartPositionV + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                               21, 12);
-                fWeatherNonWorkingDaysInMonth += fNonWorkingCount;
+
+                if (g_strRainyDayCountType == "0")//下雨即不計工期
+                {
+                    fWeatherNonWorkingDaysInMonth += fNonWorkingCount;
+                }       
             }
             else if (strMorningWeather == "豪雨" && !bWriteEmptyChart)
             {
@@ -644,7 +707,6 @@ namespace HuaChun_DailyReport
                                               g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
                                               g_fStartPositionV + 10 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                               21, 12);
-                Thread.Sleep(10);
             }
             else if (strAfternoonWeather == "晴" && !bWriteEmptyChart)
             {
@@ -653,7 +715,6 @@ namespace HuaChun_DailyReport
                                               g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
                                               g_fStartPositionV + 10 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                               21, 12);
-                Thread.Sleep(10);
             }
             else if (strAfternoonWeather == "雨" && !bWriteEmptyChart)
             {
@@ -662,7 +723,10 @@ namespace HuaChun_DailyReport
                                               g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
                                               g_fStartPositionV + 10 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                               21, 12);
-                fWeatherNonWorkingDaysInMonth += fNonWorkingCount;
+                if (g_strRainyDayCountType == "0")//下雨即不計工期
+                {
+                    fWeatherNonWorkingDaysInMonth += fNonWorkingCount;
+                }  
             }
             else if (strAfternoonWeather == "豪雨" && !bWriteEmptyChart)
             {

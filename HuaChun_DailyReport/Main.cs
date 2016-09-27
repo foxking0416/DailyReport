@@ -14,7 +14,7 @@ namespace HuaChun_DailyReport
     public partial class Main : Form
     {
 
-        BackgroundWorker bg = new BackgroundWorker();
+        BackgroundWorker bgWorker = new BackgroundWorker();
 
         private string dbHost;
         private string dbUser;
@@ -36,9 +36,9 @@ namespace HuaChun_DailyReport
 
             SQL = new MySQL(dbHost, dbUser, dbPass, dbName);
 
-            bg.DoWork += new DoWorkEventHandler(bg_DoWork);
-            bg.ProgressChanged += new ProgressChangedEventHandler(bg_ProgressChange);
-            bg.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bg_RunWorkerCompleted);
+            bgWorker.DoWork += new DoWorkEventHandler(bg_DoWork);
+            bgWorker.ProgressChanged += new ProgressChangedEventHandler(bg_ProgressChange);
+            bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bg_RunWorkerCompleted);
         }
 
         //MenuItem Click Event
@@ -213,7 +213,10 @@ namespace HuaChun_DailyReport
 
             if (saveFileDialog.FileName != "")
             {
+                Cursor.Current = Cursors.WaitCursor;
                 ClassExcelGenerator excelGen = new ClassExcelGenerator(g_ProjectNo, saveFileDialog.FileName, (int)ChartType.ExpectFinishChart);
+                excelGen.GenerateExcel();
+                Cursor.Current = Cursors.Default;
             }
         }
         //查詢晴雨表
@@ -236,9 +239,11 @@ namespace HuaChun_DailyReport
 
                 if (saveFileDialog.FileName != "")
                 {
+                    Cursor.Current = Cursors.WaitCursor;
                     ClassExcelGenerator excelGen = new ClassExcelGenerator(g_ProjectNo, saveFileDialog.FileName, (int)ChartType.WeatherChart);
+                    excelGen.GenerateExcel();
+                    Cursor.Current = Cursors.Default;
                 }
-
             }
         }
         //查詢日報明細表
@@ -268,16 +273,8 @@ namespace HuaChun_DailyReport
         //查詢完工表表
         private void MenuItemFinishChart_Click(object sender, EventArgs e)
         {
-            //string[] reportDates = SQL.Read1DArray_SQL_Data("date", "dailyreport", "project_no ='" + g_ProjectNo + "' ORDER BY date DESC");
-            //if (reportDates.Length == 0)//表示這個工程目前並沒有輸入任何日報表
-            //{
-            //    MessageBox.Show("此工程目前並沒有任何已存在的日報表,\r\n請重新選擇工程或建立日報表", "無法查詢總表", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            //}
-            //else
-            {
-                QueryFinishForm queryFinishChartForm = new QueryFinishForm(g_ProjectNo);
-                queryFinishChartForm.ShowDialog();
-            }
+            QueryFinishForm queryFinishChartForm = new QueryFinishForm(g_ProjectNo);
+            queryFinishChartForm.ShowDialog();
         }
 
         private void bg_DoWork(object sender, DoWorkEventArgs e)

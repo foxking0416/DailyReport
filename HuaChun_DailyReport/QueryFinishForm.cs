@@ -24,9 +24,9 @@ namespace HuaChun_DailyReport
         private DataTable dataTableStatistic;
         DateTime dtStartDate;
         string g_strProjectNo;
-        string g_StrPath;
-        string g_StrSavePath;
-        string g_ProjectName;
+        string g_strPath;
+        string g_strSavePath;
+        string g_strProjectName;
 
         public QueryFinishForm(string projectNo)
         {
@@ -77,6 +77,7 @@ namespace HuaChun_DailyReport
 
         public void LoadProjectInfo(string number)
         {
+            Cursor.Current = Cursors.WaitCursor;
             g_strProjectNo = number;
             dataTableStatistic.Clear();
 
@@ -217,6 +218,7 @@ namespace HuaChun_DailyReport
                 dataTableStatistic.Rows.Add(uiDataRow);
                 i++;
             }
+            Cursor.Current = Cursors.Default;
         }
 
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -251,26 +253,29 @@ namespace HuaChun_DailyReport
 
         private void btnOutput_Click(object sender, EventArgs e)
         {
+
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Excel File|*.xls";
             saveFileDialog.Title = "Save an Excel File";
+            saveFileDialog.FileName = g_strProjectName + "完工總表";
             saveFileDialog.ShowDialog();
 
             if (saveFileDialog.FileName != "")
             {
-                Excel.Workbook xlWorkBook;
-                Excel.Worksheet xlWorkSheet;
-                g_StrPath = Directory.GetCurrentDirectory();
-                g_StrSavePath = saveFileDialog.FileName;
+                Cursor.Current = Cursors.WaitCursor;
+
+                g_strPath = Directory.GetCurrentDirectory();
+                g_strSavePath = saveFileDialog.FileName;
 
 
                 var xlApp = new Excel.Application();
-                xlWorkBook = xlApp.Workbooks.Open(g_StrPath + "\\完工總表.xls");
-                xlWorkSheet = xlWorkBook.Sheets[1];
+                Excel.Workbooks xlWorkBooks = xlApp.Workbooks;
+                Excel.Workbook xlWorkBook = xlWorkBooks.Open(g_strPath + "\\完工總表.xls");
+                Excel.Worksheet xlWorkSheet = xlWorkBook.Sheets[1];
 
-                g_ProjectName = SQL.Read_SQL_data("project_name", "project_info", "project_no = '" + g_strProjectNo + "'");
-                xlWorkBook.Sheets[1].Name = g_ProjectName + "完工總表";
-                xlWorkSheet.Cells[1, 2] = g_ProjectName;
+                g_strProjectName = SQL.Read_SQL_data("project_name", "project_info", "project_no = '" + g_strProjectNo + "'");
+                xlWorkBook.Sheets[1].Name = g_strProjectName + "完工總表";
+                xlWorkSheet.Cells[1, 2] = g_strProjectName;
 
 
                 for (int i = 0; i < dataTableStatistic.Rows.Count; ++i)
@@ -282,26 +287,25 @@ namespace HuaChun_DailyReport
                     }
                 }
 
-
-                //string startDate = SQL.Read_SQL_data("startdate", "project_info", "project_no = '" + g_strProjectNo + "'");
-                //string endDate = SQL.Read_SQL_data("date", "dailyreport", "project_no = '" + g_strProjectNo + "' ORDER BY date DESC ");//把日報表有填的日期的最後一天當enddate
-
-                //WriteDataIntoExcel(Functions.TransferSQLDateToDateTime(startDate), Functions.TransferSQLDateToDateTime(endDate));
-
-
-                xlWorkBook.SaveAs(g_StrSavePath);
-                xlWorkBook.Close(true);
+                xlApp.DisplayAlerts = false;
+                xlWorkBook.SaveAs(g_strSavePath);
+                xlApp.DisplayAlerts = true;
+                xlWorkBook.Close(0);
+                xlWorkBooks.Close();
                 xlApp.Quit();
 
+                Marshal.ReleaseComObject(xlWorkSheet);
+                Marshal.ReleaseComObject(xlWorkBook);
+                Marshal.ReleaseComObject(xlApp.Workbooks);
                 Marshal.ReleaseComObject(xlApp);
                 MessageBox.Show("完工總表儲存完成", "完成");
+                Cursor.Current = Cursors.Default;
             }
+        }
 
-
-
-
-
-            
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
