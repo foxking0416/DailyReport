@@ -59,6 +59,7 @@
     <Compile Include="DailyReportEditForm.Designer.cs">
       <DependentUpon>DailyReportEditForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Enum.cs" />
     <Compile Include="ExtentionEditForm.cs">
       <SubType>Form</SubType>
     </Compile>

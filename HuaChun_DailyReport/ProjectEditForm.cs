@@ -213,7 +213,7 @@ namespace HuaChun_DailyReport
             LoadDataTable();
         }
 
-        protected override void btnSave_Click(object sender, EventArgs e)
+        protected override void BtnSave_Click(object sender, EventArgs e)
         {
             label28.Visible = false;
             label29.Visible = false;
@@ -273,13 +273,13 @@ namespace HuaChun_DailyReport
                 //開工日期
                 SQL.Set_SQL_data("startdate", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", Functions.TransferDateTimeToSQL(dateTimeStart.Value));
                 //契約完工日
-                SQL.Set_SQL_data("contract_finishdate", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", Functions.TransferDateTimeToSQL(dateTimeFinish.Value));
+                SQL.Set_SQL_data("contract_finishdate", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", Functions.TransferDateTimeToSQL(uiDateTimeFinish.Value));
                 //契約金額
                 SQL.Set_SQL_data("contractamount", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.numericAmount.Text);
                 //契約工期
-                SQL.Set_SQL_data("contractduration", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.numericDuration.Text);
+                SQL.Set_SQL_data("contractduration", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.uiNumericDuration.Text);
                 //工程總天數
-                SQL.Set_SQL_data("contractdays", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.numericDays.Text);
+                SQL.Set_SQL_data("contractdays", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.uiNumericDays.Text);
                 //主辦1
                 SQL.Set_SQL_data("handle1", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxHandle1.Text);
                 //主辦1電話
@@ -302,15 +302,15 @@ namespace HuaChun_DailyReport
                 SQL.Set_SQL_data("security", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxSecurity.Text);
                 //工期型式
                 
-                if (radioBtnRestrictSchedule.Checked == true)
+                if (uiRadioBtnRestrictSchedule.Checked == true)
                 {
                     SQL.Set_SQL_data("computetype", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", "1");
                 }
-                else if (radioBtnCalenderDay.Checked == true)
+                else if (uiRadioBtnCalenderDay.Checked == true)
                 {
                     SQL.Set_SQL_data("computetype", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", "2");
                 }
-                else if (radioBtnWorkingDay.Checked == true)
+                else if (uiRadioBtnWorkingDay.Checked == true)
                 {
                     if (radioBtnNoWeekend.Checked == true)
                         SQL.Set_SQL_data("computetype", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", "3");
@@ -343,45 +343,45 @@ namespace HuaChun_DailyReport
         {
             if (SQL.Read_SQL_data("computetype", "project_info", "project_no = '" + projectNumber + "'") == "1")
             {
-                this.radioBtnRestrictSchedule.Checked = true;
-                this.radioBtnCalenderDay.Checked = false;
-                this.radioBtnWorkingDay.Checked = false;
+                this.uiRadioBtnRestrictSchedule.Checked = true;
+                this.uiRadioBtnCalenderDay.Checked = false;
+                this.uiRadioBtnWorkingDay.Checked = false;
                 this.radioBtnNoWeekend.Checked = true;
                 this.radioBtnSun.Checked = false;
                 this.radioBtnSatSun.Checked = false;
             }
             else if (SQL.Read_SQL_data("computetype", "project_info", "project_no = '" + projectNumber + "'") == "2")
             {
-                this.radioBtnRestrictSchedule.Checked = false;
-                this.radioBtnCalenderDay.Checked = true;
-                this.radioBtnWorkingDay.Checked = false;
+                this.uiRadioBtnRestrictSchedule.Checked = false;
+                this.uiRadioBtnCalenderDay.Checked = true;
+                this.uiRadioBtnWorkingDay.Checked = false;
                 this.radioBtnNoWeekend.Checked = true;
                 this.radioBtnSun.Checked = false;
                 this.radioBtnSatSun.Checked = false;
             }
             else if (SQL.Read_SQL_data("computetype", "project_info", "project_no = '" + projectNumber + "'") == "3")
             {
-                this.radioBtnRestrictSchedule.Checked = false;
-                this.radioBtnCalenderDay.Checked = false;
-                this.radioBtnWorkingDay.Checked = true;
+                this.uiRadioBtnRestrictSchedule.Checked = false;
+                this.uiRadioBtnCalenderDay.Checked = false;
+                this.uiRadioBtnWorkingDay.Checked = true;
                 this.radioBtnNoWeekend.Checked = true;
                 this.radioBtnSun.Checked = false;
                 this.radioBtnSatSun.Checked = false;
             }
             else if (SQL.Read_SQL_data("computetype", "project_info", "project_no = '" + projectNumber + "'") == "4")
             {
-                this.radioBtnRestrictSchedule.Checked = false;
-                this.radioBtnCalenderDay.Checked = false;
-                this.radioBtnWorkingDay.Checked = true;
+                this.uiRadioBtnRestrictSchedule.Checked = false;
+                this.uiRadioBtnCalenderDay.Checked = false;
+                this.uiRadioBtnWorkingDay.Checked = true;
                 this.radioBtnNoWeekend.Checked = false;
                 this.radioBtnSun.Checked = true;
                 this.radioBtnSatSun.Checked = false;
             }
             else if (SQL.Read_SQL_data("computetype", "project_info", "project_no = '" + projectNumber + "'") == "5")
             {
-                this.radioBtnRestrictSchedule.Checked = false;
-                this.radioBtnCalenderDay.Checked = false;
-                this.radioBtnWorkingDay.Checked = true;
+                this.uiRadioBtnRestrictSchedule.Checked = false;
+                this.uiRadioBtnCalenderDay.Checked = false;
+                this.uiRadioBtnWorkingDay.Checked = true;
                 this.radioBtnNoWeekend.Checked = false;
                 this.radioBtnSun.Checked = false;
                 this.radioBtnSatSun.Checked = true;
@@ -435,8 +435,8 @@ namespace HuaChun_DailyReport
             this.textBoxPhone2.Text = SQL.Read_SQL_data("phone2", "project_info", "project_no = '" + projectNumber + "'");
             this.textBoxPhone3.Text = SQL.Read_SQL_data("phone3", "project_info", "project_no = '" + projectNumber + "'");
             this.textBoxPhone4.Text = SQL.Read_SQL_data("phone4", "project_info", "project_no = '" + projectNumber + "'");
-            this.numericDays.Value = Convert.ToDecimal(SQL.Read_SQL_data("contractdays", "project_info", "project_no = '" + projectNumber + "'"));
-            this.numericDuration.Value = Convert.ToDecimal(SQL.Read_SQL_data("contractduration", "project_info", "project_no = '" + projectNumber + "'"));
+            this.uiNumericDays.Value = Convert.ToDecimal(SQL.Read_SQL_data("contractdays", "project_info", "project_no = '" + projectNumber + "'"));
+            this.uiNumericDuration.Value = Convert.ToDecimal(SQL.Read_SQL_data("contractduration", "project_info", "project_no = '" + projectNumber + "'"));
 
           
             string startDate = SQL.Read_SQL_data("startdate", "project_info", "project_no = '" + projectNumber + "'");
@@ -446,7 +446,7 @@ namespace HuaChun_DailyReport
             dateTimeBid.Value = Functions.TransferSQLDateToDateTime(bidDate);
 
             string finishDate = SQL.Read_SQL_data("contract_finishdate", "project_info", "project_no = '" + projectNumber + "'");
-            dateTimeFinish.Value = Functions.TransferSQLDateToDateTime(finishDate);
+            uiDateTimeFinish.Value = Functions.TransferSQLDateToDateTime(finishDate);
 
 
 
@@ -463,7 +463,7 @@ namespace HuaChun_DailyReport
 
             double totalValue = Convert.ToDouble(this.numericAmount.Value);
             float accuextendduration = 0;
-            float totalduration = Convert.ToSingle(this.numericDuration.Value);
+            float totalduration = Convert.ToSingle(this.uiNumericDuration.Value);
 
             DataRow dataRow;
             for (int i = 1; i <= numbers.Length; i++)
@@ -482,7 +482,7 @@ namespace HuaChun_DailyReport
                 dataRow["累計追加工期"] = accuextendduration;
                 totalduration += extendDuration;
                 dataRow["總工期"] = totalduration;
-                dataRow["契約完工日"] = Functions.GetDateTimeValueSlash(dateTimeFinish.Value);
+                dataRow["契約完工日"] = Functions.GetDateTimeValueSlash(uiDateTimeFinish.Value);
 
                 DayCompute dayCompute = new DayCompute();
 
@@ -499,7 +499,7 @@ namespace HuaChun_DailyReport
         private void SetupDayComputer(DayCompute dayCompute)
         {
 
-            if (radioBtnRestrictSchedule.Checked == true || radioBtnCalenderDay.Checked == true)
+            if (uiRadioBtnRestrictSchedule.Checked == true || uiRadioBtnCalenderDay.Checked == true)
             {
                 dayCompute.restOnSaturday = false;
                 dayCompute.restOnSunday = false;
@@ -532,17 +532,17 @@ namespace HuaChun_DailyReport
 
         private void TimeAndValueChanged(object sender, EventArgs e)
         {
-            int v1 = (int)Math.Round((double)numericDuration.Value / 0.5);//為了讓numericUpDown固定以0.5為單位
-            numericDuration.Value = Convert.ToDecimal(v1 * 0.5);
+            int v1 = (int)Math.Round((double)uiNumericDuration.Value / 0.5);//為了讓numericUpDown固定以0.5為單位
+            uiNumericDuration.Value = Convert.ToDecimal(v1 * 0.5);
 
-            if (radioBtnCalenderDay.Checked == true)
+            if (uiRadioBtnCalenderDay.Checked == true)
             {
-                numericDays.Value = numericDuration.Value;
-                dateTimeFinish.Value = dateTimeStart.Value.AddDays(Convert.ToInt16(Math.Ceiling(v1 * 0.5)) - 1);
+                uiNumericDays.Value = uiNumericDuration.Value;
+                uiDateTimeFinish.Value = dateTimeStart.Value.AddDays(Convert.ToInt16(Math.Ceiling(v1 * 0.5)) - 1);
             }
-            else if (radioBtnWorkingDay.Checked == true)
+            else if (uiRadioBtnWorkingDay.Checked == true)
             {
-                calculateByDuration();
+                CalculateByDuration();
             }
             LoadDataTable();
         }

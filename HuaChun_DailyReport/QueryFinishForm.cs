@@ -22,7 +22,7 @@ namespace HuaChun_DailyReport
         string dbName;
         protected MySQL SQL;
         private DataTable dataTableStatistic;
-        DateTime DTStartDate;
+        DateTime dtStartDate;
         string g_strProjectNo;
         string g_StrPath;
         string g_StrSavePath;
@@ -134,94 +134,94 @@ namespace HuaChun_DailyReport
                 this.label3.Text += "下雨即不計工期";
             }
 
-            float originalTotalDuration = Convert.ToSingle(SQL.Read_SQL_data("contractduration", "project_info", "project_no = '" + g_strProjectNo + "'"));
-            float originalTotalDays = Convert.ToSingle(SQL.Read_SQL_data("contractdays", "project_info", "project_no = '" + g_strProjectNo + "'"));
-            DateTime originalFinishDate = Functions.TransferSQLDateToDateTime(SQL.Read_SQL_data("contract_finishdate", "project_info", "project_no = '" + g_strProjectNo + "'"));
-            string[] extendDurationStartDates = SQL.Read1DArray_SQL_Data("extendstartdate", "extendduration", "project_no = '" + g_strProjectNo + "'");
-            float accumulateExtendDurations = 0;
+            float fOriginalTotalDuration = Convert.ToSingle(SQL.Read_SQL_data("contractduration", "project_info", "project_no = '" + g_strProjectNo + "'"));
+            float fOriginalTotalDays = Convert.ToSingle(SQL.Read_SQL_data("contractdays", "project_info", "project_no = '" + g_strProjectNo + "'"));
+            DateTime dtOriginalFinishDate = Functions.TransferSQLDateToDateTime(SQL.Read_SQL_data("contract_finishdate", "project_info", "project_no = '" + g_strProjectNo + "'"));
+            string[] arrExtendDurationStartDates = SQL.Read1DArray_SQL_Data("extendstartdate", "extendduration", "project_no = '" + g_strProjectNo + "'");
+            float fAccumulateExtendDurations = 0;
 
-            string startDate = SQL.Read_SQL_data("startdate", "project_info", "project_no = '" + g_strProjectNo + "'");
-            DTStartDate = Functions.TransferSQLDateToDateTime(startDate);
-            DataRow dataRow;
+            string strStartDate = SQL.Read_SQL_data("startdate", "project_info", "project_no = '" + g_strProjectNo + "'");
+            dtStartDate = Functions.TransferSQLDateToDateTime(strStartDate);
+            DataRow uiDataRow;
 
             int i = 0;
-            bool stop = false;
-            while (!stop)
+            bool bStop = false;
+            while (!bStop)
             {
 
-                DateTime dateToday = DTStartDate.AddDays(i);
+                DateTime dtDateToday = dtStartDate.AddDays(i);
 
-                dataRow = dataTableStatistic.NewRow();
+                uiDataRow = dataTableStatistic.NewRow();
 
 
-                dataRow["日期"] = dateToday.ToString("yyyy/MM/dd");
-                dataRow["開工迄今"] = (i + 1).ToString();
-                dataRow["星期"] = Functions.ComputeDayOfWeek(dateToday);
+                uiDataRow["日期"] = dtDateToday.ToString("yyyy/MM/dd");
+                uiDataRow["開工迄今"] = (i + 1).ToString();
+                uiDataRow["星期"] = Functions.ComputeDayOfWeek(dtDateToday);
                 //Image img = Image.FromFile("D:\\12Small.jpg");
-                //dataRow["農曆"] = imageToByteArray(img);
-                dataRow["節日"] = dayCompute.GetCondition(dateToday);
-                string morningWeather = SQL.Read_SQL_data("morning_weather", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday) + "'");
-                dataRow["上午天氣"] = (morningWeather == string.Empty) ? "無資料" : morningWeather;
-                string afternoonWeather = SQL.Read_SQL_data("afternoon_weather", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday) + "'");
-                dataRow["下午天氣"] = (afternoonWeather == string.Empty) ? "無資料" : afternoonWeather;
-                string morningCondition = SQL.Read_SQL_data("morning_condition", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday) + "'");
-                dataRow["上午人為因素"] = (morningCondition == string.Empty) ? "無資料" : morningCondition;
-                string afternoonCondition = SQL.Read_SQL_data("afternoon_condition", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday) + "'");
-                dataRow["下午人為因素"] = (afternoonCondition == string.Empty) ? "無資料" : afternoonCondition;
+                uiDataRow["節日"] = dayCompute.GetCondition(dtDateToday);
+                string morningWeather = SQL.Read_SQL_data("morning_weather", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
+                uiDataRow["上午天氣"] = (morningWeather == string.Empty) ? "無資料" : morningWeather;
+                string afternoonWeather = SQL.Read_SQL_data("afternoon_weather", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
+                uiDataRow["下午天氣"] = (afternoonWeather == string.Empty) ? "無資料" : afternoonWeather;
+                string morningCondition = SQL.Read_SQL_data("morning_condition", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
+                uiDataRow["上午人為因素"] = (morningCondition == string.Empty) ? "無資料" : morningCondition;
+                string afternoonCondition = SQL.Read_SQL_data("afternoon_condition", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
+                uiDataRow["下午人為因素"] = (afternoonCondition == string.Empty) ? "無資料" : afternoonCondition;
                 
                 
-                string nonCountingToday = SQL.Read_SQL_data("nonecounting", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday) + "'");
+                string strNonCountingToday = SQL.Read_SQL_data("nonecounting", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
 
 
 
-                if (nonCountingToday == "0.5")
-                    dayCompute.AddNotWorking(dateToday, 0);
-                else if (nonCountingToday == "1")
+                if (strNonCountingToday == "0.5")
+                    dayCompute.AddNotWorking(dtDateToday, 0);
+                else if (strNonCountingToday == "1")
                 {
-                    dayCompute.AddNotWorking(dateToday, 0);
-                    dayCompute.AddNotWorking(dateToday, 1);
+                    dayCompute.AddNotWorking(dtDateToday, 0);
+                    dayCompute.AddNotWorking(dtDateToday, 1);
                 }
 
-                dataRow["本日不計工期"] = dayCompute.GetWorkingDayNonCounting(dateToday);
+                uiDataRow["本日不計工期"] = dayCompute.GetWorkingDayNonCounting(dtDateToday);
 
-                float nonCountingTotal = dayCompute.CountTotalNotWorkingDay(DTStartDate, dateToday);
+                float nonCountingTotal = dayCompute.CountTotalNotWorkingDay(dtStartDate, dtDateToday);
 
-                dataRow["累計不計工期"] = nonCountingTotal;
-                dataRow["累計工期"] = i + 1 - nonCountingTotal;
-
-
-                dataRow["原剩餘工期"] = originalTotalDuration - 1 - i + dayCompute.CountNotWorkingDayWithoutEverydayCondition(DTStartDate, dateToday);
-                dataRow["原剩餘天數"] = originalTotalDays - 1 - i;
-                dataRow["原完工日"] = originalFinishDate.ToString("yyyy/MM/dd");
+                uiDataRow["累計不計工期"] = nonCountingTotal;
+                uiDataRow["累計工期"] = i + 1 - nonCountingTotal;
 
 
-                string extendDuration = SQL.Read_SQL_data("extendduration", "extendduration", "project_no = '" + g_strProjectNo + "' AND extendstartdate = '" + Functions.TransferDateTimeToSQL(dateToday) + "'");
+                uiDataRow["原剩餘工期"] = fOriginalTotalDuration - 1 - i + dayCompute.CountNotWorkingDayWithoutEverydayCondition(dtStartDate, dtDateToday);
+                uiDataRow["原剩餘天數"] = fOriginalTotalDays - 1 - i;
+                uiDataRow["原完工日"] = dtOriginalFinishDate.ToString("yyyy/MM/dd");
+
+
+                string extendDuration = SQL.Read_SQL_data("extendduration", "extendduration", "project_no = '" + g_strProjectNo + "' AND extendstartdate = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
                 if (extendDuration != string.Empty)
                 {
-                    accumulateExtendDurations += Convert.ToSingle(extendDuration);
-                    dataRow["追加工期"] = extendDuration;
+                    fAccumulateExtendDurations += Convert.ToSingle(extendDuration);
+                    uiDataRow["追加工期"] = extendDuration;
                 }
 
-                float modifiedRestDuration = originalTotalDuration - 1 - i + nonCountingTotal + accumulateExtendDurations;
-                dataRow["變動剩餘工期"] = modifiedRestDuration;
+                float modifiedRestDuration = fOriginalTotalDuration - 1 - i + nonCountingTotal + fAccumulateExtendDurations;
+                uiDataRow["變動剩餘工期"] = modifiedRestDuration;
 
 
-                DateTime modifiedFinishDate = dayCompute.CountByDuration(dateToday.AddDays(1), modifiedRestDuration);
-                dataRow["變動完工日"] = modifiedFinishDate.ToString("yyyy/MM/dd");
-                if (dateToday.CompareTo(modifiedFinishDate) == 0)
-                    stop = true;
-                dataRow["變動剩餘天數"] = modifiedFinishDate.Subtract(dateToday).Days;
+                DateTime modifiedFinishDate = dayCompute.CountByDuration(dtDateToday.AddDays(1), modifiedRestDuration);
+                uiDataRow["變動完工日"] = modifiedFinishDate.ToString("yyyy/MM/dd");
+                if (dtDateToday.CompareTo(modifiedFinishDate) == 0)
+                {
+                    bStop = true;
+                }
+                uiDataRow["變動剩餘天數"] = modifiedFinishDate.Subtract(dtDateToday).Days;
 
-                dataRow["原百分比"] = "";
-                dataTableStatistic.Rows.Add(dataRow);
+                uiDataRow["原百分比"] = "";
+                dataTableStatistic.Rows.Add(uiDataRow);
                 i++;
             }
-            //dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.Red;
         }
 
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            DateTime dateClick = DTStartDate.AddDays(e.RowIndex);
+            DateTime dateClick = dtStartDate.AddDays(e.RowIndex);
             string morningWeather = SQL.Read_SQL_data("morning_weather", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dateClick) + "'");
             if (morningWeather == string.Empty)//表示這天沒有日報表
             {

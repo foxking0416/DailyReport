@@ -38,8 +38,8 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.radioBtnCalenderDay = new System.Windows.Forms.RadioButton();
-            this.radioBtnWorkingDay = new System.Windows.Forms.RadioButton();
+            this.uiRadioBtnCalenderDay = new System.Windows.Forms.RadioButton();
+            this.uiRadioBtnWorkingDay = new System.Windows.Forms.RadioButton();
             this.textBoxProjectNo = new System.Windows.Forms.TextBox();
             this.textBoxProjectName = new System.Windows.Forms.TextBox();
             this.textBoxProjectLocation = new System.Windows.Forms.TextBox();
@@ -54,7 +54,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.dateTimeBid = new System.Windows.Forms.DateTimePicker();
             this.dateTimeStart = new System.Windows.Forms.DateTimePicker();
-            this.dateTimeFinish = new System.Windows.Forms.DateTimePicker();
+            this.uiDateTimeFinish = new System.Windows.Forms.DateTimePicker();
             this.label13 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
@@ -80,8 +80,8 @@
             this.textBoxHandle4 = new System.Windows.Forms.TextBox();
             this.textBoxOnsite = new System.Windows.Forms.TextBox();
             this.textBoxSecurity = new System.Windows.Forms.TextBox();
-            this.numericDays = new System.Windows.Forms.NumericUpDown();
-            this.numericDuration = new System.Windows.Forms.NumericUpDown();
+            this.uiNumericDays = new System.Windows.Forms.NumericUpDown();
+            this.uiNumericDuration = new System.Windows.Forms.NumericUpDown();
             this.label24 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
             this.label26 = new System.Windows.Forms.Label();
@@ -93,7 +93,7 @@
             this.btnSearchOnsite = new System.Windows.Forms.Button();
             this.btnSearchSecurity = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radioBtnRestrictSchedule = new System.Windows.Forms.RadioButton();
+            this.uiRadioBtnRestrictSchedule = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label28 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
@@ -106,8 +106,8 @@
             this.radioBtnNoWorkingOnSmallRainyDay = new System.Windows.Forms.RadioButton();
             this.radioBtnNoWorkingOnHeavyRainyDay = new System.Windows.Forms.RadioButton();
             this.numericAmount = new System.Windows.Forms.NumericUpDown();
-            ((System.ComponentModel.ISupportInitialize)(this.numericDays)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericDuration)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uiNumericDays)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uiNumericDuration)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -218,27 +218,27 @@
             // 
             // radioBtnCalenderDay
             // 
-            this.radioBtnCalenderDay.AutoSize = true;
-            this.radioBtnCalenderDay.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioBtnCalenderDay.Location = new System.Drawing.Point(100, 10);
-            this.radioBtnCalenderDay.Name = "radioBtnCalenderDay";
-            this.radioBtnCalenderDay.Size = new System.Drawing.Size(71, 20);
-            this.radioBtnCalenderDay.TabIndex = 29;
-            this.radioBtnCalenderDay.Text = "日曆天";
-            this.radioBtnCalenderDay.UseVisualStyleBackColor = true;
-            this.radioBtnCalenderDay.CheckedChanged += new System.EventHandler(this.radioButton123_CheckedChanged);
+            this.uiRadioBtnCalenderDay.AutoSize = true;
+            this.uiRadioBtnCalenderDay.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uiRadioBtnCalenderDay.Location = new System.Drawing.Point(100, 10);
+            this.uiRadioBtnCalenderDay.Name = "radioBtnCalenderDay";
+            this.uiRadioBtnCalenderDay.Size = new System.Drawing.Size(71, 20);
+            this.uiRadioBtnCalenderDay.TabIndex = 29;
+            this.uiRadioBtnCalenderDay.Text = "日曆天";
+            this.uiRadioBtnCalenderDay.UseVisualStyleBackColor = true;
+            this.uiRadioBtnCalenderDay.CheckedChanged += new System.EventHandler(this.RadioButton123_CheckedChanged);
             // 
             // radioBtnWorkingDay
             // 
-            this.radioBtnWorkingDay.AutoSize = true;
-            this.radioBtnWorkingDay.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioBtnWorkingDay.Location = new System.Drawing.Point(175, 10);
-            this.radioBtnWorkingDay.Name = "radioBtnWorkingDay";
-            this.radioBtnWorkingDay.Size = new System.Drawing.Size(71, 20);
-            this.radioBtnWorkingDay.TabIndex = 30;
-            this.radioBtnWorkingDay.Text = "工作天";
-            this.radioBtnWorkingDay.UseVisualStyleBackColor = true;
-            this.radioBtnWorkingDay.CheckedChanged += new System.EventHandler(this.radioButton123_CheckedChanged);
+            this.uiRadioBtnWorkingDay.AutoSize = true;
+            this.uiRadioBtnWorkingDay.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uiRadioBtnWorkingDay.Location = new System.Drawing.Point(175, 10);
+            this.uiRadioBtnWorkingDay.Name = "radioBtnWorkingDay";
+            this.uiRadioBtnWorkingDay.Size = new System.Drawing.Size(71, 20);
+            this.uiRadioBtnWorkingDay.TabIndex = 30;
+            this.uiRadioBtnWorkingDay.Text = "工作天";
+            this.uiRadioBtnWorkingDay.UseVisualStyleBackColor = true;
+            this.uiRadioBtnWorkingDay.CheckedChanged += new System.EventHandler(this.RadioButton123_CheckedChanged);
             // 
             // textBoxProjectNo
             // 
@@ -355,16 +355,16 @@
             this.dateTimeStart.Name = "dateTimeStart";
             this.dateTimeStart.Size = new System.Drawing.Size(200, 22);
             this.dateTimeStart.TabIndex = 24;
-            this.dateTimeStart.ValueChanged += new System.EventHandler(this.dateTimeStart_ValueChanged);
+            this.dateTimeStart.ValueChanged += new System.EventHandler(this.DateTimeStart_ValueChanged);
             // 
             // dateTimeFinish
             // 
-            this.dateTimeFinish.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dateTimeFinish.Location = new System.Drawing.Point(410, 207);
-            this.dateTimeFinish.Name = "dateTimeFinish";
-            this.dateTimeFinish.Size = new System.Drawing.Size(200, 22);
-            this.dateTimeFinish.TabIndex = 26;
-            this.dateTimeFinish.ValueChanged += new System.EventHandler(this.dateTimeFinish_ValueChanged);
+            this.uiDateTimeFinish.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uiDateTimeFinish.Location = new System.Drawing.Point(410, 207);
+            this.uiDateTimeFinish.Name = "dateTimeFinish";
+            this.uiDateTimeFinish.Size = new System.Drawing.Size(200, 22);
+            this.uiDateTimeFinish.TabIndex = 26;
+            this.uiDateTimeFinish.ValueChanged += new System.EventHandler(this.DateTimeFinish_ValueChanged);
             // 
             // label13
             // 
@@ -432,7 +432,7 @@
             this.btnExit.TabIndex = 51;
             this.btnExit.Text = "結束";
             this.btnExit.UseVisualStyleBackColor = true;
-            this.btnExit.Click += new System.EventHandler(this.buttonExit_Click);
+            this.btnExit.Click += new System.EventHandler(this.ButtonExit_Click);
             // 
             // btnSave
             // 
@@ -442,7 +442,7 @@
             this.btnSave.TabIndex = 50;
             this.btnSave.Text = "存檔";
             this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
             // 
             // btnSearchSponsor
             // 
@@ -452,7 +452,7 @@
             this.btnSearchSponsor.TabIndex = 0;
             this.btnSearchSponsor.Text = "...";
             this.btnSearchSponsor.UseVisualStyleBackColor = true;
-            this.btnSearchSponsor.Click += new System.EventHandler(this.btnSearchSponsor_Click);
+            this.btnSearchSponsor.Click += new System.EventHandler(this.BtnSearchSponsor_Click);
             // 
             // btnSearchQA
             // 
@@ -462,7 +462,7 @@
             this.btnSearchQA.TabIndex = 0;
             this.btnSearchQA.Text = "...";
             this.btnSearchQA.UseVisualStyleBackColor = true;
-            this.btnSearchQA.Click += new System.EventHandler(this.btnSearchQA_Click);
+            this.btnSearchQA.Click += new System.EventHandler(this.BtnSearchQA_Click);
             // 
             // radioBtnNoWeekend
             // 
@@ -476,7 +476,7 @@
             this.radioBtnNoWeekend.TabStop = true;
             this.radioBtnNoWeekend.Text = "無休";
             this.radioBtnNoWeekend.UseVisualStyleBackColor = true;
-            this.radioBtnNoWeekend.CheckedChanged += new System.EventHandler(this.workingDayConditionChanged);
+            this.radioBtnNoWeekend.CheckedChanged += new System.EventHandler(this.WorkingDayConditionChanged);
             // 
             // radioBtnSun
             // 
@@ -489,7 +489,7 @@
             this.radioBtnSun.TabStop = true;
             this.radioBtnSun.Text = "週休一日";
             this.radioBtnSun.UseVisualStyleBackColor = true;
-            this.radioBtnSun.CheckedChanged += new System.EventHandler(this.workingDayConditionChanged);
+            this.radioBtnSun.CheckedChanged += new System.EventHandler(this.WorkingDayConditionChanged);
             // 
             // radioBtnSatSun
             // 
@@ -502,7 +502,7 @@
             this.radioBtnSatSun.TabStop = true;
             this.radioBtnSatSun.Text = "週休二日";
             this.radioBtnSatSun.UseVisualStyleBackColor = true;
-            this.radioBtnSatSun.CheckedChanged += new System.EventHandler(this.workingDayConditionChanged);
+            this.radioBtnSatSun.CheckedChanged += new System.EventHandler(this.WorkingDayConditionChanged);
             // 
             // label18
             // 
@@ -614,65 +614,65 @@
             // 
             // numericDays
             // 
-            this.numericDays.DecimalPlaces = 1;
-            this.numericDays.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericDays.Increment = new decimal(new int[] {
+            this.uiNumericDays.DecimalPlaces = 1;
+            this.uiNumericDays.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uiNumericDays.Increment = new decimal(new int[] {
             5,
             0,
             0,
             65536});
-            this.numericDays.Location = new System.Drawing.Point(410, 247);
-            this.numericDays.Maximum = new decimal(new int[] {
+            this.uiNumericDays.Location = new System.Drawing.Point(410, 247);
+            this.uiNumericDays.Maximum = new decimal(new int[] {
             10000,
             0,
             0,
             0});
-            this.numericDays.Minimum = new decimal(new int[] {
+            this.uiNumericDays.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.numericDays.Name = "numericDays";
-            this.numericDays.Size = new System.Drawing.Size(200, 22);
-            this.numericDays.TabIndex = 27;
-            this.numericDays.ThousandsSeparator = true;
-            this.numericDays.Value = new decimal(new int[] {
+            this.uiNumericDays.Name = "numericDays";
+            this.uiNumericDays.Size = new System.Drawing.Size(200, 22);
+            this.uiNumericDays.TabIndex = 27;
+            this.uiNumericDays.ThousandsSeparator = true;
+            this.uiNumericDays.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.numericDays.ValueChanged += new System.EventHandler(this.numericDays_ValueChanged);
+            this.uiNumericDays.ValueChanged += new System.EventHandler(this.NumericDays_ValueChanged);
             // 
             // numericDuration
             // 
-            this.numericDuration.DecimalPlaces = 1;
-            this.numericDuration.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericDuration.Increment = new decimal(new int[] {
+            this.uiNumericDuration.DecimalPlaces = 1;
+            this.uiNumericDuration.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uiNumericDuration.Increment = new decimal(new int[] {
             5,
             0,
             0,
             65536});
-            this.numericDuration.Location = new System.Drawing.Point(410, 167);
-            this.numericDuration.Maximum = new decimal(new int[] {
+            this.uiNumericDuration.Location = new System.Drawing.Point(410, 167);
+            this.uiNumericDuration.Maximum = new decimal(new int[] {
             10000,
             0,
             0,
             0});
-            this.numericDuration.Minimum = new decimal(new int[] {
+            this.uiNumericDuration.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.numericDuration.Name = "numericDuration";
-            this.numericDuration.Size = new System.Drawing.Size(200, 22);
-            this.numericDuration.TabIndex = 25;
-            this.numericDuration.ThousandsSeparator = true;
-            this.numericDuration.Value = new decimal(new int[] {
+            this.uiNumericDuration.Name = "numericDuration";
+            this.uiNumericDuration.Size = new System.Drawing.Size(200, 22);
+            this.uiNumericDuration.TabIndex = 25;
+            this.uiNumericDuration.ThousandsSeparator = true;
+            this.uiNumericDuration.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.numericDuration.ValueChanged += new System.EventHandler(this.numericDuration_ValueChanged);
+            this.uiNumericDuration.ValueChanged += new System.EventHandler(this.NumericDuration_ValueChanged);
             // 
             // label24
             // 
@@ -754,7 +754,7 @@
             this.btnSearchOnsite.TabIndex = 0;
             this.btnSearchOnsite.Text = "...";
             this.btnSearchOnsite.UseVisualStyleBackColor = true;
-            this.btnSearchOnsite.Click += new System.EventHandler(this.btnSearchOnsite_Click);
+            this.btnSearchOnsite.Click += new System.EventHandler(this.BtnSearchOnsite_Click);
             // 
             // btnSearchSecurity
             // 
@@ -764,13 +764,13 @@
             this.btnSearchSecurity.TabIndex = 0;
             this.btnSearchSecurity.Text = "...";
             this.btnSearchSecurity.UseVisualStyleBackColor = true;
-            this.btnSearchSecurity.Click += new System.EventHandler(this.btnSearchSecurity_Click);
+            this.btnSearchSecurity.Click += new System.EventHandler(this.BtnSearchSecurity_Click);
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.radioBtnRestrictSchedule);
-            this.groupBox1.Controls.Add(this.radioBtnCalenderDay);
-            this.groupBox1.Controls.Add(this.radioBtnWorkingDay);
+            this.groupBox1.Controls.Add(this.uiRadioBtnRestrictSchedule);
+            this.groupBox1.Controls.Add(this.uiRadioBtnCalenderDay);
+            this.groupBox1.Controls.Add(this.uiRadioBtnWorkingDay);
             this.groupBox1.Location = new System.Drawing.Point(6, 10);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(248, 35);
@@ -779,17 +779,17 @@
             // 
             // radioBtnRestrictSchedule
             // 
-            this.radioBtnRestrictSchedule.AutoSize = true;
-            this.radioBtnRestrictSchedule.Checked = true;
-            this.radioBtnRestrictSchedule.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioBtnRestrictSchedule.Location = new System.Drawing.Point(10, 10);
-            this.radioBtnRestrictSchedule.Name = "radioBtnRestrictSchedule";
-            this.radioBtnRestrictSchedule.Size = new System.Drawing.Size(86, 20);
-            this.radioBtnRestrictSchedule.TabIndex = 28;
-            this.radioBtnRestrictSchedule.TabStop = true;
-            this.radioBtnRestrictSchedule.Text = "限期完工";
-            this.radioBtnRestrictSchedule.UseVisualStyleBackColor = true;
-            this.radioBtnRestrictSchedule.CheckedChanged += new System.EventHandler(this.radioButton123_CheckedChanged);
+            this.uiRadioBtnRestrictSchedule.AutoSize = true;
+            this.uiRadioBtnRestrictSchedule.Checked = true;
+            this.uiRadioBtnRestrictSchedule.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uiRadioBtnRestrictSchedule.Location = new System.Drawing.Point(10, 10);
+            this.uiRadioBtnRestrictSchedule.Name = "radioBtnRestrictSchedule";
+            this.uiRadioBtnRestrictSchedule.Size = new System.Drawing.Size(86, 20);
+            this.uiRadioBtnRestrictSchedule.TabIndex = 28;
+            this.uiRadioBtnRestrictSchedule.TabStop = true;
+            this.uiRadioBtnRestrictSchedule.Text = "限期完工";
+            this.uiRadioBtnRestrictSchedule.UseVisualStyleBackColor = true;
+            this.uiRadioBtnRestrictSchedule.CheckedChanged += new System.EventHandler(this.RadioButton123_CheckedChanged);
             // 
             // groupBox2
             // 
@@ -868,7 +868,7 @@
             this.radioBtnHolidayNoWorking.TabIndex = 53;
             this.radioBtnHolidayNoWorking.Text = "國定假日不施工";
             this.radioBtnHolidayNoWorking.UseVisualStyleBackColor = true;
-            this.radioBtnHolidayNoWorking.CheckedChanged += new System.EventHandler(this.workingDayConditionChanged);
+            this.radioBtnHolidayNoWorking.CheckedChanged += new System.EventHandler(this.WorkingDayConditionChanged);
             // 
             // radioBtnHolidayNeedWorking
             // 
@@ -883,7 +883,7 @@
             this.radioBtnHolidayNeedWorking.TabStop = true;
             this.radioBtnHolidayNeedWorking.Text = "國定假日照常施工";
             this.radioBtnHolidayNeedWorking.UseVisualStyleBackColor = true;
-            this.radioBtnHolidayNeedWorking.CheckedChanged += new System.EventHandler(this.workingDayConditionChanged);
+            this.radioBtnHolidayNeedWorking.CheckedChanged += new System.EventHandler(this.WorkingDayConditionChanged);
             // 
             // groupBox4
             // 
@@ -949,15 +949,15 @@
             this.Controls.Add(this.label30);
             this.Controls.Add(this.label29);
             this.Controls.Add(this.label28);
-            this.Controls.Add(this.numericDuration);
-            this.Controls.Add(this.numericDays);
+            this.Controls.Add(this.uiNumericDuration);
+            this.Controls.Add(this.uiNumericDays);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnSearchQA);
             this.Controls.Add(this.btnSearchSecurity);
             this.Controls.Add(this.btnSearchOnsite);
             this.Controls.Add(this.btnSearchSponsor);
             this.Controls.Add(this.btnExit);
-            this.Controls.Add(this.dateTimeFinish);
+            this.Controls.Add(this.uiDateTimeFinish);
             this.Controls.Add(this.dateTimeStart);
             this.Controls.Add(this.dateTimeBid);
             this.Controls.Add(this.textBoxContractNo);
@@ -1011,8 +1011,8 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Name = "ProjectIncreaseForm";
             this.Text = "工程新增作業";
-            ((System.ComponentModel.ISupportInitialize)(this.numericDays)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericDuration)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uiNumericDays)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uiNumericDuration)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -1040,8 +1040,8 @@
         protected System.Windows.Forms.Label label8;
         protected System.Windows.Forms.Label label9;
         protected System.Windows.Forms.Label label10;
-        protected System.Windows.Forms.RadioButton radioBtnCalenderDay;
-        protected System.Windows.Forms.RadioButton radioBtnWorkingDay;
+        protected System.Windows.Forms.RadioButton uiRadioBtnCalenderDay;
+        protected System.Windows.Forms.RadioButton uiRadioBtnWorkingDay;
         protected System.Windows.Forms.TextBox textBoxProjectNo;
         protected System.Windows.Forms.TextBox textBoxProjectName;
         protected System.Windows.Forms.TextBox textBoxProjectLocation;
@@ -1056,7 +1056,7 @@
         protected System.Windows.Forms.Label label12;
         protected System.Windows.Forms.DateTimePicker dateTimeBid;
         protected System.Windows.Forms.DateTimePicker dateTimeStart;
-        protected System.Windows.Forms.DateTimePicker dateTimeFinish;
+        protected System.Windows.Forms.DateTimePicker uiDateTimeFinish;
         protected System.Windows.Forms.Label label13;
         protected System.Windows.Forms.Label label14;
         protected System.Windows.Forms.Label label15;
@@ -1082,8 +1082,8 @@
         protected System.Windows.Forms.TextBox textBoxHandle4;
         protected System.Windows.Forms.TextBox textBoxOnsite;
         protected System.Windows.Forms.TextBox textBoxSecurity;
-        protected System.Windows.Forms.NumericUpDown numericDays;
-        protected System.Windows.Forms.NumericUpDown numericDuration;
+        protected System.Windows.Forms.NumericUpDown uiNumericDays;
+        protected System.Windows.Forms.NumericUpDown uiNumericDuration;
         protected System.Windows.Forms.Label label24;
         protected System.Windows.Forms.Label label25;
         protected System.Windows.Forms.Label label26;
@@ -1100,7 +1100,7 @@
         protected System.Windows.Forms.Label label29;
         protected System.Windows.Forms.Label label30;
         protected System.Windows.Forms.GroupBox groupBox3;
-        protected System.Windows.Forms.RadioButton radioBtnRestrictSchedule;
+        protected System.Windows.Forms.RadioButton uiRadioBtnRestrictSchedule;
         protected System.Windows.Forms.NumericUpDown numericAmount;
         private System.Windows.Forms.GroupBox groupBox5;
         protected System.Windows.Forms.RadioButton radioBtnHolidayNoWorking;

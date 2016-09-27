@@ -20,111 +20,127 @@ namespace HuaChun_DailyReport
         string dbName;
         protected MySQL SQL;
 
-        Excel.Workbook xlWorkBook;
-        //Excel.Workbooks xlWorkBooks;
+        string g_strProjectNo;
+        string g_strProjectName;
+        string g_strComputeType;
+        string g_strComputeHoliday;
+        string g_strPath;
+        string g_strSavePath;
+        float g_fCellWidth = 30.75f;
+        float g_fStartPositionH = 37;
+        float g_fCellHeight = 39.75f;
+        float g_fStartPositionV = 174;
         Excel.Worksheet xlWorkSheet;
-        string g_ProjectNo;
-        string g_ProjectName;
-        string g_ComputeType;
-        string g_ComputeHoliday;
-        string g_StrPath;
-        string g_StrSavePath;
-        float g_CellWidth = 30.75f;
-        float g_StartPositionH = 37;
-        float g_CellHeight = 39.75f;
-        float g_startPositionV = 174;
+        Excel.Workbook xlWorkBook;
         
-        public ClassExcelGenerator(string strProjectNo, string strSavePath, int type)
+        public ClassExcelGenerator(string strProjectNo, string strSavePath, int iType)
         {
             dbHost = AppSetting.LoadInitialSetting("DB_IP", "127.0.0.1");
             dbUser = AppSetting.LoadInitialSetting("DB_USER", "root");
             dbPass = AppSetting.LoadInitialSetting("DB_PASSWORD", "123");
             dbName = AppSetting.LoadInitialSetting("DB_NAME", "huachun");
             SQL = new MySQL(dbHost, dbUser, dbPass, dbName);
+            
 
 
+            string strComputeType = SQL.Read_SQL_data("computetype", "project_info", "project_no = '" + strProjectNo + "'");
+            g_strComputeType = strComputeType;
 
-            string computeType = SQL.Read_SQL_data("computetype", "project_info", "project_no = '" + strProjectNo + "'");
-            g_ComputeType = computeType;
-
-            string computeHoliday = SQL.Read_SQL_data("holiday", "project_info", "project_no = '" + strProjectNo + "'");
-            g_ComputeHoliday = computeHoliday;
+            string strComputeHoliday = SQL.Read_SQL_data("holiday", "project_info", "project_no = '" + strProjectNo + "'");
+            g_strComputeHoliday = strComputeHoliday;
 
 
-            g_ProjectNo = strProjectNo;
-            g_StrPath = Directory.GetCurrentDirectory();
-            g_StrSavePath = strSavePath;
+            g_strProjectNo = strProjectNo;
+            g_strPath = Directory.GetCurrentDirectory();
+            g_strSavePath = strSavePath;
 
             var xlApp = new Excel.Application();
-            //xlWorkBooks = xlApp.Workbooks;
-            xlWorkBook = xlApp.Workbooks.Open(g_StrPath + "\\晴雨暨工期表.xls");
+            Excel.Workbooks xlWorkBooks = xlApp.Workbooks;
+            xlWorkBook = xlWorkBooks.Open(g_strPath + "\\晴雨暨工期表.xls");
             xlWorkSheet = xlWorkBook.Sheets[1];
 
-            g_ProjectName = SQL.Read_SQL_data("project_name", "project_info", "project_no = '" + g_ProjectNo + "'");
-            string startDate = SQL.Read_SQL_data("startdate", "project_info", "project_no = '" + g_ProjectNo + "'");
-            string endDate = "";
 
-            if (type == 0)
+            g_strProjectName = SQL.Read_SQL_data("project_name", "project_info", "project_no = '" + g_strProjectNo + "'");
+            string strStartDate = SQL.Read_SQL_data("startdate", "project_info", "project_no = '" + g_strProjectNo + "'");
+            string strContractEndDate = SQL.Read_SQL_data("contract_finishdate", "project_info", "project_no = '" + g_strProjectNo + "'"); ;
+            DateTime dtStartDate = Functions.TransferSQLDateToDateTime(strStartDate);
+            DateTime dtEndDate = new DateTime();
+            DateTime dtContractEndDate = Functions.TransferSQLDateToDateTime(strContractEndDate);
+
+            if (iType == (int)ChartType.WeatherChart)
             {
-                endDate = SQL.Read_SQL_data("date", "dailyreport", "project_no = '" + g_ProjectNo + "' ORDER BY date DESC ");//把日報表有填的日期的最後一天當enddate
+                dtEndDate = ComputeValidFinishDate(dtStartDate);
             }
-            else if (type == 1)
+            else if (iType == (int)ChartType.ExpectFinishChart)
             {
-                endDate = SQL.Read_SQL_data("contract_finishdate", "project_info", "project_no = '" + g_ProjectNo + "'");
+                dtEndDate = dtContractEndDate;
             }
 
-            int yearStart = Functions.TransferSQLDateToDateTime(startDate).Year;
-            int yearEnd = Functions.TransferSQLDateToDateTime(endDate).Year;
-            for (int i = 0; i < yearEnd - yearStart; ++i)
+            int iYearStart = dtStartDate.Year;
+            int iYearEnd = dtEndDate.Year;
+            for (int i = 0; i < iYearEnd - iYearStart; ++i)
             {
                 xlWorkSheet.Copy(Type.Missing, xlWorkBook.Sheets[xlWorkBook.Sheets.Count]); // copy
             }
-
-            WriteDataIntoExcel(Functions.TransferSQLDateToDateTime(startDate), Functions.TransferSQLDateToDateTime(endDate));
+            if (iType == (int) ChartType.WeatherChart)
+            {
+                WriteDataIntoExcel(dtStartDate,
+                                   dtEndDate,
+                                   dtContractEndDate,
+                                   false);
+            }
+            else if (iType == (int)ChartType.ExpectFinishChart)
+            {
+                WriteDataIntoExcel(dtStartDate,
+                                   dtEndDate,
+                                   dtContractEndDate,
+                                   true);
+            }
+            
 
             xlApp.DisplayAlerts = false;
-            xlWorkBook.SaveAs(g_StrSavePath);
+            xlWorkBook.SaveAs(g_strSavePath);
             xlApp.DisplayAlerts = true;
-            xlWorkBook.Close(false);
-            //xlApp.Workbooks.Close();
+            xlWorkBook.Close(0);
+            xlWorkBooks.Close();
             xlApp.Quit();
 
-            Marshal.ReleaseComObject(xlApp);
+            Marshal.ReleaseComObject(xlWorkSheet);
             Marshal.ReleaseComObject(xlWorkBook);
-            //Marshal.ReleaseComObject(xlApp.Workbooks);
+            Marshal.ReleaseComObject(xlApp.Workbooks);
+            Marshal.ReleaseComObject(xlApp);
 
             MessageBox.Show("晴雨表儲存完成", "完成");
-
         }
 
-        private void WriteDataIntoExcel(DateTime dateStart, DateTime dateEnd)
+        private void WriteDataIntoExcel(DateTime dtDateStart, DateTime dtDateEnd, DateTime dtContractDateEnd, bool bWriteEmptyChart)
         {
             //dateEnd = dateStart.AddDays(2);
 
-            int yearStart = dateStart.Year;
-            int yearEnd = dateEnd.Year;
+            int iYearStart = dtDateStart.Year;
+            int iYearEnd = dtDateEnd.Year;
 
-            for (int year = yearStart; year <= yearEnd; year++)
+            for (int iYear = iYearStart; iYear <= iYearEnd; iYear++)
             {
-                xlWorkSheet = xlWorkBook.Sheets[ year - yearStart + 1 ];
-                xlWorkSheet.Cells[1, 1] = g_ProjectName;
-                xlWorkSheet.Cells[5, 2] = (year - 1911).ToString() + "年";
+                xlWorkSheet = xlWorkBook.Sheets[ iYear - iYearStart + 1 ];
+                xlWorkSheet.Cells[1, 1] = g_strProjectName;
+                xlWorkSheet.Cells[5, 2] = (iYear - 1911).ToString() + "年";
 
-                xlWorkSheet.Name = (year - 1911).ToString() + "年度" + g_ProjectName + "工期晴雨表";
+                xlWorkSheet.Name = (iYear - 1911).ToString() + "年度" + g_strProjectName + "工期晴雨表";
 
 
-                for (int month = 1; month <= 12; month++)
+                for (int iMonth = 1; iMonth <= 12; iMonth++)
                 {
 
-                    float daysInMonth = 0;
-                    float holidaysInMonth = 0;
-                    float weatherNonWorkingDaysInMonth = 0;
-                    float conditionNonWorkingDaysInMonth = 0;
+                    float fDaysInMonth = 0;
+                    float fHolidaysInMonth = 0;
+                    float fWeatherNonWorkingDaysInMonth = 0;
+                    float fConditionNonWorkingDaysInMonth = 0;
 
 
                     #region
-                    int dayNumbers = 0;
-                    switch (month)
+                    int iDayNumbers = 0;
+                    switch (iMonth)
                     {
                         case 1:
                         case 3:
@@ -133,185 +149,312 @@ namespace HuaChun_DailyReport
                         case 8:
                         case 10:
                         case 12:
-                            dayNumbers = 31;
+                            iDayNumbers = 31;
                             break;
                         case 2:
-                            if (year == 2016 || year == 2020 || year == 2024 || year == 2028 || year == 2032 || year == 2036)
-                                dayNumbers = 29;
+                            if (iYear == 2016 || iYear == 2020 || iYear == 2024 || iYear == 2028 || iYear == 2032 || iYear == 2036)
+                                iDayNumbers = 29;
                             else
-                                dayNumbers = 28;
+                                iDayNumbers = 28;
                             break;
                         case 4:
                         case 6:
                         case 9:
                         case 11:
-                            dayNumbers = 30;
+                            iDayNumbers = 30;
                             break;
 
                     }
                     #endregion
 
 
-                    int weekCount = 0;
-                    for (int day = 1; day <= dayNumbers; day++)
+                    int iWeekCount = 0;
+                    for (int iDay = 1; iDay <= iDayNumbers; iDay++)
                     {
-                        DateTime date = new DateTime(year, month, day);
+                        DateTime dtDate = new DateTime(iYear, iMonth, iDay);
                         #region 計算dateIndex
-                        int dateIndex = 1;
-                        switch (date.DayOfWeek)
+                        int iDateIndex = 1;
+                        switch (dtDate.DayOfWeek)
                         {
                             case DayOfWeek.Sunday:
-                                dateIndex = 1;
-                                if (day == 1)
-                                    weekCount = 0;
+                                iDateIndex = 1;
+                                if (iDay == 1)
+                                    iWeekCount = 0;
                                 else
-                                    weekCount++;
+                                    iWeekCount++;
                                 break;
                             case DayOfWeek.Monday:
-                                dateIndex = 2;
+                                iDateIndex = 2;
                                 break;
                             case DayOfWeek.Tuesday:
-                                dateIndex = 3;
+                                iDateIndex = 3;
                                 break;
                             case DayOfWeek.Wednesday:
-                                dateIndex = 4;
+                                iDateIndex = 4;
                                 break;
                             case DayOfWeek.Thursday:
-                                dateIndex = 5;
+                                iDateIndex = 5;
                                 break;
                             case DayOfWeek.Friday:
-                                dateIndex = 6;
+                                iDateIndex = 6;
                                 break;
                             case DayOfWeek.Saturday:
-                                dateIndex = 7;
+                                iDateIndex = 7;
                                 break;
                         }
-                        dateIndex += weekCount * 7;
-                        string holidayReason = SQL.Read_SQL_data("reason", "holiday", "date = '" + Functions.TransferDateTimeToSQL(date) + "'");
-                        if (holidayReason != string.Empty)
+                        iDateIndex += iWeekCount * 7;
+                        string strHolidayReason = SQL.Read_SQL_data("reason", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
+                        if (strHolidayReason != string.Empty)
                         {
-                            xlWorkSheet.Cells[8 + month * 2, 1 + dateIndex] = holidayReason;
+                            xlWorkSheet.Cells[8 + iMonth * 2, 1 + iDateIndex] = strHolidayReason;
                         }
                         else
                         {
-                            xlWorkSheet.Cells[8 + month * 2, 1 + dateIndex] = day;
+                            xlWorkSheet.Cells[8 + iMonth * 2, 1 + iDateIndex] = iDay;
                         }
                         #endregion
 
-                        string morningWeather = SQL.Read_SQL_data("morning_weather", "dailyreport", "project_no = '" + g_ProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
-                        string afternoonWeather = SQL.Read_SQL_data("afternoon_weather", "dailyreport", "project_no = '" + g_ProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
-                        string morningCondition = SQL.Read_SQL_data("morning_condition", "dailyreport", "project_no = '" + g_ProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
-                        string afternoonCondition = SQL.Read_SQL_data("afternoon_condition", "dailyreport", "project_no = '" + g_ProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
+                        string strMorningWeather = SQL.Read_SQL_data("morning_weather", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
+                        string strAfternoonWeather = SQL.Read_SQL_data("afternoon_weather", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
+                        string strMorningCondition = SQL.Read_SQL_data("morning_condition", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
+                        string strAfternoonCondition = SQL.Read_SQL_data("afternoon_condition", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
 
 
-                        if (date.CompareTo(dateStart) >= 0 && date.CompareTo(dateEnd) <= 0)//開工日期之後才需要貼晴雨圖
+                        if (dtDate.CompareTo(dtContractDateEnd) == 0)
+                        {
+                            PrintFinish(iMonth, iDateIndex, false);
+                        }
+                        if (dtDate.CompareTo(dtDateEnd) == 0)
+                        {
+                            PrintFinish(iMonth, iDateIndex, true);
+                        }
+                        if (dtDate.CompareTo(dtDateStart) >= 0 && dtDate.CompareTo(dtDateEnd) <= 0)//開工日期之後才需要貼晴雨圖
                         {             
-                            daysInMonth += 1;
+                            fDaysInMonth += 1;
                             #region 例假日
-                            if (g_ComputeType == "1")//工期計算方式為限期完工
+                            if (g_strComputeType == "1")//工期計算方式為限期完工
                             {
                             }
-                            else if (g_ComputeType == "2")//工期計算方式為日曆天
+                            else if (g_strComputeType == "2")//工期計算方式為日曆天
                             {
                             }
-                            else if (g_ComputeType == "3")//工期計算方式為工作天，無週休二日
+                            else if (g_strComputeType == "3")//工期計算方式為工作天，無週休二日
                             {
                                 #region
-                                if (g_ComputeHoliday == "0")//國定假日照常施工
+                                if (g_strComputeHoliday == "0")//國定假日照常施工
                                 {
-                                    computeNonWorkingDay(true, month, dateIndex, morningWeather, afternoonWeather, morningCondition, afternoonCondition, ref weatherNonWorkingDaysInMonth, ref conditionNonWorkingDaysInMonth);
+                                    ComputeNonWorkingDay(true, 
+                                                         iMonth, 
+                                                         iDateIndex, 
+                                                         strMorningWeather, 
+                                                         strAfternoonWeather, 
+                                                         strMorningCondition,
+                                                         strAfternoonCondition, 
+                                                         ref fWeatherNonWorkingDaysInMonth, 
+                                                         ref fConditionNonWorkingDaysInMonth, 
+                                                         bWriteEmptyChart);
                                 }
-                                else if (g_ComputeHoliday == "1")//國定假日不施工
+                                else if (g_strComputeHoliday == "1")//國定假日不施工
                                 {
                                     #region
-                                    string working = SQL.Read_SQL_data("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(date) + "'");
+                                    string working = SQL.Read_SQL_data("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
                                     if (working != string.Empty && working == "1")//遇到國定假日
                                     {
-                                        computeNonWorkingDay(false, month, dateIndex, morningWeather, afternoonWeather, morningCondition, afternoonCondition, ref weatherNonWorkingDaysInMonth, ref conditionNonWorkingDaysInMonth);
-                                        holidaysInMonth += 1;
-                                        PrintHoliday(month, dateIndex);
+                                        ComputeNonWorkingDay(false, 
+                                                             iMonth, 
+                                                             iDateIndex, 
+                                                             strMorningWeather, 
+                                                             strAfternoonWeather, 
+                                                             strMorningCondition, 
+                                                             strAfternoonCondition, 
+                                                             ref fWeatherNonWorkingDaysInMonth, 
+                                                             ref fConditionNonWorkingDaysInMonth, 
+                                                             bWriteEmptyChart);
+                                            
+                                        fHolidaysInMonth += 1;
+                                        PrintHoliday(iMonth, iDateIndex);
                                     }
                                     else
                                     {
-                                        computeNonWorkingDay(true, month, dateIndex, morningWeather, afternoonWeather, morningCondition, afternoonCondition, ref weatherNonWorkingDaysInMonth, ref conditionNonWorkingDaysInMonth);
+
+                                        ComputeNonWorkingDay(true, 
+                                                             iMonth, 
+                                                             iDateIndex, 
+                                                             strMorningWeather, 
+                                                             strAfternoonWeather, 
+                                                             strMorningCondition, 
+                                                             strAfternoonCondition, 
+                                                             ref fWeatherNonWorkingDaysInMonth, 
+                                                             ref fConditionNonWorkingDaysInMonth,
+                                                             bWriteEmptyChart);
+                                                                         
                                     }
                                     #endregion
                                 }
                                 #endregion
                             }
-                            else if (g_ComputeType == "4")//工期計算方式為工作天，週休一日
+                            else if (g_strComputeType == "4")//工期計算方式為工作天，週休一日
                             {
                                 #region
-                                if (date.DayOfWeek == DayOfWeek.Sunday)
+                                if (dtDate.DayOfWeek == DayOfWeek.Sunday)
                                 {
-                                    computeNonWorkingDay(false, month, dateIndex, morningWeather, afternoonWeather, morningCondition, afternoonCondition, ref weatherNonWorkingDaysInMonth, ref conditionNonWorkingDaysInMonth);
-                                    holidaysInMonth += 1;
-                                    PrintHoliday(month, dateIndex);
+                                    ComputeNonWorkingDay(false, 
+                                                         iMonth,
+                                                         iDateIndex, 
+                                                         strMorningWeather,
+                                                         strAfternoonWeather,
+                                                         strMorningCondition,
+                                                         strAfternoonCondition, 
+                                                         ref fWeatherNonWorkingDaysInMonth,
+                                                         ref fConditionNonWorkingDaysInMonth, 
+                                                         bWriteEmptyChart);
+                                    fHolidaysInMonth += 1;
+                                    PrintHoliday(iMonth, iDateIndex);
                                 }
                                 else
                                 {
-                                    if (g_ComputeHoliday == "0")//國定假日照常施工
+                                    if (g_strComputeHoliday == "0")//國定假日照常施工
                                     {
-                                        computeNonWorkingDay(true, month, dateIndex, morningWeather, afternoonWeather, morningCondition, afternoonCondition, ref weatherNonWorkingDaysInMonth, ref conditionNonWorkingDaysInMonth);
+                                        ComputeNonWorkingDay(true, 
+                                                             iMonth, 
+                                                             iDateIndex, 
+                                                             strMorningWeather, 
+                                                             strAfternoonWeather, 
+                                                             strMorningCondition, 
+                                                             strAfternoonCondition, 
+                                                             ref fWeatherNonWorkingDaysInMonth,
+                                                             ref fConditionNonWorkingDaysInMonth,
+                                                             bWriteEmptyChart);
                                     }
-                                    else if (g_ComputeHoliday == "1")//國定假日不施工
+                                    else if (g_strComputeHoliday == "1")//國定假日不施工
                                     {
-                                        string working = SQL.Read_SQL_data("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(date) + "'");
+                                        string working = SQL.Read_SQL_data("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
                                         if (working != string.Empty && working == "1")
                                         {
-                                            computeNonWorkingDay(false, month, dateIndex, morningWeather, afternoonWeather, morningCondition, afternoonCondition, ref weatherNonWorkingDaysInMonth, ref conditionNonWorkingDaysInMonth);
-                                            holidaysInMonth += 1;
-                                            PrintHoliday(month, dateIndex);
+                                            ComputeNonWorkingDay(false, 
+                                                                 iMonth, iDateIndex, 
+                                                                 strMorningWeather,
+                                                                 strAfternoonWeather, 
+                                                                 strMorningCondition, 
+                                                                 strAfternoonCondition, 
+                                                                 ref fWeatherNonWorkingDaysInMonth,
+                                                                 ref fConditionNonWorkingDaysInMonth, 
+                                                                 bWriteEmptyChart);
+                                            fHolidaysInMonth += 1;
+                                            PrintHoliday(iMonth, iDateIndex);
                                         }
                                         else
                                         {
-                                            computeNonWorkingDay(true, month, dateIndex, morningWeather, afternoonWeather, morningCondition, afternoonCondition, ref weatherNonWorkingDaysInMonth, ref conditionNonWorkingDaysInMonth);
+                                            ComputeNonWorkingDay(true, 
+                                                                 iMonth, 
+                                                                 iDateIndex, 
+                                                                 strMorningWeather,
+                                                                 strAfternoonWeather, 
+                                                                 strMorningCondition, 
+                                                                 strAfternoonCondition, 
+                                                                 ref fWeatherNonWorkingDaysInMonth,
+                                                                 ref fConditionNonWorkingDaysInMonth, 
+                                                                 bWriteEmptyChart);
                                         }
                                     }
                                 }
                                 #endregion
                             }
-                            else if (g_ComputeType == "5")//工期計算方式為工作天，週休二日
+                            else if (g_strComputeType == "5")//工期計算方式為工作天，週休二日
                             {
                                 #region
-                                if (date.DayOfWeek == DayOfWeek.Sunday)
+                                if (dtDate.DayOfWeek == DayOfWeek.Sunday)
                                 {
-                                    computeNonWorkingDay(false, month, dateIndex, morningWeather, afternoonWeather, morningCondition, afternoonCondition, ref weatherNonWorkingDaysInMonth, ref conditionNonWorkingDaysInMonth);
-                                    holidaysInMonth += 1;
-                                    PrintHoliday(month, dateIndex);
+                                    ComputeNonWorkingDay(false, 
+                                                         iMonth, 
+                                                         iDateIndex,
+                                                         strMorningWeather, 
+                                                         strAfternoonWeather,
+                                                         strMorningCondition, 
+                                                         strAfternoonCondition,
+                                                         ref fWeatherNonWorkingDaysInMonth,
+                                                         ref fConditionNonWorkingDaysInMonth,
+                                                         bWriteEmptyChart);
+                                    fHolidaysInMonth += 1;
+                                    PrintHoliday(iMonth, iDateIndex);
                                 }
-                                else if (date.DayOfWeek == DayOfWeek.Saturday)
+                                else if (dtDate.DayOfWeek == DayOfWeek.Saturday)
                                 {
-                                    string working = SQL.Read_SQL_data("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(date) + "'");
+                                    string working = SQL.Read_SQL_data("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
                                     if (working == string.Empty || working == "1")
                                     {
-                                        computeNonWorkingDay(false, month, dateIndex, morningWeather, afternoonWeather, morningCondition, afternoonCondition, ref weatherNonWorkingDaysInMonth, ref conditionNonWorkingDaysInMonth);
-                                        holidaysInMonth += 1;
-                                        PrintHoliday(month, dateIndex);
+                                        ComputeNonWorkingDay(false,
+                                                             iMonth,
+                                                             iDateIndex,
+                                                             strMorningWeather, 
+                                                             strAfternoonWeather,
+                                                             strMorningCondition,
+                                                             strAfternoonCondition,
+                                                             ref fWeatherNonWorkingDaysInMonth,
+                                                             ref fConditionNonWorkingDaysInMonth,
+                                                             bWriteEmptyChart);
+                                        fHolidaysInMonth += 1;
+                                        PrintHoliday(iMonth, iDateIndex);
                                     }
                                     else//這應該是要補班的狀況
                                     {
-                                        computeNonWorkingDay(true, month, dateIndex, morningWeather, afternoonWeather, morningCondition, afternoonCondition, ref weatherNonWorkingDaysInMonth, ref conditionNonWorkingDaysInMonth);
+                                        ComputeNonWorkingDay(true,
+                                                             iMonth,
+                                                             iDateIndex,
+                                                             strMorningWeather, 
+                                                             strAfternoonWeather, 
+                                                             strMorningCondition,
+                                                             strAfternoonCondition,
+                                                             ref fWeatherNonWorkingDaysInMonth,
+                                                             ref fConditionNonWorkingDaysInMonth, 
+                                                             bWriteEmptyChart);
                                     }
                                 }
                                 else
                                 {
-                                    if (g_ComputeHoliday == "0")//國定假日照常施工
+                                    if (g_strComputeHoliday == "0")//國定假日照常施工
                                     {
-                                        computeNonWorkingDay(true, month, dateIndex, morningWeather, afternoonWeather, morningCondition, afternoonCondition, ref weatherNonWorkingDaysInMonth, ref conditionNonWorkingDaysInMonth);
+                                        ComputeNonWorkingDay(true, 
+                                                             iMonth, 
+                                                             iDateIndex, 
+                                                             strMorningWeather, 
+                                                             strAfternoonWeather,
+                                                             strMorningCondition, 
+                                                             strAfternoonCondition,
+                                                             ref fWeatherNonWorkingDaysInMonth,
+                                                             ref fConditionNonWorkingDaysInMonth, 
+                                                             bWriteEmptyChart);
                                     }
-                                    else if (g_ComputeHoliday == "1")//國定假日不施工
+                                    else if (g_strComputeHoliday == "1")//國定假日不施工
                                     {
-                                        string working = SQL.Read_SQL_data("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(date) + "'");
+                                        string working = SQL.Read_SQL_data("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
                                         if (working != string.Empty && working == "1")//遇到國定假日
                                         {
-                                            computeNonWorkingDay(false, month, dateIndex, morningWeather, afternoonWeather, morningCondition, afternoonCondition, ref weatherNonWorkingDaysInMonth, ref conditionNonWorkingDaysInMonth);
-                                            holidaysInMonth += 1;
-                                            PrintHoliday(month, dateIndex);
+                                            ComputeNonWorkingDay(false,
+                                                                 iMonth, 
+                                                                 iDateIndex,
+                                                                 strMorningWeather,
+                                                                 strAfternoonWeather,
+                                                                 strMorningCondition,
+                                                                 strAfternoonCondition, 
+                                                                 ref fWeatherNonWorkingDaysInMonth,
+                                                                 ref fConditionNonWorkingDaysInMonth, 
+                                                                 bWriteEmptyChart);
+                                            fHolidaysInMonth += 1;
+                                            PrintHoliday(iMonth, iDateIndex);
                                         }
                                         else
                                         {
-                                            computeNonWorkingDay(true, month, dateIndex, morningWeather, afternoonWeather, morningCondition, afternoonCondition, ref weatherNonWorkingDaysInMonth, ref conditionNonWorkingDaysInMonth);
+                                            ComputeNonWorkingDay(true,
+                                                                 iMonth, 
+                                                                 iDateIndex, 
+                                                                 strMorningWeather,
+                                                                 strAfternoonWeather, 
+                                                                 strMorningCondition, 
+                                                                 strAfternoonCondition, 
+                                                                 ref fWeatherNonWorkingDaysInMonth,
+                                                                 ref fConditionNonWorkingDaysInMonth, 
+                                                                 bWriteEmptyChart);
                                         }
                                     }
                                 }
@@ -322,226 +465,335 @@ namespace HuaChun_DailyReport
                     }
 
 
-                    xlWorkSheet.Cells[7 + month * 2, 39] = daysInMonth;
-                    xlWorkSheet.Cells[7 + month * 2, 40] = holidaysInMonth;
-                    xlWorkSheet.Cells[7 + month * 2, 41] = weatherNonWorkingDaysInMonth;
-                    xlWorkSheet.Cells[7 + month * 2, 42] = conditionNonWorkingDaysInMonth;
+                    xlWorkSheet.Cells[7 + iMonth * 2, 39] = fDaysInMonth;
+                    xlWorkSheet.Cells[7 + iMonth * 2, 40] = fHolidaysInMonth;
+                    xlWorkSheet.Cells[7 + iMonth * 2, 41] = fWeatherNonWorkingDaysInMonth;
+                    xlWorkSheet.Cells[7 + iMonth * 2, 42] = fConditionNonWorkingDaysInMonth;
                 }
             }
         }
 
-        private void computeNonWorkingDay(bool countNonWorking, int month, int dateIndex, string morningWeather, string afternoonWeather, string morningCondition, string afternoonCondition, ref float weatherNonWorkingDaysInMonth, ref float conditionNonWorkingDaysInMonth)
+        private DateTime ComputeValidFinishDate(DateTime dtStartDate)
         {
-            float nonWorkingCount = 0;
-            if (countNonWorking == true)
-                nonWorkingCount = 0.5f;
+            DayCompute dayCompute = new DayCompute();
+
+            if (g_strComputeType == "1")//限期完工  日曆天
+            {
+
+            }
+            else if (g_strComputeType == "2")
+            {
+
+            }
+            else if (g_strComputeType == "3")//工作天 無休
+            {
+                dayCompute.restOnSaturday = false;
+                dayCompute.restOnSunday = false;
+
+            }
+            else if (g_strComputeType == "4")//工作天 周休一日
+            {
+                dayCompute.restOnSaturday = false;
+                dayCompute.restOnSunday = true;
+
+            }
+            else if (g_strComputeType == "5")//工作天 周休二日
+            {
+                dayCompute.restOnSaturday = true;
+                dayCompute.restOnSunday = true;
+
+            }
+
+            if (g_strComputeHoliday == "1")
+            {
+                dayCompute.restOnHoliday = true;
+            }
+            else if (g_strComputeHoliday == "0")
+            {
+                dayCompute.restOnHoliday = false;
+            }
+
+
+            float fOriginalTotalDuration = Convert.ToSingle(SQL.Read_SQL_data("contractduration", "project_info", "project_no = '" + g_strProjectNo + "'"));
+            float fAccumulateExtendDurations = 0;
+
+            int i = 0;
+            bool bStop = false;
+            while (!bStop)
+            {
+                DateTime dtDateToday = dtStartDate.AddDays(i);
+
+                string strNonCountingToday = SQL.Read_SQL_data("nonecounting", 
+                                                               "dailyreport", 
+                                                               "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
+                if (strNonCountingToday == "0.5")
+                {
+                    dayCompute.AddNotWorking(dtDateToday, 0);
+                }
+                else if (strNonCountingToday == "1")
+                {
+                    dayCompute.AddNotWorking(dtDateToday, 0);
+                    dayCompute.AddNotWorking(dtDateToday, 1);
+                }
+
+
+                float fNonCountingTotal = dayCompute.CountTotalNotWorkingDay(dtStartDate, dtDateToday);
+
+
+                string strExtendDuration = SQL.Read_SQL_data("extendduration", 
+                                                             "extendduration", 
+                                                             "project_no = '" + g_strProjectNo + "' AND extendstartdate = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
+                if (strExtendDuration != string.Empty)
+                {
+                    fAccumulateExtendDurations += Convert.ToSingle(strExtendDuration);
+                }
+
+                float modifiedRestDuration = fOriginalTotalDuration - 1 - i + fNonCountingTotal + fAccumulateExtendDurations;
+
+
+                i++;
+                DateTime dtModifiedFinishDate = dayCompute.CountByDuration(dtDateToday.AddDays(1), modifiedRestDuration);
+                if (dtDateToday.CompareTo(dtModifiedFinishDate) == 0)
+                {
+                    bStop = true;  
+                }  
+            }
+            return dtStartDate.AddDays(i-1);
+        }
+
+        private void ComputeNonWorkingDay(bool bCountNonWorking, 
+                                          int iMonth, 
+                                          int iDateIndex, 
+                                          string strMorningWeather, 
+                                          string strAfternoonWeather, 
+                                          string strMorningCondition, 
+                                          string afternoonCondition, 
+                                          ref float fWeatherNonWorkingDaysInMonth, 
+                                          ref float fConditionNonWorkingDaysInMonth, 
+                                          bool bWriteEmptyChart)
+        {
+            float fNonWorkingCount = 0;
+            if (bCountNonWorking == true)
+            {
+                fNonWorkingCount = 0.5f;
+            }
             else
-                nonWorkingCount = 0;
-
+            {
+                fNonWorkingCount = 0;
+            }
             #region 天候狀況
-            if (morningWeather == string.Empty)//無日報表資料
+            if (strMorningWeather == string.Empty && !bWriteEmptyChart)//無日報表資料
             {
-                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\上午無資料無框.png", 
+                xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\上午無資料無框.png", 
                                               MsoTriState.msoFalse, MsoTriState.msoTrue, 
-                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))), 
-                                              g_startPositionV + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))), 
+                                              g_fStartPositionV + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                               21, 12);
             }
-            else if (morningWeather == "晴")
+            else if (strMorningWeather == "晴" && !bWriteEmptyChart)
             {
-                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\上午晴無框.png", 
+                xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\上午晴無框.png", 
                                               MsoTriState.msoFalse, MsoTriState.msoTrue, 
-                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))), 
-                                              g_startPositionV + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))), 
+                                              g_fStartPositionV + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                               21, 12);
             }
-            else if (morningWeather == "雨")
+            else if (strMorningWeather == "雨" && !bWriteEmptyChart)
             {
-                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\上午雨無框.png", 
+                xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\上午雨無框.png", 
                                               MsoTriState.msoFalse, MsoTriState.msoTrue, 
-                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))), 
-                                              g_startPositionV + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))), 
+                                              g_fStartPositionV + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                               21, 12);
-                weatherNonWorkingDaysInMonth += nonWorkingCount;
+                fWeatherNonWorkingDaysInMonth += fNonWorkingCount;
             }
-            else if (morningWeather == "豪雨")
+            else if (strMorningWeather == "豪雨" && !bWriteEmptyChart)
             {
-                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\上午豪雨無框.png", 
+                xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\上午豪雨無框.png", 
                                               MsoTriState.msoFalse, MsoTriState.msoTrue, 
-                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))), 
-                                              g_startPositionV + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))),
+                                              g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))), 
+                                              g_fStartPositionV + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))),
                                               21, 12);
-                weatherNonWorkingDaysInMonth += nonWorkingCount;
+                fWeatherNonWorkingDaysInMonth += fNonWorkingCount;
             }
-            else if (morningWeather == "颱風")
+            else if (strMorningWeather == "颱風" && !bWriteEmptyChart)
             {
-                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\上午颱風.png", 
+                xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\上午颱風.png", 
                                               MsoTriState.msoFalse, MsoTriState.msoTrue, 
-                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
-                                              g_startPositionV + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
+                                              g_fStartPositionV + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                               21, 12);
-                weatherNonWorkingDaysInMonth += nonWorkingCount;
+                fWeatherNonWorkingDaysInMonth += fNonWorkingCount;
             }
-            else if (morningWeather == "酷熱")
+            else if (strMorningWeather == "酷熱" && !bWriteEmptyChart)
             {
-                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\上午酷熱無框.png", 
+                xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\上午酷熱無框.png", 
                                               MsoTriState.msoFalse, MsoTriState.msoTrue, 
-                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
-                                              g_startPositionV + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
+                                              g_fStartPositionV + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                               21, 12);
-                weatherNonWorkingDaysInMonth += nonWorkingCount;
+                fWeatherNonWorkingDaysInMonth += fNonWorkingCount;
             }
 
 
-            if (afternoonWeather == string.Empty)//無日報表資料
+            if (strAfternoonWeather == string.Empty && !bWriteEmptyChart)//無日報表資料
             {
-                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\下午無資料無框.png", 
+                xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\下午無資料無框.png", 
                                               MsoTriState.msoFalse, MsoTriState.msoTrue, 
-                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
-                                              g_startPositionV + 10 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
+                                              g_fStartPositionV + 10 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                               21, 12);
                 Thread.Sleep(10);
             }
-            else if (afternoonWeather == "晴")
+            else if (strAfternoonWeather == "晴" && !bWriteEmptyChart)
             {
-                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\下午晴無框.png", 
+                xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\下午晴無框.png", 
                                               MsoTriState.msoFalse, MsoTriState.msoTrue, 
-                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
-                                              g_startPositionV + 10 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
+                                              g_fStartPositionV + 10 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                               21, 12);
                 Thread.Sleep(10);
             }
-            else if (afternoonWeather == "雨")
+            else if (strAfternoonWeather == "雨" && !bWriteEmptyChart)
             {
-                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\下午雨無框.png", 
+                xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\下午雨無框.png", 
                                               MsoTriState.msoFalse, MsoTriState.msoTrue, 
-                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
-                                              g_startPositionV + 10 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
+                                              g_fStartPositionV + 10 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                               21, 12);
-                weatherNonWorkingDaysInMonth += nonWorkingCount;
+                fWeatherNonWorkingDaysInMonth += fNonWorkingCount;
             }
-            else if (afternoonWeather == "豪雨")
+            else if (strAfternoonWeather == "豪雨" && !bWriteEmptyChart)
             {
-                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\下午豪雨無框.png", 
+                xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\下午豪雨無框.png", 
                                               MsoTriState.msoFalse, MsoTriState.msoTrue, 
-                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
-                                              g_startPositionV + 10 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
+                                              g_fStartPositionV + 10 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                               21, 12);
-                weatherNonWorkingDaysInMonth += nonWorkingCount;
+                fWeatherNonWorkingDaysInMonth += fNonWorkingCount;
             }
-            else if (afternoonWeather == "颱風")
+            else if (strAfternoonWeather == "颱風" && !bWriteEmptyChart)
             {
-                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\下午颱風.png", 
+                xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\下午颱風.png", 
                                               MsoTriState.msoFalse, MsoTriState.msoTrue, 
-                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
-                                              g_startPositionV + 10 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
+                                              g_fStartPositionV + 10 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                               21, 12);
-                weatherNonWorkingDaysInMonth += nonWorkingCount;
+                fWeatherNonWorkingDaysInMonth += fNonWorkingCount;
             }
-            else if (afternoonWeather == "酷熱")
+            else if (strAfternoonWeather == "酷熱" && !bWriteEmptyChart)
             {
-                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\下午酷熱無框.png", 
+                xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\下午酷熱無框.png", 
                                               MsoTriState.msoFalse, MsoTriState.msoTrue,
-                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
-                                              g_startPositionV + 10 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
+                                              g_fStartPositionV + 10 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                               21, 12);
-                weatherNonWorkingDaysInMonth += nonWorkingCount;
+                fWeatherNonWorkingDaysInMonth += fNonWorkingCount;
             }
             #endregion
 
-            if (morningCondition == string.Empty)
+            if (strMorningCondition == string.Empty)
             { }
-            else if (morningCondition == "無")
+            else if (strMorningCondition == "無" && !bWriteEmptyChart)
             { }
-            else if (morningCondition == "停電")
+            else if (strMorningCondition == "停電" && !bWriteEmptyChart)
             {
-                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\全日停電.png", 
+                xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\全日停電.png", 
                                               MsoTriState.msoFalse, MsoTriState.msoTrue, 
-                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
-                                              g_startPositionV + 1 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
+                                              g_fStartPositionV + 1 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                               21, 21);
-                conditionNonWorkingDaysInMonth += nonWorkingCount;
+                fConditionNonWorkingDaysInMonth += fNonWorkingCount;
             }
-            else if (morningCondition == "停工")
+            else if (strMorningCondition == "停工" && !bWriteEmptyChart)
             {
-                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\全日停工.png", 
+                xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\全日停工.png", 
                                               MsoTriState.msoFalse, MsoTriState.msoTrue, 
-                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
-                                              g_startPositionV + 1 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
+                                              g_fStartPositionV + 1 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                               21, 21);
-                conditionNonWorkingDaysInMonth += nonWorkingCount;
+                fConditionNonWorkingDaysInMonth += fNonWorkingCount;
             }
-            else if (morningCondition == "補假")
+            else if (strMorningCondition == "補假")
             {
-                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\補假.png", 
+                xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\補假.png", 
                                               MsoTriState.msoFalse, MsoTriState.msoTrue, 
-                                              g_StartPositionH - 7 + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
-                                              g_startPositionV - 7 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              g_fStartPositionH - 7 + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
+                                              g_fStartPositionV - 7 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                               35, 35);
-                conditionNonWorkingDaysInMonth += nonWorkingCount;
+                fConditionNonWorkingDaysInMonth += fNonWorkingCount;
             }
-            else if (morningCondition == "選舉")
+            else if (strMorningCondition == "選舉")
             {
-                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\選舉.png", 
+                xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\選舉.png", 
                                               MsoTriState.msoFalse, MsoTriState.msoTrue, 
-                                              g_StartPositionH - 7 + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
-                                              g_startPositionV - 7 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              g_fStartPositionH - 7 + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
+                                              g_fStartPositionV - 7 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                               35, 35);
-                conditionNonWorkingDaysInMonth += nonWorkingCount;
+                fConditionNonWorkingDaysInMonth += fNonWorkingCount;
             }
-            else if (morningCondition == "雨後泥濘")
+            else if (strMorningCondition == "雨後泥濘" && !bWriteEmptyChart)
             {
-                conditionNonWorkingDaysInMonth += nonWorkingCount;
+                fConditionNonWorkingDaysInMonth += fNonWorkingCount;
             }
 
             if (afternoonCondition == string.Empty)
             { }
             else if (afternoonCondition == "無")
             { }
-            else if (afternoonCondition == "停電")
+            else if (afternoonCondition == "停電" && !bWriteEmptyChart)
             {
-                if (morningCondition != "停電")
+                if (strMorningCondition != "停電")
                 {
-                    xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\下午停電.png", 
+                    xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\下午停電.png", 
                                                  MsoTriState.msoFalse, MsoTriState.msoTrue, 
-                                                  g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
-                                                  g_startPositionV + 1 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                                  g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
+                                                  g_fStartPositionV + 1 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                                   21, 21);
                 }
-                conditionNonWorkingDaysInMonth += nonWorkingCount;
+                fConditionNonWorkingDaysInMonth += fNonWorkingCount;
             }
-            else if (afternoonCondition == "停工")
+            else if (afternoonCondition == "停工" && !bWriteEmptyChart)
             {
-                if (morningCondition != "停工")
+                if (strMorningCondition != "停工")
                 {
-                    xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\下午停工.png", 
+                    xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\下午停工.png", 
                                                   MsoTriState.msoFalse, MsoTriState.msoTrue, 
-                                                  g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
-                                                  g_startPositionV + 1 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                                  g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
+                                                  g_fStartPositionV + 1 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
                                                   21, 21);
                 }
-                conditionNonWorkingDaysInMonth += nonWorkingCount;
+                fConditionNonWorkingDaysInMonth += fNonWorkingCount;
             }
             else if (afternoonCondition == "補假")
             {
-                conditionNonWorkingDaysInMonth += nonWorkingCount;
+                fConditionNonWorkingDaysInMonth += fNonWorkingCount;
             }
             else if (afternoonCondition == "選舉")
             {
-                conditionNonWorkingDaysInMonth += nonWorkingCount;
+                fConditionNonWorkingDaysInMonth += fNonWorkingCount;
             }
-            else if (afternoonCondition == "雨後泥濘")
+            else if (afternoonCondition == "雨後泥濘" && !bWriteEmptyChart)
             {
-                conditionNonWorkingDaysInMonth += nonWorkingCount;
+                fConditionNonWorkingDaysInMonth += fNonWorkingCount;
             }
         }
 
-        private void PrintHoliday(int month, int dateIndex)
+        private void PrintHoliday(int iMonth, int iDateIndex)
         {
-            xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\例假日.png", 
+            xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\例假日.png", 
                                           MsoTriState.msoFalse, MsoTriState.msoTrue, 
-                                          g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
-                                          g_startPositionV - 1 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                          g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
+                                          g_fStartPositionV - 1 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
+                                          21, 21);
+        }
+
+        private void PrintFinish(int iMonth, int iDateIndex, bool bContract)
+        {
+            xlWorkSheet.Shapes.AddPicture(bContract ? g_strPath + "\\image\\完工.png" : g_strPath + "\\image\\變動完工日.png",
+                                          MsoTriState.msoFalse, MsoTriState.msoTrue,
+                                          g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
+                                          g_fStartPositionV + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))),
                                           21, 21);
         }
 

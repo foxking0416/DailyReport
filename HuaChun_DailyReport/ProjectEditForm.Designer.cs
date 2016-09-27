@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ((System.ComponentModel.ISupportInitialize)(this.numericDays)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericDuration)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uiNumericDays)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uiNumericDuration)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -41,11 +41,11 @@
             // 
             // dateTimeFinish
             // 
-            this.dateTimeFinish.ValueChanged += new System.EventHandler(this.TimeAndValueChanged);
+            this.uiDateTimeFinish.ValueChanged += new System.EventHandler(this.TimeAndValueChanged);
             // 
             // numericDuration
             // 
-            this.numericDuration.ValueChanged += new System.EventHandler(this.TimeAndValueChanged);
+            this.uiNumericDuration.ValueChanged += new System.EventHandler(this.TimeAndValueChanged);
             // 
             // ProjectEditForm
             // 
@@ -54,8 +54,8 @@
             this.ClientSize = new System.Drawing.Size(890, 518);
             this.Name = "ProjectEditForm";
             this.Text = "ProjectEditForm";
-            ((System.ComponentModel.ISupportInitialize)(this.numericDays)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericDuration)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uiNumericDays)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uiNumericDuration)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);

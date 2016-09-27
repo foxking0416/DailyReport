@@ -204,38 +204,41 @@ namespace HuaChun_DailyReport
         //查詢預計完工表
         private void MenuItemEepectFinishChart_Click(object sender, EventArgs e)
         {
+            string strProjectName = SQL.Read_SQL_data("project_name", "project_info", "project_no ='" + g_ProjectNo + "'");
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Excel File|*.xls";
             saveFileDialog.Title = "Save an Excel File";
+            saveFileDialog.FileName = strProjectName + "預計完工表";
             saveFileDialog.ShowDialog();
 
             if (saveFileDialog.FileName != "")
             {
-                ClassExcelGenerator excelGen = new ClassExcelGenerator(g_ProjectNo, saveFileDialog.FileName, 1);
+                ClassExcelGenerator excelGen = new ClassExcelGenerator(g_ProjectNo, saveFileDialog.FileName, (int)ChartType.ExpectFinishChart);
             }
         }
         //查詢晴雨表
         private void MenuItemWeatherChart_Click(object sender, EventArgs e)
         {
-            string[] reportDates = SQL.Read1DArray_SQL_Data("date", "dailyreport", "project_no ='" + g_ProjectNo + "' ORDER BY date DESC");
-            if (reportDates.Length == 0)//表示這個工程目前並沒有輸入任何日報表
+            string[] arrReportDates = SQL.Read1DArray_SQL_Data("date", "dailyreport", "project_no ='" + g_ProjectNo + "' ORDER BY date DESC");
+
+            if (arrReportDates.Length == 0)//表示這個工程目前並沒有輸入任何日報表
             {
                 MessageBox.Show("此工程目前並沒有任何已存在的日報表,\r\n請重新選擇工程或建立日報表", "無法建立晴雨表", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             else
             {
+                string strProjectName = SQL.Read_SQL_data("project_name", "project_info", "project_no ='" + g_ProjectNo + "'");
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.Filter = "Excel File|*.xls";
                 saveFileDialog.Title = "Save an Excel File";
+                saveFileDialog.FileName = strProjectName + "晴雨表";
                 saveFileDialog.ShowDialog();
 
                 if (saveFileDialog.FileName != "")
                 {
-                    ClassExcelGenerator excelGen = new ClassExcelGenerator(g_ProjectNo, saveFileDialog.FileName, 0);
-                    int i = 0;
+                    ClassExcelGenerator excelGen = new ClassExcelGenerator(g_ProjectNo, saveFileDialog.FileName, (int)ChartType.WeatherChart);
                 }
 
-                //bg.RunWorkerAsync();  
             }
         }
         //查詢日報明細表
