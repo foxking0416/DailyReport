@@ -201,6 +201,19 @@ namespace HuaChun_DailyReport
         {
 
         }
+        //查詢預計完工表
+        private void MenuItemEepectFinishChart_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Excel File|*.xls";
+            saveFileDialog.Title = "Save an Excel File";
+            saveFileDialog.ShowDialog();
+
+            if (saveFileDialog.FileName != "")
+            {
+                ClassExcelGenerator excelGen = new ClassExcelGenerator(g_ProjectNo, saveFileDialog.FileName, 1);
+            }
+        }
         //查詢晴雨表
         private void MenuItemWeatherChart_Click(object sender, EventArgs e)
         {
@@ -379,6 +392,11 @@ namespace HuaChun_DailyReport
             this.MenuItemQuery.Enabled = true;
 
         }
+
+
+
+ 
+
 
   
 

@@ -67,6 +67,7 @@
             this.MenuItemVendorList = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemEmployeeList = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.MenuItemEepectFinishChart = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemWeatherChart = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemDailyReportList = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemNonworkingDayChart = new System.Windows.Forms.ToolStripMenuItem();
@@ -136,7 +137,7 @@
             // 
             this.MenuItemSelectProject.Enabled = false;
             this.MenuItemSelectProject.Name = "MenuItemSelectProject";
-            this.MenuItemSelectProject.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemSelectProject.Size = new System.Drawing.Size(122, 22);
             this.MenuItemSelectProject.Text = "選擇專案";
             this.MenuItemSelectProject.Click += new System.EventHandler(this.MenuItemSelectProject_Click);
             // 
@@ -381,6 +382,7 @@
             this.MenuItemVendorList,
             this.MenuItemEmployeeList,
             this.toolStripSeparator6,
+            this.MenuItemEepectFinishChart,
             this.MenuItemWeatherChart,
             this.MenuItemDailyReportList,
             this.MenuItemNonworkingDayChart,
@@ -396,7 +398,7 @@
             this.休假明細表ToolStripMenuItem});
             this.MenuItemQuery.Enabled = false;
             this.MenuItemQuery.Name = "MenuItemQuery";
-            this.MenuItemQuery.Size = new System.Drawing.Size(43, 20);
+            this.MenuItemQuery.Size = new System.Drawing.Size(44, 20);
             this.MenuItemQuery.Text = "查詢";
             // 
             // MenuItemVendorList
@@ -419,6 +421,13 @@
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
             this.toolStripSeparator6.Size = new System.Drawing.Size(155, 6);
+            // 
+            // MenuItemEepectFinishChart
+            // 
+            this.MenuItemEepectFinishChart.Name = "MenuItemEepectFinishChart";
+            this.MenuItemEepectFinishChart.Size = new System.Drawing.Size(158, 22);
+            this.MenuItemEepectFinishChart.Text = "預計完工表";
+            this.MenuItemEepectFinishChart.Click += new System.EventHandler(this.MenuItemEepectFinishChart_Click);
             // 
             // MenuItemWeatherChart
             // 
@@ -548,7 +557,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(21, 81);
+            this.button1.Location = new System.Drawing.Point(12, 50);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 2;
@@ -559,7 +568,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(134, 80);
+            this.button2.Location = new System.Drawing.Point(129, 50);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 4;
@@ -570,7 +579,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(251, 80);
+            this.button3.Location = new System.Drawing.Point(240, 50);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 5;
@@ -582,16 +591,16 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(21, 55);
+            this.label1.Location = new System.Drawing.Point(12, 34);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(91, 13);
+            this.label1.Size = new System.Drawing.Size(85, 13);
             this.label1.TabIndex = 6;
             this.label1.Text = "目前選擇專案：";
             // 
             // labelProject
             // 
             this.labelProject.AutoSize = true;
-            this.labelProject.Location = new System.Drawing.Point(109, 55);
+            this.labelProject.Location = new System.Drawing.Point(109, 34);
             this.labelProject.Name = "labelProject";
             this.labelProject.Size = new System.Drawing.Size(19, 13);
             this.labelProject.TabIndex = 6;
@@ -601,7 +610,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(366, 132);
+            this.ClientSize = new System.Drawing.Size(366, 62);
             this.Controls.Add(this.labelProject);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button3);
@@ -685,6 +694,7 @@
         private System.Windows.Forms.ToolStripMenuItem MenuItemSelectProject;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label labelProject;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemEepectFinishChart;
     }
 }
 

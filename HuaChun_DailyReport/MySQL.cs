@@ -159,9 +159,13 @@ namespace HuaChun_DailyReport
         public string[] Read1DArrayNoCondition_SQL_Data(string Value_Name, string table)
         {
             string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
+            //string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass;
+
             MySqlConnection conn = new MySqlConnection(connStr);
             conn.Open();
             string CmdText = "SELECT " + Value_Name + " FROM " + table;
+            //string CmdText = "show tables";
+            //string CmdText = "show databases";
             MySqlCommand cmd = new MySqlCommand(CmdText, conn);
             MySqlDataReader myReader;
             List<string> data_array = new List<string>();

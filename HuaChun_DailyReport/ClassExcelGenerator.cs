@@ -6,6 +6,9 @@ using System.IO;
 using Microsoft.Office.Core;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using System.ComponentModel;
+using System.Threading;
 
 namespace HuaChun_DailyReport
 {
@@ -18,16 +21,20 @@ namespace HuaChun_DailyReport
         protected MySQL SQL;
 
         Excel.Workbook xlWorkBook;
+        //Excel.Workbooks xlWorkBooks;
         Excel.Worksheet xlWorkSheet;
         string g_ProjectNo;
         string g_ProjectName;
         string g_ComputeType;
         string g_ComputeHoliday;
-
-        int width = 34;
-        int height = 200;
-        int range = 10;
-        public ClassExcelGenerator(string projectNo, string savePath, int type)
+        string g_StrPath;
+        string g_StrSavePath;
+        float g_CellWidth = 30.75f;
+        float g_StartPositionH = 37;
+        float g_CellHeight = 39.75f;
+        float g_startPositionV = 174;
+        
+        public ClassExcelGenerator(string strProjectNo, string strSavePath, int type)
         {
             dbHost = AppSetting.LoadInitialSetting("DB_IP", "127.0.0.1");
             dbUser = AppSetting.LoadInitialSetting("DB_USER", "root");
@@ -35,72 +42,77 @@ namespace HuaChun_DailyReport
             dbName = AppSetting.LoadInitialSetting("DB_NAME", "huachun");
             SQL = new MySQL(dbHost, dbUser, dbPass, dbName);
 
+
+
+            string computeType = SQL.Read_SQL_data("computetype", "project_info", "project_no = '" + strProjectNo + "'");
+            g_ComputeType = computeType;
+
+            string computeHoliday = SQL.Read_SQL_data("holiday", "project_info", "project_no = '" + strProjectNo + "'");
+            g_ComputeHoliday = computeHoliday;
+
+
+            g_ProjectNo = strProjectNo;
+            g_StrPath = Directory.GetCurrentDirectory();
+            g_StrSavePath = strSavePath;
+
+            var xlApp = new Excel.Application();
+            //xlWorkBooks = xlApp.Workbooks;
+            xlWorkBook = xlApp.Workbooks.Open(g_StrPath + "\\晴雨暨工期表.xls");
+            xlWorkSheet = xlWorkBook.Sheets[1];
+
+            g_ProjectName = SQL.Read_SQL_data("project_name", "project_info", "project_no = '" + g_ProjectNo + "'");
+            string startDate = SQL.Read_SQL_data("startdate", "project_info", "project_no = '" + g_ProjectNo + "'");
+            string endDate = "";
+
             if (type == 0)
             {
-                string computeType = SQL.Read_SQL_data("computetype", "project_info", "project_no = '" + projectNo + "'");
-                g_ComputeType = computeType;
-
-                string computeHoliday = SQL.Read_SQL_data("holiday", "project_info", "project_no = '" + projectNo + "'");
-                g_ComputeHoliday = computeHoliday;
-
-
-                g_ProjectNo = projectNo;
-                string path = Directory.GetCurrentDirectory();
-                var xlApp = new Excel.Application();
-                xlWorkBook = xlApp.Workbooks.Open(path + "\\晴雨暨工期表.xls");
-                xlWorkSheet = xlWorkBook.Sheets[1];
-
-                //int dateIndex = 1;
-                //int month = 12;
-
-                //xlWorkSheet.Shapes.AddPicture(@"D:\\上午雨無框.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 34 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 174 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 21, 12);
-                //xlWorkSheet.Shapes.AddPicture(@"D:\\下午雨無框.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 34 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 184 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 21, 12);
-                //xlWorkSheet.Shapes.AddPicture(@"D:\\補假.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 27 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 167 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 35, 35);
-                //xlWorkSheet.Shapes.AddPicture(@"D:\\選舉.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 27 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 167 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 35, 35);
-                //xlWorkSheet.Shapes.AddPicture(@"D:\\全日停電.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 27 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 167 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 35, 35);
-                //xlWorkSheet.Shapes.AddPicture(@"D:\\下午停工.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 39 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 187 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 11, 11);
-                //xlWorkSheet.Shapes.AddPicture(@"D:\\下午停電.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 35 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 180 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 21, 21);
-
-                g_ProjectName = SQL.Read_SQL_data("project_name", "project_info", "project_no = '" + g_ProjectNo + "'");
-                xlWorkSheet.Cells[1, 1] = g_ProjectName;
-                string startDate = SQL.Read_SQL_data("startdate", "project_info", "project_no = '" + g_ProjectNo + "'");
-                string endDate = SQL.Read_SQL_data("date", "dailyreport", "project_no = '" + g_ProjectNo + "' ORDER BY date DESC ");//把日報表有填的日期的最後一天當enddate
-
-                WriteDataIntoExcel(Functions.TransferSQLDateToDateTime(startDate), Functions.TransferSQLDateToDateTime(endDate));
-
-                //xlWorkBook.SaveAs("D:\\test" + width.ToString() + "_" + height + "_" + range + ".xls");
-                xlWorkBook.SaveAs(savePath);
-                xlWorkBook.Close(true);
-                xlApp.Quit();
-
-                Marshal.ReleaseComObject(xlApp);
+                endDate = SQL.Read_SQL_data("date", "dailyreport", "project_no = '" + g_ProjectNo + "' ORDER BY date DESC ");//把日報表有填的日期的最後一天當enddate
             }
             else if (type == 1)
             {
- 
+                endDate = SQL.Read_SQL_data("contract_finishdate", "project_info", "project_no = '" + g_ProjectNo + "'");
             }
 
-        }
+            int yearStart = Functions.TransferSQLDateToDateTime(startDate).Year;
+            int yearEnd = Functions.TransferSQLDateToDateTime(endDate).Year;
+            for (int i = 0; i < yearEnd - yearStart; ++i)
+            {
+                xlWorkSheet.Copy(Type.Missing, xlWorkBook.Sheets[xlWorkBook.Sheets.Count]); // copy
+            }
 
-        private void WriteIntoExcelTest()
-        {
-            //xlWorkSheet.Shapes.AddPicture(@"D:\\例假日.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 34 , 159 , 21, 21);
-            //xlWorkSheet.Shapes.AddPicture(@"D:\\停工.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 34, 165, 21, 21);
-            //xlWorkSheet.Shapes.AddPicture(@"D:\\上午晴.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, width, height, 21, 12);
-            //xlWorkSheet.Shapes.AddPicture(@"D:\\下午晴.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, width, height + range, 21, 12);
-            WriteDataIntoExcel(new DateTime(2013, 1, 1), new DateTime(2013, 12, 31));
+            WriteDataIntoExcel(Functions.TransferSQLDateToDateTime(startDate), Functions.TransferSQLDateToDateTime(endDate));
+
+            xlApp.DisplayAlerts = false;
+            xlWorkBook.SaveAs(g_StrSavePath);
+            xlApp.DisplayAlerts = true;
+            xlWorkBook.Close(false);
+            //xlApp.Workbooks.Close();
+            xlApp.Quit();
+
+            Marshal.ReleaseComObject(xlApp);
+            Marshal.ReleaseComObject(xlWorkBook);
+            //Marshal.ReleaseComObject(xlApp.Workbooks);
+
+            MessageBox.Show("晴雨表儲存完成", "完成");
+
         }
 
         private void WriteDataIntoExcel(DateTime dateStart, DateTime dateEnd)
         {
+            //dateEnd = dateStart.AddDays(2);
+
             int yearStart = dateStart.Year;
             int yearEnd = dateEnd.Year;
 
             for (int year = yearStart; year <= yearEnd; year++)
             {
-                xlWorkBook.Sheets[xlWorkBook.Sheets.Count].Name = (year - 1911).ToString() + "年度" + g_ProjectName + "工期晴雨表";
-
+                xlWorkSheet = xlWorkBook.Sheets[ year - yearStart + 1 ];
+                xlWorkSheet.Cells[1, 1] = g_ProjectName;
                 xlWorkSheet.Cells[5, 2] = (year - 1911).ToString() + "年";
+
+                xlWorkSheet.Name = (year - 1911).ToString() + "年度" + g_ProjectName + "工期晴雨表";
+
+
                 for (int month = 1; month <= 12; month++)
                 {
 
@@ -186,7 +198,6 @@ namespace HuaChun_DailyReport
                         }
                         #endregion
 
-
                         string morningWeather = SQL.Read_SQL_data("morning_weather", "dailyreport", "project_no = '" + g_ProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
                         string afternoonWeather = SQL.Read_SQL_data("afternoon_weather", "dailyreport", "project_no = '" + g_ProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
                         string morningCondition = SQL.Read_SQL_data("morning_condition", "dailyreport", "project_no = '" + g_ProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
@@ -196,7 +207,6 @@ namespace HuaChun_DailyReport
                         if (date.CompareTo(dateStart) >= 0 && date.CompareTo(dateEnd) <= 0)//開工日期之後才需要貼晴雨圖
                         {             
                             daysInMonth += 1;
-
                             #region 例假日
                             if (g_ComputeType == "1")//工期計算方式為限期完工
                             {
@@ -307,11 +317,8 @@ namespace HuaChun_DailyReport
                                 }
                                 #endregion
                             }
-                            #endregion
-
-                            
+                            #endregion         
                         }
-
                     }
 
 
@@ -320,9 +327,6 @@ namespace HuaChun_DailyReport
                     xlWorkSheet.Cells[7 + month * 2, 41] = weatherNonWorkingDaysInMonth;
                     xlWorkSheet.Cells[7 + month * 2, 42] = conditionNonWorkingDaysInMonth;
                 }
-
-                if(year != yearEnd)
-                    xlWorkSheet.Copy(Type.Missing, xlWorkBook.Sheets[xlWorkBook.Sheets.Count]); // copy
             }
         }
 
@@ -337,60 +341,110 @@ namespace HuaChun_DailyReport
             #region 天候狀況
             if (morningWeather == string.Empty)//無日報表資料
             {
-                xlWorkSheet.Shapes.AddPicture(@"D:\\上午無資料無框.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 34 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 174 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 21, 12);
+                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\上午無資料無框.png", 
+                                              MsoTriState.msoFalse, MsoTriState.msoTrue, 
+                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))), 
+                                              g_startPositionV + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              21, 12);
             }
             else if (morningWeather == "晴")
             {
-                xlWorkSheet.Shapes.AddPicture(@"D:\\上午晴無框.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 34 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 174 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 21, 12);
+                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\上午晴無框.png", 
+                                              MsoTriState.msoFalse, MsoTriState.msoTrue, 
+                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))), 
+                                              g_startPositionV + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              21, 12);
             }
             else if (morningWeather == "雨")
             {
-                xlWorkSheet.Shapes.AddPicture(@"D:\\上午雨無框.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 34 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 174 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 21, 12);
+                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\上午雨無框.png", 
+                                              MsoTriState.msoFalse, MsoTriState.msoTrue, 
+                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))), 
+                                              g_startPositionV + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              21, 12);
                 weatherNonWorkingDaysInMonth += nonWorkingCount;
             }
             else if (morningWeather == "豪雨")
             {
-                xlWorkSheet.Shapes.AddPicture(@"D:\\上午豪雨無框.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 34 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 174 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 21, 12);
+                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\上午豪雨無框.png", 
+                                              MsoTriState.msoFalse, MsoTriState.msoTrue, 
+                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))), 
+                                              g_startPositionV + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))),
+                                              21, 12);
                 weatherNonWorkingDaysInMonth += nonWorkingCount;
             }
             else if (morningWeather == "颱風")
             {
-                xlWorkSheet.Shapes.AddPicture(@"D:\\上午颱風.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 34 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 174 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 21, 12);
+                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\上午颱風.png", 
+                                              MsoTriState.msoFalse, MsoTriState.msoTrue, 
+                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
+                                              g_startPositionV + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              21, 12);
                 weatherNonWorkingDaysInMonth += nonWorkingCount;
             }
             else if (morningWeather == "酷熱")
             {
-                xlWorkSheet.Shapes.AddPicture(@"D:\\上午酷熱無框.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 34 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 174 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 21, 12);
+                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\上午酷熱無框.png", 
+                                              MsoTriState.msoFalse, MsoTriState.msoTrue, 
+                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
+                                              g_startPositionV + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              21, 12);
                 weatherNonWorkingDaysInMonth += nonWorkingCount;
             }
 
 
             if (afternoonWeather == string.Empty)//無日報表資料
             {
-                xlWorkSheet.Shapes.AddPicture(@"D:\\下午無資料無框.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 34 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 184 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 21, 12);
+                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\下午無資料無框.png", 
+                                              MsoTriState.msoFalse, MsoTriState.msoTrue, 
+                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
+                                              g_startPositionV + 10 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              21, 12);
+                Thread.Sleep(10);
             }
             else if (afternoonWeather == "晴")
             {
-                xlWorkSheet.Shapes.AddPicture(@"D:\\下午晴無框.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 34 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 184 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 21, 12);
+                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\下午晴無框.png", 
+                                              MsoTriState.msoFalse, MsoTriState.msoTrue, 
+                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
+                                              g_startPositionV + 10 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              21, 12);
+                Thread.Sleep(10);
             }
             else if (afternoonWeather == "雨")
             {
-                xlWorkSheet.Shapes.AddPicture(@"D:\\下午雨無框.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 34 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 184 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 21, 12);
+                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\下午雨無框.png", 
+                                              MsoTriState.msoFalse, MsoTriState.msoTrue, 
+                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
+                                              g_startPositionV + 10 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              21, 12);
                 weatherNonWorkingDaysInMonth += nonWorkingCount;
             }
             else if (afternoonWeather == "豪雨")
             {
-                xlWorkSheet.Shapes.AddPicture(@"D:\\下午豪雨無框.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 34 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 184 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 21, 12);
+                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\下午豪雨無框.png", 
+                                              MsoTriState.msoFalse, MsoTriState.msoTrue, 
+                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
+                                              g_startPositionV + 10 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              21, 12);
                 weatherNonWorkingDaysInMonth += nonWorkingCount;
             }
             else if (afternoonWeather == "颱風")
             {
-                xlWorkSheet.Shapes.AddPicture(@"D:\\下午颱風.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 34 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 184 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 21, 12);
+                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\下午颱風.png", 
+                                              MsoTriState.msoFalse, MsoTriState.msoTrue, 
+                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
+                                              g_startPositionV + 10 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              21, 12);
                 weatherNonWorkingDaysInMonth += nonWorkingCount;
             }
             else if (afternoonWeather == "酷熱")
             {
-                xlWorkSheet.Shapes.AddPicture(@"D:\\下午酷熱無框.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 34 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 184 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 21, 12);
+                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\下午酷熱無框.png", 
+                                              MsoTriState.msoFalse, MsoTriState.msoTrue,
+                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
+                                              g_startPositionV + 10 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              21, 12);
                 weatherNonWorkingDaysInMonth += nonWorkingCount;
             }
             #endregion
@@ -401,22 +455,38 @@ namespace HuaChun_DailyReport
             { }
             else if (morningCondition == "停電")
             {
-                xlWorkSheet.Shapes.AddPicture(@"D:\\全日停電.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 27 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 167 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 35, 35);
+                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\全日停電.png", 
+                                              MsoTriState.msoFalse, MsoTriState.msoTrue, 
+                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
+                                              g_startPositionV + 1 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              21, 21);
                 conditionNonWorkingDaysInMonth += nonWorkingCount;
             }
             else if (morningCondition == "停工")
             {
-                xlWorkSheet.Shapes.AddPicture(@"D:\\全日停工.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 34 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 175 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 21, 21);
+                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\全日停工.png", 
+                                              MsoTriState.msoFalse, MsoTriState.msoTrue, 
+                                              g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
+                                              g_startPositionV + 1 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              21, 21);
                 conditionNonWorkingDaysInMonth += nonWorkingCount;
             }
             else if (morningCondition == "補假")
             {
-                xlWorkSheet.Shapes.AddPicture(@"D:\\補假.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 27 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 167 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 35, 35);
+                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\補假.png", 
+                                              MsoTriState.msoFalse, MsoTriState.msoTrue, 
+                                              g_StartPositionH - 7 + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
+                                              g_startPositionV - 7 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              35, 35);
                 conditionNonWorkingDaysInMonth += nonWorkingCount;
             }
             else if (morningCondition == "選舉")
             {
-                xlWorkSheet.Shapes.AddPicture(@"D:\\選舉.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 27 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 167 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 35, 35);
+                xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\選舉.png", 
+                                              MsoTriState.msoFalse, MsoTriState.msoTrue, 
+                                              g_StartPositionH - 7 + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
+                                              g_startPositionV - 7 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                              35, 35);
                 conditionNonWorkingDaysInMonth += nonWorkingCount;
             }
             else if (morningCondition == "雨後泥濘")
@@ -432,7 +502,11 @@ namespace HuaChun_DailyReport
             {
                 if (morningCondition != "停電")
                 {
-                    xlWorkSheet.Shapes.AddPicture(@"D:\\下午停電.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 35 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 180 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 21, 21);
+                    xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\下午停電.png", 
+                                                 MsoTriState.msoFalse, MsoTriState.msoTrue, 
+                                                  g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
+                                                  g_startPositionV + 1 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                                  21, 21);
                 }
                 conditionNonWorkingDaysInMonth += nonWorkingCount;
             }
@@ -440,7 +514,11 @@ namespace HuaChun_DailyReport
             {
                 if (morningCondition != "停工")
                 {
-                    xlWorkSheet.Shapes.AddPicture(@"D:\\下午停工.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 39 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 187 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 11, 11);
+                    xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\下午停工.png", 
+                                                  MsoTriState.msoFalse, MsoTriState.msoTrue, 
+                                                  g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
+                                                  g_startPositionV + 1 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                                  21, 21);
                 }
                 conditionNonWorkingDaysInMonth += nonWorkingCount;
             }
@@ -460,7 +538,11 @@ namespace HuaChun_DailyReport
 
         private void PrintHoliday(int month, int dateIndex)
         {
-            xlWorkSheet.Shapes.AddPicture(@"D:\\例假日.png", MsoTriState.msoFalse, MsoTriState.msoCTrue, 34 + Convert.ToInt32(Math.Round(28.5 * (dateIndex - 1))), 173 + Convert.ToInt32(Math.Round(39.75 * (month - 1))), 21, 21);
+            xlWorkSheet.Shapes.AddPicture(g_StrPath + "\\image\\例假日.png", 
+                                          MsoTriState.msoFalse, MsoTriState.msoTrue, 
+                                          g_StartPositionH + Convert.ToInt32(Math.Round(g_CellWidth * (dateIndex - 1))),
+                                          g_startPositionV - 1 + Convert.ToInt32(Math.Round(g_CellHeight * (month - 1))), 
+                                          21, 21);
         }
 
         private void PrintNonWorking(int month, int dateIndex)
