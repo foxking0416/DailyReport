@@ -220,14 +220,7 @@ namespace HuaChun_DailyReport
                         string strAfternoonCondition = SQL.Read_SQL_data("afternoon_condition", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
 
 
-                        if (dtDate.CompareTo(dtContractDateEnd) == 0)
-                        {
-                            PrintFinish(iMonth, iDateIndex, false);
-                        }
-                        if (dtDate.CompareTo(dtDateEnd) == 0)
-                        {
-                            PrintFinish(iMonth, iDateIndex, true);
-                        }
+
                         if (dtDate.CompareTo(dtDateStart) >= 0 && dtDate.CompareTo(dtDateEnd) <= 0)//開工日期之後才需要貼晴雨圖
                         {             
                             fDaysInMonth += 1;
@@ -461,6 +454,14 @@ namespace HuaChun_DailyReport
                                 #endregion
                             }
                             #endregion         
+                        }
+                        if (dtDate.CompareTo(dtContractDateEnd) == 0)
+                        {
+                            PrintFinish(iMonth, iDateIndex, false);
+                        }
+                        if (dtDate.CompareTo(dtDateEnd) == 0)
+                        {
+                            PrintFinish(iMonth, iDateIndex, true);
                         }
                     }
 
