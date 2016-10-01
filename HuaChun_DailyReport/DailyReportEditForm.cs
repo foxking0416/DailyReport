@@ -25,6 +25,7 @@ namespace HuaChun_DailyReport
 
         public override void LoadProjectInfo(string projectNo)
         {
+            Cursor.Current = Cursors.WaitCursor;
             //專案編號
             this.textBoxProjectNo.Text = projectNo;
             g_ProjectNumber = projectNo;
@@ -128,7 +129,7 @@ namespace HuaChun_DailyReport
                 this.textBoxTotalDays.Text = Convert.ToString(FinishDate.Subtract(dateStart.Value).Days + 1);
             }
 
-            
+            Cursor.Current = Cursors.Default;
         }
 
         private void LoadReportInfo(string projectNo, DateTime date)

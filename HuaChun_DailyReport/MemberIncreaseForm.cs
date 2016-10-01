@@ -50,6 +50,7 @@ namespace HuaChun_DailyReport
 
         protected void InsertIntoDB()
         {
+            Cursor.Current = Cursors.WaitCursor;
             string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
             MySqlConnection conn = new MySqlConnection(connStr);
             MySqlCommand command = conn.CreateCommand();
@@ -134,6 +135,7 @@ namespace HuaChun_DailyReport
             command.CommandText = commandStr;// "Insert into vendor(vendor_no,vendor_name,vendor_abbre) values('" + textBoxVendor_No.Text + "','" + textBoxVendor_Name.Text + "','" + textBoxVendor_Abbre.Text + "')";
             command.ExecuteNonQuery();
             conn.Close();
+            Cursor.Current = Cursors.Default;
         }
 
         protected void Clear()

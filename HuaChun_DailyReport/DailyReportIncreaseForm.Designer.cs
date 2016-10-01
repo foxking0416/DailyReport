@@ -646,6 +646,7 @@
             this.textBoxInterference.Name = "textBoxInterference";
             this.textBoxInterference.Size = new System.Drawing.Size(65, 22);
             this.textBoxInterference.TabIndex = 5;
+            this.textBoxInterference.Visible = false;
             // 
             // label21
             // 
@@ -656,12 +657,13 @@
             this.label21.Size = new System.Drawing.Size(68, 16);
             this.label21.TabIndex = 0;
             this.label21.Text = "干擾因素";
+            this.label21.Visible = false;
             // 
             // comboBoxConditionMorning
             // 
             this.comboBoxConditionMorning.Enabled = false;
             this.comboBoxConditionMorning.FormattingEnabled = true;
-            this.comboBoxConditionMorning.Location = new System.Drawing.Point(40, 21);
+            this.comboBoxConditionMorning.Location = new System.Drawing.Point(44, 21);
             this.comboBoxConditionMorning.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxConditionMorning.Name = "comboBoxConditionMorning";
             this.comboBoxConditionMorning.Size = new System.Drawing.Size(82, 24);
@@ -943,7 +945,7 @@
             // 
             this.label31.AutoSize = true;
             this.label31.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label31.Location = new System.Drawing.Point(120, 25);
+            this.label31.Location = new System.Drawing.Point(135, 25);
             this.label31.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(38, 16);
@@ -954,7 +956,7 @@
             // 
             this.comboBoxConditionAfternoon.Enabled = false;
             this.comboBoxConditionAfternoon.FormattingEnabled = true;
-            this.comboBoxConditionAfternoon.Location = new System.Drawing.Point(164, 21);
+            this.comboBoxConditionAfternoon.Location = new System.Drawing.Point(176, 21);
             this.comboBoxConditionAfternoon.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxConditionAfternoon.Name = "comboBoxConditionAfternoon";
             this.comboBoxConditionAfternoon.Size = new System.Drawing.Size(82, 24);

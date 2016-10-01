@@ -26,6 +26,7 @@ namespace HuaChun_DailyReport
 
         public void LoadInformation(string grantNumber)
         {
+            Cursor.Current = Cursors.WaitCursor;
             //核准日期
             string grantdate = SQL.Read_SQL_data("grantdate", "extendduration", "project_no = '" + ProjectNumber + "' AND grantnumber = '" + grantNumber + "'");
             this.dateTimeGrantDate.Value = Functions.TransferSQLDateToDateTime(grantdate);
@@ -41,6 +42,7 @@ namespace HuaChun_DailyReport
             //填寫日期
             string writedate = SQL.Read_SQL_data("writedate", "extendduration", "project_no = '" + ProjectNumber + "' AND grantnumber = '" + grantNumber + "'");
             this.dateTimeFilledDate.Value = Functions.TransferSQLDateToDateTime(writedate);
+            Cursor.Current = Cursors.Default;
         }
 
         protected override void btnOK_Click(object sender, EventArgs e)

@@ -14,8 +14,6 @@ namespace HuaChun_DailyReport
     public partial class Main : Form
     {
 
-        BackgroundWorker bgWorker = new BackgroundWorker();
-
         private string dbHost;
         private string dbUser;
         private string dbPass;
@@ -36,9 +34,6 @@ namespace HuaChun_DailyReport
 
             SQL = new MySQL(dbHost, dbUser, dbPass, dbName);
 
-            bgWorker.DoWork += new DoWorkEventHandler(bg_DoWork);
-            bgWorker.ProgressChanged += new ProgressChangedEventHandler(bg_ProgressChange);
-            bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bg_RunWorkerCompleted);
         }
 
         //MenuItem Click Event
@@ -158,10 +153,6 @@ namespace HuaChun_DailyReport
 
         }
 
-        private void MenuItemEnd_Click(object sender, EventArgs e)
-        {
-
-        }
 
 
         //日報表作業
@@ -359,16 +350,12 @@ namespace HuaChun_DailyReport
         private void button1_Click(object sender, EventArgs e)
         {
 
-            DateTime date1 = new DateTime(2016, 1, 1);
-            DateTime date2 = new DateTime(2017, 1, 1);
-            int days = date2.Subtract(date1).Days;
-            int a = 0;
-            //ClassExcelGenerator ExcelGen = new ClassExcelGenerator("");
+            SQL.TestSqlCommand();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            ClassPDFGenerator pdfGen = new ClassPDFGenerator();
+            SQL.TestSqlCommand2();
 
         }
 

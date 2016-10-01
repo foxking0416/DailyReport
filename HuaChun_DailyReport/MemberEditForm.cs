@@ -179,6 +179,7 @@ namespace HuaChun_DailyReport
 
         public void LoadInformation(string member_account)
         {
+            Cursor.Current = Cursors.WaitCursor;
             this.textBoxAccount.Text = SQL.Read_SQL_data("account", "member", "account = '" + member_account + "'");
             this.textBoxName.Text = SQL.Read_SQL_data("name", "member", "account = '" + member_account + "'");
             this.textBoxID.Text = SQL.Read_SQL_data("id", "member", "account = '" + member_account + "'");
@@ -233,6 +234,8 @@ namespace HuaChun_DailyReport
                 radioBtnOnJobY.Checked = true;
             else
                 radioBtnOnJobN.Checked = true;
+
+            Cursor.Current = Cursors.Default;
 
         }
 

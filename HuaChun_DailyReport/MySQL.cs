@@ -69,7 +69,7 @@ namespace HuaChun_DailyReport
         {
             try
             {
-                string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
+                string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName + ";database=huachun;Charset = utf8";
                 MySqlConnection conn = new MySqlConnection(connStr);
                 conn.Open();
                 string CmdText = "SELECT sv_value FROM sv WHERE sv_id = 8000001";
@@ -89,7 +89,7 @@ namespace HuaChun_DailyReport
         {
             try
             {
-                string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
+                string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName + ";database=huachun;Charset = utf8";
                 MySqlConnection conn = new MySqlConnection(connStr);
                 conn.Open();
                 MySqlCommand cmd = conn.CreateCommand();
@@ -105,7 +105,7 @@ namespace HuaChun_DailyReport
         {
             try
             {
-                string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
+                string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName + ";database=huachun;Charset = utf8";
                 MySqlConnection conn = new MySqlConnection(connStr);
                 conn.Open();
                 string CmdText = "SELECT " + Value_Name + " FROM " + table + " WHERE " + condition;
@@ -121,7 +121,7 @@ namespace HuaChun_DailyReport
         }
         public void NoHistoryDelete_SQL(string table, string condition)
         {
-            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
+            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName + ";database=huachun;Charset = utf8";
             MySqlConnection conn = new MySqlConnection(connStr);
             conn.Open();
             MySqlCommand cmd = conn.CreateCommand();
@@ -134,7 +134,8 @@ namespace HuaChun_DailyReport
         }
         public string[] Read1DArray_SQL_Data(string Value_Name, string table, string condition)
         {
-            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
+            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName + ";database=huachun;Charset = utf8";
+            
             MySqlConnection conn = new MySqlConnection(connStr);
             conn.Open();
             string CmdText = "SELECT " + Value_Name + " FROM " + table + " WHERE " + condition;
@@ -158,14 +159,11 @@ namespace HuaChun_DailyReport
         }
         public string[] Read1DArrayNoCondition_SQL_Data(string Value_Name, string table)
         {
-            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
-            //string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass;
-
+            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName + ";database=huachun;Charset = utf8";
             MySqlConnection conn = new MySqlConnection(connStr);
             conn.Open();
             string CmdText = "SELECT " + Value_Name + " FROM " + table;
-            //string CmdText = "show tables";
-            //string CmdText = "show databases";
+
             MySqlCommand cmd = new MySqlCommand(CmdText, conn);
             MySqlDataReader myReader;
             List<string> data_array = new List<string>();
@@ -187,7 +185,7 @@ namespace HuaChun_DailyReport
         
         public DataTable Read2DArray_SQL_Data(string Value_Name, string table, string condition)
         {
-            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
+            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName + ";database=huachun;Charset = utf8";
             MySqlConnection conn = new MySqlConnection(connStr);
             conn.Open();
             string CmdText = "SELECT " + Value_Name + " FROM " + table + " WHERE " + condition;
@@ -202,7 +200,7 @@ namespace HuaChun_DailyReport
         }
         public void Truncate_SQL_Table(string table)
         {
-            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
+            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName + ";database=huachun;Charset = utf8";
             MySqlConnection conn = new MySqlConnection(connStr);
             conn.Open();
             MySqlCommand cmd = conn.CreateCommand();
@@ -213,7 +211,7 @@ namespace HuaChun_DailyReport
 
         public void Insert_SQL_ProjectDetail(string projectNo, string projectName, string projectLocation, string contractor, string date, int duration, int extend)
         {
-            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
+            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName + ";database=huachun;Charset = utf8";
             MySqlConnection conn = new MySqlConnection(connStr);
             conn.Open();
             MySqlCommand cmd = conn.CreateCommand();
@@ -224,5 +222,53 @@ namespace HuaChun_DailyReport
         }
         //===================================Basic function=============================================
 
+        public void TestSqlCommand()
+        {
+            //string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
+            //string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass;
+            string connStr = "server=60.248.58.116;uid=root;pwd=abcdef_1;database=huachun;Charset = utf8;";
+
+            MySqlConnection conn = new MySqlConnection(connStr);
+            conn.Open();
+            string CmdText = "SELECT district FROM city WHERE city = '高雄市'";
+            //string CmdText = "SELECT " + Value_Name + " FROM " + table + " WHERE " + condition;
+            //string CmdText = "set names utf8";
+            //string CmdText = "show databases";
+            MySqlCommand cmd = new MySqlCommand(CmdText, conn);
+
+            //cmd.ExecuteNonQuery();
+
+            MySqlDataReader myReader;
+            List<string> data_array = new List<string>();
+            myReader = cmd.ExecuteReader();
+            try
+            {
+                while (myReader.Read())
+                {
+                    data_array.Add(myReader.GetString(0));
+                }
+            }
+            catch
+            {
+            }
+            myReader.Close();
+            conn.Close();
+        }
+
+        public void TestSqlCommand2()
+        {
+            string connStr = "server=60.248.58.116;uid=root;pwd=abcdef_1;database=huachun;Charset = utf8;";
+
+
+            MySqlConnection conn = new MySqlConnection(connStr);
+            conn.Open();
+            string CmdText = "SET NAMES utf8";
+
+            MySqlCommand cmd = new MySqlCommand(CmdText, conn);
+
+            cmd.ExecuteNonQuery();
+
+            conn.Close();
+        }
     }
 }

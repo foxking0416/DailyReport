@@ -58,6 +58,7 @@ namespace HuaChun_DailyReport
 
         private void RefreshDatagridview()
         {
+            Cursor.Current = Cursors.WaitCursor;
             dataTable.Clear();
 
             string[] dateArr = SQL.Read1DArrayNoCondition_SQL_Data("date", "holiday");
@@ -82,10 +83,12 @@ namespace HuaChun_DailyReport
                     dataRow["放假/補班"] = "補班";
                 dataTable.Rows.Add(dataRow);
             }
+            Cursor.Current = Cursors.Default;
         }
 
         private void InsertIntoDB()
         {
+            Cursor.Current = Cursors.WaitCursor;
             string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
             MySqlConnection conn = new MySqlConnection(connStr);
             MySqlCommand command = conn.CreateCommand();
@@ -112,6 +115,7 @@ namespace HuaChun_DailyReport
             command.CommandText = commandStr;
             command.ExecuteNonQuery();
             conn.Close();
+            Cursor.Current = Cursors.Default;
         }
 
         private void EditExistDB() 

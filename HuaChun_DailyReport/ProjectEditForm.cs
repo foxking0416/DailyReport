@@ -341,6 +341,7 @@ namespace HuaChun_DailyReport
 
         public void LoadInformation(string projectNumber)
         {
+            Cursor.Current = Cursors.WaitCursor;
             if (SQL.Read_SQL_data("computetype", "project_info", "project_no = '" + projectNumber + "'") == "1")
             {
                 this.uiRadioBtnRestrictSchedule.Checked = true;
@@ -452,6 +453,7 @@ namespace HuaChun_DailyReport
 
 
             LoadDataTable();
+            Cursor.Current = Cursors.Default;
         }
 
         private void LoadDataTable()

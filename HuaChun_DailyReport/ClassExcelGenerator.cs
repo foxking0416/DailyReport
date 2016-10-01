@@ -516,11 +516,11 @@ namespace HuaChun_DailyReport
                         }
                         if (dtDate.CompareTo(dtContractDateEnd) == 0)
                         {
-                            PrintFinish(iMonth, iDateIndex, false);
+                            PrintFinish(iMonth, iDateIndex, true);
                         }
                         if (dtDate.CompareTo(dtDateEnd) == 0)
                         {
-                            PrintFinish(iMonth, iDateIndex, true);
+                            PrintFinish(iMonth, iDateIndex, false);
                         }
                     }
 

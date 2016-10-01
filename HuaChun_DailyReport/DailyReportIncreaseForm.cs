@@ -195,6 +195,7 @@ namespace HuaChun_DailyReport
 
         public virtual void LoadProjectInfo(string projectNo) 
         {
+            Cursor.Current = Cursors.WaitCursor;
             //專案編號
             this.textBoxProjectNo.Text = projectNo;
             g_ProjectNumber = projectNo;
@@ -233,8 +234,11 @@ namespace HuaChun_DailyReport
             g_RainydayCountType = SQL.Read_SQL_data("rainyday", "project_info", "project_no = '" + projectNo + "'");
 
             if (g_ProjectNumber != null && g_ComputeType != null && g_CountHoliday != null && g_StartDate != null)
-            Compute(projectNo, g_ComputeType, g_CountHoliday, g_StartDate);
+            {
+                Compute(projectNo, g_ComputeType, g_CountHoliday, g_StartDate);
+            }
 
+            Cursor.Current = Cursors.Default;
         }
 
         private void LoadInfoByDate(string projectNo)
@@ -457,7 +461,11 @@ namespace HuaChun_DailyReport
         {
             if (g_ProjectNumber != null && g_ComputeType != null && g_CountHoliday != null && g_StartDate != null)
             //LoadProjectInfo(g_ProjectNumber);
-            Compute(g_ProjectNumber, g_ComputeType, g_CountHoliday, g_StartDate);
+            {
+                Cursor.Current = Cursors.WaitCursor;
+                Compute(g_ProjectNumber, g_ComputeType, g_CountHoliday, g_StartDate);
+                Cursor.Current = Cursors.Default;
+            }
         }
 
         private void comboBoxWeatherAndCondition_SelectedIndexChanged(object sender, EventArgs e)
