@@ -113,9 +113,9 @@ namespace HuaChun_DailyReport
             DialogResult result = MessageBox.Show("確定要刪除員工資料?", "確定", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
             if (result == DialogResult.Yes)
             {
-                SQL.NoHistoryDelete_SQL("account", "member = '" + this.textBoxAccount.Text + "'");
+                SQL.NoHistoryDelete_SQL("member", "account = '" + this.textBoxAccount.Text + "'");
 
-                members = SQL.Read1DArrayNoCondition_SQL_Data("vendor_no", "vendor");
+                members = SQL.Read1DArrayNoCondition_SQL_Data("account", "member");
                 memberCount = members.Length;
                 --selectIndex;
                 if (selectIndex >= 0)
