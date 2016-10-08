@@ -9,93 +9,95 @@ namespace HuaChun_DailyReport
 {
     public class MySQL
     {
-        private string dbHost;
-        private string dbUser;
-        private string dbPass;
-        private string dbName;
-        public MySQL(string SQL_Host, string SQL_User, string SQL_Pass, string SQL_Name)
+        static int iOpenCount = 0;
+        MySqlConnection conn;
+        public MySQL()
         {
-            Host = SQL_Host;
-            User = SQL_User;
-            Password = SQL_Pass;
-            Name = SQL_Name;
-        }
-        public string Host
-        {
-            set
-            {
-                dbHost = value;
-            }
-            get
-            {
-                return dbHost;
-            }
-        }
-        public string User
-        {
-            set
-            {
-                dbUser = value;
-            }
-            get
-            {
-                return dbUser;
-            }
-        }
-        public string Password
-        {
-            set
-            {
-                dbPass = value;
-            }
-            get
-            {
-                return dbPass;
-            }
-        }
-        public string Name
-        {
-            set
-            {
-                dbName = value;
-            }
-            get
-            {
-                return dbName;
-            }
+            string dbHost = AppSetting.LoadInitialSetting("DB_IP", "127.0.0.1");
+            string dbUser = AppSetting.LoadInitialSetting("DB_USER", "root");
+            string dbPass = AppSetting.LoadInitialSetting("DB_PASSWORD", "123");
+            string dbName = AppSetting.LoadInitialSetting("DB_NAME", "huachun");
+
+            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName + ";database=huachun;Charset = utf8";
+            conn = new MySqlConnection(connStr);
         }
 
-        public bool TestSQLConnect()
+
+        //===================================Basic function=============================================
+        public void OpenSqlChannel()
         {
             try
             {
-                string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName + ";database=huachun;Charset = utf8";
-                MySqlConnection conn = new MySqlConnection(connStr);
-                conn.Open();
-                string CmdText = "SELECT sv_value FROM sv WHERE sv_id = 8000001";
-                MySqlCommand cmd = new MySqlCommand(CmdText, conn);
-                object ExeScalar = cmd.ExecuteScalar();
-                conn.Close();
-                return true;
+                if (iOpenCount == 0)
+                {
+                    conn.Open();
+                }
+                iOpenCount++;
             }
             catch
             {
-                return false;
             }
         }
 
-        //===================================Basic function=============================================
+        public void CloseSqlChannel()
+        {
+            try
+            {
+                if (iOpenCount == 1)
+                {
+                    conn.Close();
+                }
+                iOpenCount--;
+            }
+            catch
+            {
+            }
+        }
+
+        public void ExecuteNonQueryCommand(string strCommand)
+        {
+            MySqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = strCommand;
+            cmd.ExecuteNonQuery();
+        }
+
+        public void SetSqlDataWithoutOpenClose(string Value_Name, string table, string condition, string New_Value)
+        {
+            try
+            {
+                MySqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = "UPDATE " + table + " SET " + Value_Name + " = " + "'" + New_Value + "'" + " WHERE " + condition;
+                cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+            }
+        }
+
+        public string ReadSqlDataWithoutOpenClose(string Value_Name, string table, string condition)
+        {
+            try
+            {
+                MySqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = "SELECT " + Value_Name + " FROM " + table + " WHERE " + condition;
+                object ExeScalar = cmd.ExecuteScalar();
+                return ExeScalar.ToString();
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
         public void Set_SQL_data(string Value_Name, string table, string condition, string New_Value)
         {
             try
             {
-                string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName + ";database=huachun;Charset = utf8";
-                MySqlConnection conn = new MySqlConnection(connStr);
-                conn.Open();
+                OpenSqlChannel();
                 MySqlCommand cmd = conn.CreateCommand();
                 cmd.CommandText = "UPDATE " + table + " SET " + Value_Name + " = " + "'" + New_Value + "'" + " WHERE " + condition;
                 cmd.ExecuteNonQuery();
-                conn.Close();
+                CloseSqlChannel();
             }
             catch
             {
@@ -105,13 +107,11 @@ namespace HuaChun_DailyReport
         {
             try
             {
-                string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName + ";database=huachun;Charset = utf8";
-                MySqlConnection conn = new MySqlConnection(connStr);
-                conn.Open();
+                OpenSqlChannel();
                 string CmdText = "SELECT " + Value_Name + " FROM " + table + " WHERE " + condition;
                 MySqlCommand cmd = new MySqlCommand(CmdText, conn);
                 object ExeScalar = cmd.ExecuteScalar();
-                conn.Close();
+                CloseSqlChannel();
                 return ExeScalar.ToString();
             }
             catch
@@ -121,23 +121,18 @@ namespace HuaChun_DailyReport
         }
         public void NoHistoryDelete_SQL(string table, string condition)
         {
-            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName + ";database=huachun;Charset = utf8";
-            MySqlConnection conn = new MySqlConnection(connStr);
-            conn.Open();
+            OpenSqlChannel();
             MySqlCommand cmd = conn.CreateCommand();
             cmd.CommandText = "DELETE FROM " + table + " WHERE " + condition;
             cmd.ExecuteNonQuery();
             //OPTIMIZE TABLE  
             cmd.CommandText = "OPTIMIZE TABLE " + table;
             cmd.ExecuteNonQuery();
-            conn.Close();
+            CloseSqlChannel();
         }
         public string[] Read1DArray_SQL_Data(string Value_Name, string table, string condition)
         {
-            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName + ";database=huachun;Charset = utf8";
-            
-            MySqlConnection conn = new MySqlConnection(connStr);
-            conn.Open();
+            OpenSqlChannel();
             string CmdText = "SELECT " + Value_Name + " FROM " + table + " WHERE " + condition;
             MySqlCommand cmd = new MySqlCommand(CmdText, conn);
             MySqlDataReader myReader;
@@ -154,14 +149,12 @@ namespace HuaChun_DailyReport
             {
             }
             myReader.Close();
-            conn.Close();
+            CloseSqlChannel();
             return data_array.ToArray();
         }
         public string[] Read1DArrayNoCondition_SQL_Data(string Value_Name, string table)
         {
-            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName + ";database=huachun;Charset = utf8";
-            MySqlConnection conn = new MySqlConnection(connStr);
-            conn.Open();
+            OpenSqlChannel();
             string CmdText = "SELECT " + Value_Name + " FROM " + table;
 
             MySqlCommand cmd = new MySqlCommand(CmdText, conn);
@@ -179,96 +172,10 @@ namespace HuaChun_DailyReport
             {
             }
             myReader.Close();
-            conn.Close();
+            CloseSqlChannel();
             return data_array.ToArray();
         }
-        
-        public DataTable Read2DArray_SQL_Data(string Value_Name, string table, string condition)
-        {
-            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName + ";database=huachun;Charset = utf8";
-            MySqlConnection conn = new MySqlConnection(connStr);
-            conn.Open();
-            string CmdText = "SELECT " + Value_Name + " FROM " + table + " WHERE " + condition;
-            MySqlCommand cmd = new MySqlCommand(CmdText, conn);
-            MySqlDataAdapter myAdapter;
-            DataTable ResultTable;
-            myAdapter = new MySqlDataAdapter(CmdText, conn);
-            ResultTable = new DataTable();
-            myAdapter.Fill(ResultTable);
-            conn.Close();
-            return ResultTable;
-        }
-        public void Truncate_SQL_Table(string table)
-        {
-            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName + ";database=huachun;Charset = utf8";
-            MySqlConnection conn = new MySqlConnection(connStr);
-            conn.Open();
-            MySqlCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "TRUNCATE TABLE " + table;
-            cmd.ExecuteNonQuery();
-            conn.Close();
-        }
-
-        public void Insert_SQL_ProjectDetail(string projectNo, string projectName, string projectLocation, string contractor, string date, int duration, int extend)
-        {
-            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName + ";database=huachun;Charset = utf8";
-            MySqlConnection conn = new MySqlConnection(connStr);
-            conn.Open();
-            MySqlCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "INSERT INTO project VALUES ('"
-                + projectNo + "','" + projectName + "','" + projectLocation + "','" + contractor + "'," + date + "," + duration.ToString() + "," + extend.ToString() + ")";
-            cmd.ExecuteNonQuery();
-            conn.Close();
-        }
+       
         //===================================Basic function=============================================
-
-        public void TestSqlCommand()
-        {
-            //string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
-            //string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass;
-            string connStr = "server=60.248.58.116;uid=root;pwd=abcdef_1;database=huachun;Charset = utf8;";
-
-            MySqlConnection conn = new MySqlConnection(connStr);
-            conn.Open();
-            string CmdText = "SELECT district FROM city WHERE city = '高雄市'";
-            //string CmdText = "SELECT " + Value_Name + " FROM " + table + " WHERE " + condition;
-            //string CmdText = "set names utf8";
-            //string CmdText = "show databases";
-            MySqlCommand cmd = new MySqlCommand(CmdText, conn);
-
-            //cmd.ExecuteNonQuery();
-
-            MySqlDataReader myReader;
-            List<string> data_array = new List<string>();
-            myReader = cmd.ExecuteReader();
-            try
-            {
-                while (myReader.Read())
-                {
-                    data_array.Add(myReader.GetString(0));
-                }
-            }
-            catch
-            {
-            }
-            myReader.Close();
-            conn.Close();
-        }
-
-        public void TestSqlCommand2()
-        {
-            string connStr = "server=60.248.58.116;uid=root;pwd=abcdef_1;database=huachun;Charset = utf8;";
-
-
-            MySqlConnection conn = new MySqlConnection(connStr);
-            conn.Open();
-            string CmdText = "SET NAMES utf8";
-
-            MySqlCommand cmd = new MySqlCommand(CmdText, conn);
-
-            cmd.ExecuteNonQuery();
-
-            conn.Close();
-        }
     }
 }

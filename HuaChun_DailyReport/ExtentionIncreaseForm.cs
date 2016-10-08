@@ -12,21 +12,19 @@ namespace HuaChun_DailyReport
 {
     public partial class ExtentionIncreaseForm : Form
     {
-        string dbHost;
-        string dbUser;
-        string dbPass;
-        string dbName;
-        protected MySQL SQL;
+        protected MySQL m_Sql;
         protected string ProjectNumber;
 
-        public ExtentionIncreaseForm()
+        public ExtentionIncreaseForm(MySQL Sql)
         {
+            m_Sql = Sql;
             InitializeComponent();
             Initialize();
         }
 
-        public ExtentionIncreaseForm(string ID)
+        public ExtentionIncreaseForm(string ID, MySQL Sql)
         {
+            m_Sql = Sql;
             ProjectNumber = ID;
             InitializeComponent();
             Initialize();
@@ -34,20 +32,11 @@ namespace HuaChun_DailyReport
 
         private void Initialize()
         {
-            dbHost = AppSetting.LoadInitialSetting("DB_IP", "127.0.0.1");
-            dbUser = AppSetting.LoadInitialSetting("DB_USER", "root");
-            dbPass = AppSetting.LoadInitialSetting("DB_PASSWORD", "123");
-            dbName = AppSetting.LoadInitialSetting("DB_NAME", "huachun");
-
-            SQL = new MySQL(dbHost, dbUser, dbPass, dbName);
         }
         
         protected void InsertIntoDB()
         {
-            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
-            MySqlConnection conn = new MySqlConnection(connStr);
-            MySqlCommand command = conn.CreateCommand();
-            conn.Open();
+            m_Sql.OpenSqlChannel();
 
             string commandStr = "Insert into extendduration(";
             commandStr = commandStr + "project_no,";//
@@ -67,10 +56,8 @@ namespace HuaChun_DailyReport
             commandStr = commandStr + Functions.TransferDateTimeToSQL(dateTimeFilledDate.Value);//填寫日期
             commandStr = commandStr + "')";
 
-
-            command.CommandText = commandStr;// "Insert into vendor(vendor_no,vendor_name,vendor_abbre) values('" + textBoxVendor_No.Text + "','" + textBoxVendor_Name.Text + "','" + textBoxVendor_Abbre.Text + "')";
-            command.ExecuteNonQuery();
-            conn.Close();
+            m_Sql.ExecuteNonQueryCommand(commandStr);
+            m_Sql.CloseSqlChannel();
         }
 
         protected virtual void btnOK_Click(object sender, EventArgs e)
@@ -83,7 +70,7 @@ namespace HuaChun_DailyReport
             if (textBoxGrantNumber.Text == string.Empty)
                 return;
 
-            string[] sameNo = SQL.Read1DArray_SQL_Data("grantnumber", "extendduration", "project_no = '" + ProjectNumber + "' AND grantnumber = '" + textBoxGrantNumber.Text + "'");
+            string[] sameNo = m_Sql.Read1DArray_SQL_Data("grantnumber", "extendduration", "project_no = '" + ProjectNumber + "' AND grantnumber = '" + textBoxGrantNumber.Text + "'");
             if (sameNo.Length != 0)
             {
                 label12.Text = "已存在相同核准文號";

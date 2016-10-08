@@ -11,8 +11,10 @@ namespace HuaChun_DailyReport
 {
     public partial class QueryDailyReportListForm : Form
     {
-        public QueryDailyReportListForm()
+        MySQL m_Sql;
+        public QueryDailyReportListForm(MySQL Sql) 
         {
+            m_Sql = Sql;
             InitializeComponent();
         }
     }

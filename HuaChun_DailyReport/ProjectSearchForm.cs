@@ -17,7 +17,8 @@ namespace HuaChun_DailyReport
         private QueryFormBase queryForm;
         private Main mainForm;
 
-        public ProjectSearchForm(ProjectEditForm form)
+        public ProjectSearchForm(ProjectEditForm form, MySQL Sql) 
+            : base(Sql)
         {
             inputFormType = 0;
             InitializeComponent();
@@ -26,7 +27,8 @@ namespace HuaChun_DailyReport
             Initialize();
         }
 
-        public ProjectSearchForm(DailyReportIncreaseForm form)
+        public ProjectSearchForm(DailyReportIncreaseForm form, MySQL Sql)
+            : base(Sql)
         {
             inputFormType = 1;
             InitializeComponent();
@@ -35,7 +37,8 @@ namespace HuaChun_DailyReport
             Initialize();
         }
 
-        public ProjectSearchForm(QueryFormBase form)
+        public ProjectSearchForm(QueryFormBase form, MySQL Sql)
+            : base(Sql)
         {
             inputFormType = 2;
             InitializeComponent();
@@ -44,7 +47,8 @@ namespace HuaChun_DailyReport
             Initialize();
         }
 
-        public ProjectSearchForm(Main form)
+        public ProjectSearchForm(Main form, MySQL Sql)
+            : base(Sql)
         {
             inputFormType = 3;
             InitializeComponent();

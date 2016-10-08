@@ -13,15 +13,16 @@ namespace HuaChun_DailyReport
 {
     public partial class ProcessCodeIncreaseForm : IncreaseEditFormBase
     {
-        public ProcessCodeIncreaseForm()
+        public ProcessCodeIncreaseForm(MySQL Sql)
+            : base(Sql)
         {
             InitializeComponent();
-            functionName = "項目";
-            functionNameEng = "processcode";
+            strFunctionName = "項目";
+            strFunctionNameEng = "processcode";
 
             this.Text = "施工項目新增作業";
-            this.label1.Text = functionName + "編號";
-            this.label2.Text = functionName + "名稱";
+            this.label1.Text = strFunctionName + "編號";
+            this.label2.Text = strFunctionName + "名稱";
             this.btnAddEdit.Text = "新增";
             Initialize();
         }
@@ -29,8 +30,8 @@ namespace HuaChun_DailyReport
         protected override void InitializeDataTable()
         {
             dataTable = new DataTable("MyNewTable");
-            dataTable.Columns.Add(functionName + "編號", typeof(String));
-            dataTable.Columns.Add(functionName + "名稱", typeof(String));
+            dataTable.Columns.Add(strFunctionName + "編號", typeof(String));
+            dataTable.Columns.Add(strFunctionName + "名稱", typeof(String));
             dataTable.Columns.Add("單位", typeof(String));
             dataGridView1.DataSource = dataTable;
             dataGridView1.ReadOnly = true;
@@ -42,30 +43,31 @@ namespace HuaChun_DailyReport
 
         private void RefreshDatagridview()
         {
+            Cursor.Current = Cursors.WaitCursor;
             dataTable.Clear();
 
-            string[] numberArr = SQL.Read1DArrayNoCondition_SQL_Data("number", functionNameEng);
+            string[] numberArr = m_Sql.Read1DArrayNoCondition_SQL_Data("number", strFunctionNameEng);
             Array.Sort(numberArr);
 
             DataRow dataRow;
+            m_Sql.OpenSqlChannel();
             for (int i = 0; i < numberArr.Length; i++)
             {
                 dataRow = dataTable.NewRow();
-                dataRow[functionName + "編號"] = numberArr[i];
-                dataRow[functionName + "名稱"] = SQL.Read_SQL_data("name", functionNameEng, "number = '" + numberArr[i] + "'");
-                dataRow["單位"] = SQL.Read_SQL_data("unit", functionNameEng, "number = '" + numberArr[i] + "'");
+                dataRow[strFunctionName + "編號"] = numberArr[i];
+                dataRow[strFunctionName + "名稱"] = m_Sql.ReadSqlDataWithoutOpenClose("name", strFunctionNameEng, "number = '" + numberArr[i] + "'");
+                dataRow["單位"] = m_Sql.ReadSqlDataWithoutOpenClose("unit", strFunctionNameEng, "number = '" + numberArr[i] + "'");
                 dataTable.Rows.Add(dataRow);
             }
+            m_Sql.CloseSqlChannel();
+            Cursor.Current = Cursors.Default;
         }
 
         private void InsertIntoDB()
         {
-            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
-            MySqlConnection conn = new MySqlConnection(connStr);
-            MySqlCommand command = conn.CreateCommand();
-            conn.Open();
+            m_Sql.OpenSqlChannel();
 
-            string commandStr = "Insert into " + functionNameEng + "(";
+            string commandStr = "Insert into " + strFunctionNameEng + "(";
             commandStr = commandStr + "number,";
             commandStr = commandStr + "name,";
             commandStr = commandStr + "unit";
@@ -75,9 +77,8 @@ namespace HuaChun_DailyReport
             commandStr = commandStr + textBox_Unit.Text;
             commandStr = commandStr + "')";
 
-            command.CommandText = commandStr;
-            command.ExecuteNonQuery();
-            conn.Close();
+            m_Sql.ExecuteNonQueryCommand(commandStr);
+            m_Sql.CloseSqlChannel();
         }
 
         protected override void btnAddEdit_Click(object sender, EventArgs e)
@@ -111,10 +112,10 @@ namespace HuaChun_DailyReport
             else
                 labelWarning1.Text = "編號不可為空白";
 
-            string[] sameNo = SQL.Read1DArray_SQL_Data("number", functionNameEng, "number = '" + textBox_No.Text + "'");
+            string[] sameNo = m_Sql.Read1DArray_SQL_Data("number", strFunctionNameEng, "number = '" + textBox_No.Text + "'");
             if (sameNo.Length != 0)
             {
-                labelWarning1.Text = "已存在相同" + functionName + "編號";
+                labelWarning1.Text = "已存在相同" + strFunctionName + "編號";
                 labelWarning1.Visible = true;
                 return;
             }

@@ -12,11 +12,7 @@ namespace HuaChun_DailyReport
 {
     public partial class SearchFormBase : Form
     {
-        protected string dbHost;//資料庫位址
-        protected string dbUser;//資料庫使用者帳號
-        protected string dbPass;//資料庫使用者密碼
-        protected string dbName;//資料庫名稱
-        protected MySQL SQL;
+        protected MySQL m_Sql;
         protected string[] numbers;
         protected string[] names;
         protected DataTable dataTable;
@@ -31,24 +27,18 @@ namespace HuaChun_DailyReport
         protected int tabIndex;
         protected DailyReportIncreaseForm reportForm;
 
-        public SearchFormBase()
+        public SearchFormBase(MySQL Sql)
         {
+            m_Sql = Sql;
             InitializeComponent();
-            
         }
 
         protected virtual void Initialize()
         {
-
             textBox2.Enabled = false;
-            dbHost = AppSetting.LoadInitialSetting("DB_IP", "127.0.0.1");
-            dbUser = AppSetting.LoadInitialSetting("DB_USER", "root");
-            dbPass = AppSetting.LoadInitialSetting("DB_PASSWORD", "123");
-            dbName = AppSetting.LoadInitialSetting("DB_NAME", "huachun");
-            SQL = new MySQL(dbHost, dbUser, dbPass, dbName);
 
-            numbers = SQL.Read1DArrayNoCondition_SQL_Data(DB_No, DB_TableName);
-            names = SQL.Read1DArrayNoCondition_SQL_Data(DB_Name, DB_TableName);
+            numbers = m_Sql.Read1DArrayNoCondition_SQL_Data(DB_No, DB_TableName);
+            names = m_Sql.Read1DArrayNoCondition_SQL_Data(DB_Name, DB_TableName);
 
             dataTable = new DataTable("MyNewTable");
             dataTable.Columns.Add(rowNo, typeof(String));
@@ -59,13 +49,15 @@ namespace HuaChun_DailyReport
             dataGridView1.MultiSelect = false;
 
             DataRow dataRow;
+            m_Sql.OpenSqlChannel();
             for (int i = 0; i < numbers.Length; i++)
             {
                 dataRow = dataTable.NewRow();
                 dataRow[rowNo] = numbers[i];
-                dataRow[rowName] = SQL.Read_SQL_data(DB_Name, DB_TableName, DB_No + " = '" + numbers[i] + "'");
+                dataRow[rowName] = m_Sql.ReadSqlDataWithoutOpenClose(DB_Name, DB_TableName, DB_No + " = '" + numbers[i] + "'");
                 dataTable.Rows.Add(dataRow);
             }
+            m_Sql.CloseSqlChannel();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -104,13 +96,15 @@ namespace HuaChun_DailyReport
 
 
             DataRow dataRow;
+            m_Sql.OpenSqlChannel();
             for (int i = 0; i < array.Count; i++)
             {
                 dataRow = dataTable.NewRow();
                 dataRow[rowNo] = array[i];
-                dataRow[rowName] = SQL.Read_SQL_data(DB_Name, DB_TableName, DB_No + " = '" + array[i] + "'");
+                dataRow[rowName] = m_Sql.ReadSqlDataWithoutOpenClose(DB_Name, DB_TableName, DB_No + " = '" + array[i] + "'");
                 dataTable.Rows.Add(dataRow);
             }
+            m_Sql.CloseSqlChannel();
         }
 
         protected virtual void textBox2_TextChanged(object sender, EventArgs e)
@@ -126,13 +120,15 @@ namespace HuaChun_DailyReport
 
 
             DataRow dataRow;
+            m_Sql.OpenSqlChannel();
             for (int i = 0; i < array.Count; i++)
             {
                 dataRow = dataTable.NewRow();
-                dataRow[rowNo] = SQL.Read_SQL_data(DB_No, DB_TableName, DB_Name + " = '" + array[i] + "'");
+                dataRow[rowNo] = m_Sql.ReadSqlDataWithoutOpenClose(DB_No, DB_TableName, DB_Name + " = '" + array[i] + "'");
                 dataRow[rowName] = array[i];
                 dataTable.Rows.Add(dataRow);
             }
+            m_Sql.CloseSqlChannel();
         }
 
         protected virtual void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)

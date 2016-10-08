@@ -16,11 +16,7 @@ namespace HuaChun_DailyReport
 {
     public partial class QueryFinishForm : Form
     {
-        string dbHost;
-        string dbUser;
-        string dbPass;
-        string dbName;
-        protected MySQL SQL;
+        protected MySQL m_Sql;
         private DataTable dataTableStatistic;
         DateTime dtStartDate;
         string g_strProjectNo;
@@ -28,8 +24,9 @@ namespace HuaChun_DailyReport
         string g_strSavePath;
         string g_strProjectName;
 
-        public QueryFinishForm(string projectNo)
+        public QueryFinishForm(string projectNo, MySQL Sql)
         {
+            m_Sql = Sql;
             InitializeComponent();
             Initialize();
             LoadProjectInfo(projectNo);
@@ -37,12 +34,6 @@ namespace HuaChun_DailyReport
 
         private void Initialize()
         {
-            dbHost = AppSetting.LoadInitialSetting("DB_IP", "127.0.0.1");
-            dbUser = AppSetting.LoadInitialSetting("DB_USER", "root");
-            dbPass = AppSetting.LoadInitialSetting("DB_PASSWORD", "123");
-            dbName = AppSetting.LoadInitialSetting("DB_NAME", "huachun");
-            SQL = new MySQL(dbHost, dbUser, dbPass, dbName);
-
             dataTableStatistic = new DataTable("FinishStatisticTable");
             dataTableStatistic.Columns.Add("日期", typeof(String));
             dataTableStatistic.Columns.Add("開工迄今", typeof(String));
@@ -79,12 +70,14 @@ namespace HuaChun_DailyReport
         {
             Cursor.Current = Cursors.WaitCursor;
             g_strProjectNo = number;
+            g_strProjectName = m_Sql.Read_SQL_data("project_name", "project_info", "project_no = '" + g_strProjectNo + "'");
             dataTableStatistic.Clear();
 
+            m_Sql.OpenSqlChannel();
 
-            DayCompute dayCompute = new DayCompute();
-            string computeType = SQL.Read_SQL_data("computetype", "project_info", "project_no = '" + g_strProjectNo + "'");
-            string countHoliday = SQL.Read_SQL_data("holiday", "project_info", "project_no = '" + g_strProjectNo + "'");
+            DayCompute dayCompute = new DayCompute(m_Sql);
+            string computeType = m_Sql.ReadSqlDataWithoutOpenClose("computetype", "project_info", "project_no = '" + g_strProjectNo + "'");
+            string countHoliday = m_Sql.ReadSqlDataWithoutOpenClose("holiday", "project_info", "project_no = '" + g_strProjectNo + "'");
 
 
             if (computeType == "1")//限期完工  日曆天
@@ -125,7 +118,7 @@ namespace HuaChun_DailyReport
                 this.label1.Text += "，國定假日照常施工";
             }
 
-            string rainyDayCountType = SQL.Read_SQL_data("rainyday", "project_info", "project_no = '" + g_strProjectNo + "'");
+            string rainyDayCountType = m_Sql.ReadSqlDataWithoutOpenClose("rainyday", "project_info", "project_no = '" + g_strProjectNo + "'");
             if (rainyDayCountType == "1")
             {
                 this.label3.Text += "需豪雨才不計工期";
@@ -135,13 +128,13 @@ namespace HuaChun_DailyReport
                 this.label3.Text += "下雨即不計工期";
             }
 
-            float fOriginalTotalDuration = Convert.ToSingle(SQL.Read_SQL_data("contractduration", "project_info", "project_no = '" + g_strProjectNo + "'"));
-            float fOriginalTotalDays = Convert.ToSingle(SQL.Read_SQL_data("contractdays", "project_info", "project_no = '" + g_strProjectNo + "'"));
-            DateTime dtOriginalFinishDate = Functions.TransferSQLDateToDateTime(SQL.Read_SQL_data("contract_finishdate", "project_info", "project_no = '" + g_strProjectNo + "'"));
-            string[] arrExtendDurationStartDates = SQL.Read1DArray_SQL_Data("extendstartdate", "extendduration", "project_no = '" + g_strProjectNo + "'");
+            float fOriginalTotalDuration = Convert.ToSingle(m_Sql.ReadSqlDataWithoutOpenClose("contractduration", "project_info", "project_no = '" + g_strProjectNo + "'"));
+            float fOriginalTotalDays = Convert.ToSingle(m_Sql.ReadSqlDataWithoutOpenClose("contractdays", "project_info", "project_no = '" + g_strProjectNo + "'"));
+            DateTime dtOriginalFinishDate = Functions.TransferSQLDateToDateTime(m_Sql.ReadSqlDataWithoutOpenClose("contract_finishdate", "project_info", "project_no = '" + g_strProjectNo + "'"));
+            string[] arrExtendDurationStartDates = m_Sql.Read1DArray_SQL_Data("extendstartdate", "extendduration", "project_no = '" + g_strProjectNo + "'");
             float fAccumulateExtendDurations = 0;
 
-            string strStartDate = SQL.Read_SQL_data("startdate", "project_info", "project_no = '" + g_strProjectNo + "'");
+            string strStartDate = m_Sql.ReadSqlDataWithoutOpenClose("startdate", "project_info", "project_no = '" + g_strProjectNo + "'");
             dtStartDate = Functions.TransferSQLDateToDateTime(strStartDate);
             DataRow uiDataRow;
 
@@ -160,17 +153,17 @@ namespace HuaChun_DailyReport
                 uiDataRow["星期"] = Functions.ComputeDayOfWeek(dtDateToday);
                 //Image img = Image.FromFile("D:\\12Small.jpg");
                 uiDataRow["節日"] = dayCompute.GetCondition(dtDateToday);
-                string morningWeather = SQL.Read_SQL_data("morning_weather", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
+                string morningWeather = m_Sql.ReadSqlDataWithoutOpenClose("morning_weather", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
                 uiDataRow["上午天氣"] = (morningWeather == string.Empty) ? "無資料" : morningWeather;
-                string afternoonWeather = SQL.Read_SQL_data("afternoon_weather", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
+                string afternoonWeather = m_Sql.ReadSqlDataWithoutOpenClose("afternoon_weather", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
                 uiDataRow["下午天氣"] = (afternoonWeather == string.Empty) ? "無資料" : afternoonWeather;
-                string morningCondition = SQL.Read_SQL_data("morning_condition", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
+                string morningCondition = m_Sql.ReadSqlDataWithoutOpenClose("morning_condition", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
                 uiDataRow["上午人為因素"] = (morningCondition == string.Empty) ? "無資料" : morningCondition;
-                string afternoonCondition = SQL.Read_SQL_data("afternoon_condition", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
+                string afternoonCondition = m_Sql.ReadSqlDataWithoutOpenClose("afternoon_condition", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
                 uiDataRow["下午人為因素"] = (afternoonCondition == string.Empty) ? "無資料" : afternoonCondition;
-                
-                
-                string strNonCountingToday = SQL.Read_SQL_data("nonecounting", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
+
+
+                string strNonCountingToday = m_Sql.ReadSqlDataWithoutOpenClose("nonecounting", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
 
 
 
@@ -195,7 +188,7 @@ namespace HuaChun_DailyReport
                 uiDataRow["原完工日"] = dtOriginalFinishDate.ToString("yyyy/MM/dd");
 
 
-                string extendDuration = SQL.Read_SQL_data("extendduration", "extendduration", "project_no = '" + g_strProjectNo + "' AND extendstartdate = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
+                string extendDuration = m_Sql.ReadSqlDataWithoutOpenClose("extendduration", "extendduration", "project_no = '" + g_strProjectNo + "' AND extendstartdate = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
                 if (extendDuration != string.Empty)
                 {
                     fAccumulateExtendDurations += Convert.ToSingle(extendDuration);
@@ -218,16 +211,17 @@ namespace HuaChun_DailyReport
                 dataTableStatistic.Rows.Add(uiDataRow);
                 i++;
             }
+            m_Sql.CloseSqlChannel();
             Cursor.Current = Cursors.Default;
         }
 
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             DateTime dateClick = dtStartDate.AddDays(e.RowIndex);
-            string morningWeather = SQL.Read_SQL_data("morning_weather", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dateClick) + "'");
+            string morningWeather = m_Sql.Read_SQL_data("morning_weather", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dateClick) + "'");
             if (morningWeather == string.Empty)//表示這天沒有日報表
             {
-                DailyReportIncreaseForm reportBuildForm = new DailyReportIncreaseForm(false);
+                DailyReportIncreaseForm reportBuildForm = new DailyReportIncreaseForm(false, m_Sql);
                 reportBuildForm.LoadProjectInfo(g_strProjectNo);
                 reportBuildForm.SetDateTodayValue(dateClick);
                 reportBuildForm.ShowDialog();
@@ -235,7 +229,7 @@ namespace HuaChun_DailyReport
             }
             else//表示這天已經有日報表
             {
-                DailyReportEditForm reportEditForm = new DailyReportEditForm(g_strProjectNo);
+                DailyReportEditForm reportEditForm = new DailyReportEditForm(g_strProjectNo, m_Sql);
                 reportEditForm.LoadProjectInfo(g_strProjectNo);
                 reportEditForm.SetDateTodayValue(dateClick);
                 reportEditForm.ShowDialog();
@@ -258,9 +252,7 @@ namespace HuaChun_DailyReport
             saveFileDialog.Filter = "Excel File|*.xls";
             saveFileDialog.Title = "Save an Excel File";
             saveFileDialog.FileName = g_strProjectName + "完工總表";
-            saveFileDialog.ShowDialog();
-
-            if (saveFileDialog.FileName != "")
+            if (saveFileDialog.ShowDialog() == DialogResult.OK && saveFileDialog.FileName != "")
             {
                 Cursor.Current = Cursors.WaitCursor;
 
@@ -273,7 +265,7 @@ namespace HuaChun_DailyReport
                 Excel.Workbook xlWorkBook = xlWorkBooks.Open(g_strPath + "\\完工總表.xls");
                 Excel.Worksheet xlWorkSheet = xlWorkBook.Sheets[1];
 
-                g_strProjectName = SQL.Read_SQL_data("project_name", "project_info", "project_no = '" + g_strProjectNo + "'");
+
                 xlWorkBook.Sheets[1].Name = g_strProjectName + "完工總表";
                 xlWorkSheet.Cells[1, 2] = g_strProjectName;
 

@@ -11,7 +11,8 @@ namespace HuaChun_DailyReport
 {
     public partial class QueryNonworkingDayChartForm : QueryFormBase
     {
-        public QueryNonworkingDayChartForm()
+        public QueryNonworkingDayChartForm(MySQL Sql) 
+            : base(Sql)
         {
             InitializeComponent();
         }

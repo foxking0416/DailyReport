@@ -13,32 +13,19 @@ namespace HuaChun_DailyReport
 {
     public partial class HolidaySettingForm : Form
     {
-        protected string dbHost;//資料庫位址
-        protected string dbUser;//資料庫使用者帳號
-        protected string dbPass;//資料庫使用者密碼
-        protected string dbName;//資料庫名稱
-        protected MySQL SQL;
+        protected MySQL m_Sql;
         protected DataTable dataTable;
 
-        public HolidaySettingForm()
+        public HolidaySettingForm(MySQL Sql)
         {
+            m_Sql = Sql;
             InitializeComponent();
             Initialize();
         }
 
         protected void Initialize()
         {
-            InitializeSQL();
             InitializeDataTable();
-        }
-
-        private void InitializeSQL()
-        {
-            dbHost = AppSetting.LoadInitialSetting("DB_IP", "127.0.0.1");
-            dbUser = AppSetting.LoadInitialSetting("DB_USER", "root");
-            dbPass = AppSetting.LoadInitialSetting("DB_PASSWORD", "123");
-            dbName = AppSetting.LoadInitialSetting("DB_NAME", "huachun");
-            SQL = new MySQL(dbHost, dbUser, dbPass, dbName);
         }
 
         protected void InitializeDataTable()
@@ -61,7 +48,7 @@ namespace HuaChun_DailyReport
             Cursor.Current = Cursors.WaitCursor;
             dataTable.Clear();
 
-            string[] dateArr = SQL.Read1DArrayNoCondition_SQL_Data("date", "holiday");
+            string[] dateArr = m_Sql.Read1DArrayNoCondition_SQL_Data("date", "holiday");
             DateTime[] dates = new DateTime[dateArr.Length];
             for (int i = 0; i < dateArr.Length; i++)
             {
@@ -70,29 +57,28 @@ namespace HuaChun_DailyReport
             Array.Sort(dates);
 
             DataRow dataRow;
+            m_Sql.OpenSqlChannel();
             for (int i = 0; i < dates.Length; i++)
             {
                 dataRow = dataTable.NewRow();
                 dataRow["日期"] = dates[i].Year.ToString() + "/" + dates[i].Month.ToString() + "/" + dates[i].Day.ToString() ;
                 dataRow["星期"] = Functions.ComputeDayOfWeek(dates[i]);
-                dataRow["理由"] = SQL.Read_SQL_data("reason", "holiday", "date = '" + dates[i].Year.ToString() + "-" + dates[i].Month.ToString() + "-" + dates[i].Day.ToString() + "'");
-                string working = SQL.Read_SQL_data("working", "holiday", "date = '" + dates[i].Year.ToString() + "-" + dates[i].Month.ToString() + "-" + dates[i].Day.ToString() + "'");
+                dataRow["理由"] = m_Sql.ReadSqlDataWithoutOpenClose("reason", "holiday", "date = '" + dates[i].Year.ToString() + "-" + dates[i].Month.ToString() + "-" + dates[i].Day.ToString() + "'");
+                string working = m_Sql.ReadSqlDataWithoutOpenClose("working", "holiday", "date = '" + dates[i].Year.ToString() + "-" + dates[i].Month.ToString() + "-" + dates[i].Day.ToString() + "'");
                 if(working == "1")
                     dataRow["放假/補班"] = "放假";
                 else
                     dataRow["放假/補班"] = "補班";
                 dataTable.Rows.Add(dataRow);
             }
+            m_Sql.CloseSqlChannel();
             Cursor.Current = Cursors.Default;
         }
 
         private void InsertIntoDB()
         {
             Cursor.Current = Cursors.WaitCursor;
-            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
-            MySqlConnection conn = new MySqlConnection(connStr);
-            MySqlCommand command = conn.CreateCommand();
-            conn.Open();
+            m_Sql.OpenSqlChannel();
 
             string commandStr = "Insert into holiday(";
             commandStr = commandStr + "date,";
@@ -112,22 +98,24 @@ namespace HuaChun_DailyReport
                 commandStr = commandStr + "2";//補班
             commandStr = commandStr + "')";
 
-            command.CommandText = commandStr;
-            command.ExecuteNonQuery();
-            conn.Close();
+
+            m_Sql.ExecuteNonQueryCommand(commandStr);
+            m_Sql.CloseSqlChannel();
             Cursor.Current = Cursors.Default;
         }
 
         private void EditExistDB() 
         {
+            m_Sql.OpenSqlChannel();
             int holidayYear = dateTimeHoliday.Value.Year;
             int holidayMonth = dateTimeHoliday.Value.Month;
             int holidayDay = dateTimeHoliday.Value.Day;
-            SQL.Set_SQL_data("reason", "holiday", "date = '" + holidayYear.ToString() + "-" + holidayMonth.ToString() + "-" + holidayDay.ToString() + "'",  textBoxReason.Text);
+            m_Sql.SetSqlDataWithoutOpenClose("reason", "holiday", "date = '" + holidayYear.ToString() + "-" + holidayMonth.ToString() + "-" + holidayDay.ToString() + "'",  textBoxReason.Text);
             if (radioButton1.Checked)
-                SQL.Set_SQL_data("working", "holiday", "date = '" + holidayYear.ToString() + "-" + holidayMonth.ToString() + "-" + holidayDay.ToString() + "'", "1");//放假
+                m_Sql.SetSqlDataWithoutOpenClose("working", "holiday", "date = '" + holidayYear.ToString() + "-" + holidayMonth.ToString() + "-" + holidayDay.ToString() + "'", "1");//放假
             else
-                SQL.Set_SQL_data("working", "holiday", "date = '" + holidayYear.ToString() + "-" + holidayMonth.ToString() + "-" + holidayDay.ToString() + "'", "2");//補班
+                m_Sql.SetSqlDataWithoutOpenClose("working", "holiday", "date = '" + holidayYear.ToString() + "-" + holidayMonth.ToString() + "-" + holidayDay.ToString() + "'", "2");//補班
+            m_Sql.CloseSqlChannel();
         }
 
         private void DeleteExistDB()
@@ -135,7 +123,7 @@ namespace HuaChun_DailyReport
             int holidayYear = dateTimeHoliday.Value.Year;
             int holidayMonth = dateTimeHoliday.Value.Month;
             int holidayDay = dateTimeHoliday.Value.Day;
-            SQL.NoHistoryDelete_SQL("holiday", "date = '" + holidayYear.ToString() + "-" + holidayMonth.ToString() + "-" + holidayDay.ToString() + "'");
+            m_Sql.NoHistoryDelete_SQL("holiday", "date = '" + holidayYear.ToString() + "-" + holidayMonth.ToString() + "-" + holidayDay.ToString() + "'");
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -143,7 +131,7 @@ namespace HuaChun_DailyReport
             int holidayYear = dateTimeHoliday.Value.Year;
             int holidayMonth = dateTimeHoliday.Value.Month;
             int holidayDay = dateTimeHoliday.Value.Day;
-            string[] duplicateDates = SQL.Read1DArray_SQL_Data("date", "holiday", "date = '" + holidayYear.ToString() + "-" + holidayMonth.ToString() + "-" + holidayDay.ToString() + "'");
+            string[] duplicateDates = m_Sql.Read1DArray_SQL_Data("date", "holiday", "date = '" + holidayYear.ToString() + "-" + holidayMonth.ToString() + "-" + holidayDay.ToString() + "'");
             if (duplicateDates.Length != 0)
             {
                 DialogResult result = MessageBox.Show("此日期已存在，確定要修改?", "確定", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
@@ -191,8 +179,8 @@ namespace HuaChun_DailyReport
                 string Month = date.Substring(firstIndex + 1, secondIndex - firstIndex - 1);
                 string Day = date.Substring(secondIndex + 1);
                 this.dateTimeHoliday.Value = new DateTime(Convert.ToInt32(Year), Convert.ToInt32(Month), Convert.ToInt32(Day));
-                this.textBoxReason.Text = SQL.Read_SQL_data("reason", "holiday", "date = '" + Year + "-" + Month + "-" + Day + "'");
-                string working = SQL.Read_SQL_data("working", "holiday", "date = '" + Year + "-" + Month + "-" + Day + "'");
+                this.textBoxReason.Text = m_Sql.Read_SQL_data("reason", "holiday", "date = '" + Year + "-" + Month + "-" + Day + "'");
+                string working = m_Sql.Read_SQL_data("working", "holiday", "date = '" + Year + "-" + Month + "-" + Day + "'");
                 if (working == "1")
                 {
                     radioButton1.Checked = true;

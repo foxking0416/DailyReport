@@ -13,33 +13,20 @@ namespace HuaChun_DailyReport
 {
     public partial class IncreaseEditFormBase : Form
     {
-        protected string dbHost;//資料庫位址
-        protected string dbUser;//資料庫使用者帳號
-        protected string dbPass;//資料庫使用者密碼
-        protected string dbName;//資料庫名稱
-        protected MySQL SQL;
+        protected MySQL m_Sql;
         protected DataTable dataTable;
-        protected string functionName;
-        protected string functionNameEng;
+        protected string strFunctionName;
+        protected string strFunctionNameEng;
 
-        public IncreaseEditFormBase()
+        public IncreaseEditFormBase(MySQL Sql)
         {
+            m_Sql = Sql;
             InitializeComponent();
         }
 
         protected void Initialize()
         {
-            InitializeSQL();
             InitializeDataTable();
-        }
-
-        private void InitializeSQL()
-        {
-            dbHost = AppSetting.LoadInitialSetting("DB_IP", "127.0.0.1");
-            dbUser = AppSetting.LoadInitialSetting("DB_USER", "root");
-            dbPass = AppSetting.LoadInitialSetting("DB_PASSWORD", "123");
-            dbName = AppSetting.LoadInitialSetting("DB_NAME", "huachun");
-            SQL = new MySQL(dbHost, dbUser, dbPass, dbName);
         }
 
         protected virtual void InitializeDataTable()

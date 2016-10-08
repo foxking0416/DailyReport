@@ -13,12 +13,7 @@ namespace HuaChun_DailyReport
 {
     public partial class Main : Form
     {
-
-        private string dbHost;
-        private string dbUser;
-        private string dbPass;
-        private string dbName;
-        private MySQL SQL;
+        private MySQL g_Sql;
         private string g_strProjectNo = "";
 
         LoginForm loginForm;
@@ -27,12 +22,7 @@ namespace HuaChun_DailyReport
             InitializeComponent();
             Login();
 
-            dbHost = AppSetting.LoadInitialSetting("DB_IP", "127.0.0.1");
-            dbUser = AppSetting.LoadInitialSetting("DB_USER", "root");
-            dbPass = AppSetting.LoadInitialSetting("DB_PASSWORD", "123");
-            dbName = AppSetting.LoadInitialSetting("DB_NAME", "huachun");
-
-            SQL = new MySQL(dbHost, dbUser, dbPass, dbName);
+            g_Sql = new MySQL();
 
         }
 
@@ -41,7 +31,7 @@ namespace HuaChun_DailyReport
         //登入登出
         private void MenuItemLogin_Click(object sender, EventArgs e)
         {
-            loginForm = new LoginForm(this);
+            loginForm = new LoginForm(this, g_Sql);
             loginForm.ShowDialog();
         }
 
@@ -52,99 +42,99 @@ namespace HuaChun_DailyReport
         //選擇專案
         private void MenuItemSelectProject_Click(object sender, EventArgs e)
         {
-            ProjectSearchForm form = new ProjectSearchForm(this);
+            ProjectSearchForm form = new ProjectSearchForm(this, g_Sql);
             form.ShowDialog();
         }
 
         //基本資料維護
         private void MenuItemProjectIncrease_Click(object sender, EventArgs e)
         {
-            ProjectIncreaseForm form = new ProjectIncreaseForm();
+            ProjectIncreaseForm form = new ProjectIncreaseForm(g_Sql);
             form.ShowDialog();
         }
 
         private void MenuItemProjectEdit_Click(object sender, EventArgs e)
         {
-            ProjectEditForm form = new ProjectEditForm();
+            ProjectEditForm form = new ProjectEditForm(g_Sql);
             form.ShowDialog();
         }
 
         private void MenuItemVendorIncrease_Click(object sender, EventArgs e)
         {
-            VendorIncreaseForm form = new VendorIncreaseForm();
+            VendorIncreaseForm form = new VendorIncreaseForm(g_Sql);
             form.ShowDialog();
         }
 
         private void MenuItemVendorEdit_Click(object sender, EventArgs e)
         {
-            VendorEditForm form = new VendorEditForm();
+            VendorEditForm form = new VendorEditForm(g_Sql);
             form.ShowDialog();
         }
 
         private void MenuItemMaterialIncrease_Click(object sender, EventArgs e)
         {
-            MaterialIncreaseForm materialIncreaseForm = new MaterialIncreaseForm();
+            MaterialIncreaseForm materialIncreaseForm = new MaterialIncreaseForm(g_Sql);
             materialIncreaseForm.ShowDialog();
         }
 
         private void MenuItemMaterialEdit_Click(object sender, EventArgs e)
         {
-            MaterialEditForm materialEditForm = new MaterialEditForm();
+            MaterialEditForm materialEditForm = new MaterialEditForm(g_Sql);
             materialEditForm.ShowDialog();
         }
 
         private void MenuItemToolIncrease_Click(object sender, EventArgs e)
         {
-            ToolIncreaseForm toolIncreaseForm = new ToolIncreaseForm();
+            ToolIncreaseForm toolIncreaseForm = new ToolIncreaseForm(g_Sql);
             toolIncreaseForm.ShowDialog();
         }
 
         private void MenuItemToolEdit_Click(object sender, EventArgs e)
         {
-            ToolEditForm toolEditForm = new ToolEditForm();
+            ToolEditForm toolEditForm = new ToolEditForm(g_Sql);
             toolEditForm.ShowDialog();
         }
 
         private void MenuItemLaborIncrease_Click(object sender, EventArgs e)
         {
             //新增工人別
-            LaborIncreaseForm laborIncreaseForm = new LaborIncreaseForm();
+            LaborIncreaseForm laborIncreaseForm = new LaborIncreaseForm(g_Sql);
             laborIncreaseForm.ShowDialog();
         }
 
         private void MenuItemLaborEdit_Click(object sender, EventArgs e)
         {
-            LaborEditForm laborEditForm = new LaborEditForm();
+            LaborEditForm laborEditForm = new LaborEditForm(g_Sql);
             laborEditForm.ShowDialog();
         }
 
         private void MenuItemEmployeeIncrease_Click(object sender, EventArgs e)
         {
-            MemberIncreaseForm form = new MemberIncreaseForm();
+            MemberIncreaseForm form = new MemberIncreaseForm(g_Sql);
             form.ShowDialog();
         }
 
         private void MenuItemEmployeeEdit_Click(object sender, EventArgs e)
         {
-            MemberEditForm form = new MemberEditForm();
+            MemberEditForm form = new MemberEditForm(g_Sql);
             form.ShowDialog();
         }
 
         private void MenuItemHolidayManage_Click(object sender, EventArgs e)
         {
-            HolidaySettingForm holidaySettingForm = new HolidaySettingForm();
+            HolidaySettingForm holidaySettingForm = new HolidaySettingForm(g_Sql);
             holidaySettingForm.ShowDialog();
         }
 
         private void MenuItemProcessCodeIncrease_Click(object sender, EventArgs e)
         {
-            ProcessCodeIncreaseForm processCodeIncreaseForm = new ProcessCodeIncreaseForm();
+            ProcessCodeIncreaseForm processCodeIncreaseForm = new ProcessCodeIncreaseForm(g_Sql);
             processCodeIncreaseForm.ShowDialog();
         }
 
         private void MenuItemProcessCodeEdit_Click(object sender, EventArgs e)
         {
-            ProcessCodeEditForm processCodeEditForm = new ProcessCodeEditForm();
+            ProcessCodeEditForm processCodeEditForm = new ProcessCodeEditForm(g_Sql);
             processCodeEditForm.ShowDialog();
         }
 
@@ -158,20 +148,20 @@ namespace HuaChun_DailyReport
         //日報表作業
         private void MenuItemDailyReportBuild_Click(object sender, EventArgs e)
         {
-            DailyReportIncreaseForm reportBuildForm = new DailyReportIncreaseForm(g_strProjectNo);
+            DailyReportIncreaseForm reportBuildForm = new DailyReportIncreaseForm(g_strProjectNo, g_Sql);
             reportBuildForm.ShowDialog();
         }
 
         private void MenuItemDailyReportEdit_Click(object sender, EventArgs e)
         {
-            string[] reportDates = SQL.Read1DArray_SQL_Data("date", "dailyreport", "project_no ='" + g_strProjectNo + "' ORDER BY date DESC");
+            string[] reportDates = g_Sql.Read1DArray_SQL_Data("date", "dailyreport", "project_no ='" + g_strProjectNo + "' ORDER BY date DESC");
             if (reportDates.Length == 0)//表示這個工程目前並沒有輸入任何日報表
             {
                 MessageBox.Show("此工程目前並沒有任何已存在的日報表,\r\n請重新選擇工程或建立日報表", "無法編輯", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             else
             {
-                DailyReportEditForm reportEditForm = new DailyReportEditForm(g_strProjectNo);
+                DailyReportEditForm reportEditForm = new DailyReportEditForm(g_strProjectNo, g_Sql);
                 reportEditForm.ShowDialog();
             }
         }
@@ -195,17 +185,17 @@ namespace HuaChun_DailyReport
         //查詢預計完工表
         private void MenuItemEepectFinishChart_Click(object sender, EventArgs e)
         {
-            string strProjectName = SQL.Read_SQL_data("project_name", "project_info", "project_no ='" + g_strProjectNo + "'");
+            string strProjectName = g_Sql.Read_SQL_data("project_name", "project_info", "project_no ='" + g_strProjectNo + "'");
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Excel File|*.xls";
             saveFileDialog.Title = "Save an Excel File";
             saveFileDialog.FileName = strProjectName + "預計完工表";
-            saveFileDialog.ShowDialog();
 
-            if (saveFileDialog.FileName != "")
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK && saveFileDialog.FileName != "" )
             {
                 Cursor.Current = Cursors.WaitCursor;
-                ClassExcelGenerator cExcelGen = new ClassExcelGenerator(g_strProjectNo, saveFileDialog.FileName, (int)ChartType.ExpectFinishChart);
+                ClassExcelGenerator cExcelGen = new ClassExcelGenerator(g_strProjectNo, saveFileDialog.FileName, (int)ChartType.ExpectFinishChart, g_Sql);
                 cExcelGen.GenerateExcel();
                 Cursor.Current = Cursors.Default;
             }
@@ -213,7 +203,7 @@ namespace HuaChun_DailyReport
         //查詢晴雨表
         private void MenuItemWeatherChart_Click(object sender, EventArgs e)
         {
-            string[] arrReportDates = SQL.Read1DArray_SQL_Data("date", "dailyreport", "project_no ='" + g_strProjectNo + "' ORDER BY date DESC");
+            string[] arrReportDates = g_Sql.Read1DArray_SQL_Data("date", "dailyreport", "project_no ='" + g_strProjectNo + "' ORDER BY date DESC");
 
             if (arrReportDates.Length == 0)//表示這個工程目前並沒有輸入任何日報表
             {
@@ -221,17 +211,15 @@ namespace HuaChun_DailyReport
             }
             else
             {
-                string strProjectName = SQL.Read_SQL_data("project_name", "project_info", "project_no ='" + g_strProjectNo + "'");
+                string strProjectName = g_Sql.Read_SQL_data("project_name", "project_info", "project_no ='" + g_strProjectNo + "'");
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.Filter = "Excel File|*.xls";
                 saveFileDialog.Title = "Save an Excel File";
                 saveFileDialog.FileName = strProjectName + "晴雨表";
-                saveFileDialog.ShowDialog();
-
-                if (saveFileDialog.FileName != "")
+                if (saveFileDialog.ShowDialog() == DialogResult.OK && saveFileDialog.FileName != "")
                 {
                     Cursor.Current = Cursors.WaitCursor;
-                    ClassExcelGenerator excelGen = new ClassExcelGenerator(g_strProjectNo, saveFileDialog.FileName, (int)ChartType.WeatherChart);
+                    ClassExcelGenerator excelGen = new ClassExcelGenerator(g_strProjectNo, saveFileDialog.FileName, (int)ChartType.WeatherChart, g_Sql);
                     excelGen.GenerateExcel();
                     Cursor.Current = Cursors.Default;
                 }
@@ -240,31 +228,31 @@ namespace HuaChun_DailyReport
         //查詢日報明細表
         private void MenuItemDailyReportList_Click(object sender, EventArgs e)
         {
-            QueryDailyReportListForm queryDailyReportListForm = new QueryDailyReportListForm();
+            QueryDailyReportListForm queryDailyReportListForm = new QueryDailyReportListForm(g_Sql);
             queryDailyReportListForm.ShowDialog();
         }
         //查詢不計工期圖表
         private void MenuItemNonworkingDayChart_Click(object sender, EventArgs e)
         {
-            QueryNonworkingDayChartForm queryNonworkingDayChartForm = new QueryNonworkingDayChartForm();
+            QueryNonworkingDayChartForm queryNonworkingDayChartForm = new QueryNonworkingDayChartForm(g_Sql);
             queryNonworkingDayChartForm.ShowDialog();
         }
         //查詢不計工期統計表
         private void MenuItemNonworkingDayStatistic_Click(object sender, EventArgs e)
         {
-            QueryNonworkingDayStatisticForm queryNonworkingDayStatisticForm = new QueryNonworkingDayStatisticForm();
+            QueryNonworkingDayStatisticForm queryNonworkingDayStatisticForm = new QueryNonworkingDayStatisticForm(g_Sql);
             queryNonworkingDayStatisticForm.ShowDialog();
         }
         //查詢不計工期明細表
         private void MenuItemNonworkingDayDetail_Click(object sender, EventArgs e)
         {
-            QueryNonworkingDayDetailForm queryNonworkingDayDetailForm = new QueryNonworkingDayDetailForm();
+            QueryNonworkingDayDetailForm queryNonworkingDayDetailForm = new QueryNonworkingDayDetailForm(g_Sql);
             queryNonworkingDayDetailForm.ShowDialog();
         }
         //查詢完工表表
         private void MenuItemFinishChart_Click(object sender, EventArgs e)
         {
-            QueryFinishForm queryFinishChartForm = new QueryFinishForm(g_strProjectNo);
+            QueryFinishForm queryFinishChartForm = new QueryFinishForm(g_strProjectNo, g_Sql);
             queryFinishChartForm.ShowDialog();
         }
 
@@ -315,35 +303,23 @@ namespace HuaChun_DailyReport
 
         void PD_PrintPage(object sender, PrintPageEventArgs e)
         {
-
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-
-            SQL.TestSqlCommand();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            SQL.TestSqlCommand2();
-
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            string dbHost = "192.168.1.104";
-            string dbUser = "weichien";
-            string dbPass = "chichi1219";
-            string dbName = "huachun";
-            MySQL SQL = new MySQL(dbHost, dbUser, dbPass, dbName);
-            string computeType = SQL.Read_SQL_data("computetype", "project_info", "project_no = 'w04'");
-            bool stop = true;
         }
 
         public void LoadProjectInfo(string projectNo)
         {
-            this.labelProject.Text = SQL.Read_SQL_data("project_name", "project_info", "project_no = '" + projectNo + "'");
+            this.labelProject.Text = g_Sql.Read_SQL_data("project_name", "project_info", "project_no = '" + projectNo + "'");
             g_strProjectNo = projectNo;
 
             this.MenuItemDailyReport.Enabled = true;

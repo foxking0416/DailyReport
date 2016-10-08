@@ -13,16 +13,13 @@ namespace HuaChun_DailyReport
 {
     public partial class LoginForm : Form
     {
-        string dbHost;//資料庫位址
-        string dbUser;//資料庫使用者帳號
-        string dbPass;//資料庫使用者密碼
-        string dbName;//資料庫名稱
-        MySQL SQL;
+        MySQL m_Sql;
 
         Main mainForm;
 
-        public LoginForm(Main form)
+        public LoginForm(Main form, MySQL Sql)
         {
+            m_Sql = Sql;
             mainForm = form;
             InitializeComponent();
             Initialize();
@@ -30,12 +27,6 @@ namespace HuaChun_DailyReport
 
         private void Initialize()
         {
-            dbHost = AppSetting.LoadInitialSetting("DB_IP", "127.0.0.1");
-            dbUser = AppSetting.LoadInitialSetting("DB_USER", "root");
-            dbPass = AppSetting.LoadInitialSetting("DB_PASSWORD", "123");
-            dbName = AppSetting.LoadInitialSetting("DB_NAME", "huachun");
-
-            SQL = new MySQL(dbHost, dbUser, dbPass, dbName);
         }
 
         private void LoginForm_Load(object sender, EventArgs e)
@@ -58,7 +49,7 @@ namespace HuaChun_DailyReport
             else
             {
 
-                string member = SQL.Read_SQL_data("name", "member", "account = '" + textBoxAccount.Text +"' AND password = '" + textBoxPassword.Text + "'");
+                string member = m_Sql.Read_SQL_data("name", "member", "account = '" + textBoxAccount.Text +"' AND password = '" + textBoxPassword.Text + "'");
 
                 if (member == string.Empty)
                 {

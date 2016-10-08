@@ -13,32 +13,26 @@ namespace HuaChun_DailyReport
 {
     public partial class VendorIncreaseForm : Form
     {
-        string dbHost;
-        string dbUser;
-        string dbPass;
-        string dbName;
-        protected MySQL SQL;
-        ArrayList arrayCity;
 
+        protected MySQL m_Sql;
+        ArrayList arrayCity;
 
         public VendorIncreaseForm()
         {
+        }
+
+        public VendorIncreaseForm(MySQL Sql)
+        {
+            m_Sql = Sql;
             InitializeComponent();
             Initialize();
         }
 
         private void Initialize()
         {
-            dbHost = AppSetting.LoadInitialSetting("DB_IP", "127.0.0.1");
-            dbUser = AppSetting.LoadInitialSetting("DB_USER", "root");
-            dbPass = AppSetting.LoadInitialSetting("DB_PASSWORD", "123");
-            dbName = AppSetting.LoadInitialSetting("DB_NAME", "huachun");
-
-            SQL = new MySQL(dbHost, dbUser, dbPass, dbName);
-
             arrayCity = new ArrayList();
 
-            string[] cities = SQL.Read1DArrayNoCondition_SQL_Data("distinct city", "city");
+            string[] cities = m_Sql.Read1DArrayNoCondition_SQL_Data("distinct city", "city");
 
             for (int i = 0; i < cities.Length; i++)
             {
@@ -50,10 +44,8 @@ namespace HuaChun_DailyReport
 
         protected void InsertIntoDB()
         {
-            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
-            MySqlConnection conn = new MySqlConnection(connStr);
-            MySqlCommand command = conn.CreateCommand();
-            conn.Open();
+            Cursor.Current = Cursors.WaitCursor;
+            m_Sql.OpenSqlChannel();
 
             string commandStr = "Insert into vendor(";
             commandStr = commandStr + "vendor_no,";
@@ -96,11 +88,9 @@ namespace HuaChun_DailyReport
             commandStr = commandStr + "')";
 
 
-
-
-            command.CommandText = commandStr;// "Insert into vendor(vendor_no,vendor_name,vendor_abbre) values('" + textBoxVendor_No.Text + "','" + textBoxVendor_Name.Text + "','" + textBoxVendor_Abbre.Text + "')";
-            command.ExecuteNonQuery();
-            conn.Close();
+            m_Sql.ExecuteNonQueryCommand(commandStr);
+            m_Sql.CloseSqlChannel();
+            Cursor.Current = Cursors.Default;
         }
 
         private void Clear()
@@ -148,7 +138,7 @@ namespace HuaChun_DailyReport
             if (textBoxVendor_Name.Text == string.Empty)
                 return;
 
-            string[] sameNo = SQL.Read1DArray_SQL_Data("vendor_no", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'");
+            string[] sameNo = m_Sql.Read1DArray_SQL_Data("vendor_no", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'");
             if (sameNo.Length != 0)
             {
                 label18.Text = "已存在相同廠商編號";
@@ -181,7 +171,7 @@ namespace HuaChun_DailyReport
 
         private void comboBoxCity_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string[] districts = SQL.Read1DArray_SQL_Data("district", "city", "city = '" + comboBoxCity.SelectedItem + "'");
+            string[] districts = m_Sql.Read1DArray_SQL_Data("district", "city", "city = '" + comboBoxCity.SelectedItem + "'");
             comboBoxDistrict.Items.Clear();
             for(int i = 0; i < districts.Length; i++)
             {
@@ -192,7 +182,7 @@ namespace HuaChun_DailyReport
 
         private void comboBoxDistrict_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string code = SQL.Read_SQL_data("code", "city", "city = '" + comboBoxCity.SelectedItem + "' AND district = '" + comboBoxDistrict.SelectedItem + "'");
+            string code = m_Sql.Read_SQL_data("code", "city", "city = '" + comboBoxCity.SelectedItem + "' AND district = '" + comboBoxDistrict.SelectedItem + "'");
             textBoxCode3.Text = code;
         }
 

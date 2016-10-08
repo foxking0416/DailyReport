@@ -11,7 +11,7 @@ namespace HuaChun_DailyReport
 {
     public partial class QueryWeatherChartForm : QueryFormBase
     {
-        public QueryWeatherChartForm(string projectNo)
+        public QueryWeatherChartForm(string projectNo, MySQL Sql) : base(Sql)
         {
             InitializeComponent();
         }

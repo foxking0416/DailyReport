@@ -13,11 +13,7 @@ namespace HuaChun_DailyReport
 {
     class ClassExcelGenerator
     {
-        string dbHost;
-        string dbUser;
-        string dbPass;
-        string dbName;
-        protected MySQL SQL;
+        protected MySQL m_Sql;
 
         string g_strProjectNo;
         string g_strProjectName;
@@ -35,17 +31,15 @@ namespace HuaChun_DailyReport
         Excel.Worksheet xlWorkSheet;
         Excel.Workbook xlWorkBook;
         
-        public ClassExcelGenerator(string strProjectNo, string strSavePath, int iType)
+        public ClassExcelGenerator(string strProjectNo, string strSavePath, int iType, MySQL Sql)
         {
-            dbHost = AppSetting.LoadInitialSetting("DB_IP", "127.0.0.1");
-            dbUser = AppSetting.LoadInitialSetting("DB_USER", "root");
-            dbPass = AppSetting.LoadInitialSetting("DB_PASSWORD", "123");
-            dbName = AppSetting.LoadInitialSetting("DB_NAME", "huachun");
-            SQL = new MySQL(dbHost, dbUser, dbPass, dbName);
+            m_Sql = Sql;
+            m_Sql.OpenSqlChannel();
+            g_strComputeType = m_Sql.ReadSqlDataWithoutOpenClose("computetype", "project_info", "project_no = '" + strProjectNo + "'");
+            g_strComputeHoliday = m_Sql.ReadSqlDataWithoutOpenClose("holiday", "project_info", "project_no = '" + strProjectNo + "'");
+            g_strRainyDayCountType = m_Sql.ReadSqlDataWithoutOpenClose("rainyday", "project_info", "project_no = '" + strProjectNo + "'");
+            m_Sql.CloseSqlChannel();
 
-            g_strComputeType = SQL.Read_SQL_data("computetype", "project_info", "project_no = '" + strProjectNo + "'");
-            g_strComputeHoliday = SQL.Read_SQL_data("holiday", "project_info", "project_no = '" + strProjectNo + "'");
-            g_strRainyDayCountType = SQL.Read_SQL_data("rainyday", "project_info", "project_no = '" + strProjectNo + "'");
 
             g_strProjectNo = strProjectNo;
             g_strPath = Directory.GetCurrentDirectory();
@@ -59,11 +53,12 @@ namespace HuaChun_DailyReport
             Excel.Workbooks xlWorkBooks = xlApp.Workbooks;
             xlWorkBook = xlWorkBooks.Open(g_strPath + "\\晴雨暨工期表.xls");
             xlWorkSheet = xlWorkBook.Sheets[1];
+            m_Sql.OpenSqlChannel();
 
-
-            g_strProjectName = SQL.Read_SQL_data("project_name", "project_info", "project_no = '" + g_strProjectNo + "'");
-            string strStartDate = SQL.Read_SQL_data("startdate", "project_info", "project_no = '" + g_strProjectNo + "'");
-            string strContractEndDate = SQL.Read_SQL_data("contract_finishdate", "project_info", "project_no = '" + g_strProjectNo + "'"); ;
+            g_strProjectName = m_Sql.ReadSqlDataWithoutOpenClose("project_name", "project_info", "project_no = '" + g_strProjectNo + "'");
+            string strStartDate = m_Sql.ReadSqlDataWithoutOpenClose("startdate", "project_info", "project_no = '" + g_strProjectNo + "'");
+            string strContractEndDate = m_Sql.ReadSqlDataWithoutOpenClose("contract_finishdate", "project_info", "project_no = '" + g_strProjectNo + "'");
+            m_Sql.CloseSqlChannel();
             DateTime dtStartDate = Functions.TransferSQLDateToDateTime(strStartDate);
             DateTime dtEndDate = new DateTime();
             DateTime dtContractEndDate = Functions.TransferSQLDateToDateTime(strContractEndDate);
@@ -110,14 +105,28 @@ namespace HuaChun_DailyReport
             Marshal.ReleaseComObject(xlWorkBook);
             Marshal.ReleaseComObject(xlApp.Workbooks);
             Marshal.ReleaseComObject(xlApp);
-
-            MessageBox.Show("晴雨表儲存完成", "完成");
+            if (g_iChartType == (int)ChartType.WeatherChart)
+            {
+                MessageBox.Show("晴雨表儲存完成", "完成");
+            }
+            else if (g_iChartType == (int)ChartType.ExpectFinishChart)
+            {
+                MessageBox.Show("預計完工表儲存完成", "完成");
+            }
+            
         }
 
         private void WriteDataIntoExcel(DateTime dtDateStart, DateTime dtDateEnd, DateTime dtContractDateEnd, bool bWriteEmptyChart)
         {
+            m_Sql.OpenSqlChannel();
             int iYearStart = dtDateStart.Year;
             int iYearEnd = dtDateEnd.Year;
+            int iMonthStart = dtDateStart.Month;
+            int iMonthEnd = dtDateEnd.Month;
+            float fTotalDays = 0;
+            float fTotalHolidays = 0;
+            float fTotalWeatherNonWorkingDays = 0;
+            float fTotalConditionNonWorkingDays = 0;
 
             for (int iYear = iYearStart; iYear <= iYearEnd; iYear++)
             {
@@ -170,7 +179,6 @@ namespace HuaChun_DailyReport
 
                 for (int iMonth = 1; iMonth <= 12; iMonth++)
                 {
-
                     float fDaysInMonth = 0;
                     float fHolidaysInMonth = 0;
                     float fWeatherNonWorkingDaysInMonth = 0;
@@ -242,7 +250,7 @@ namespace HuaChun_DailyReport
                                 break;
                         }
                         iDateIndex += iWeekCount * 7;
-                        string strHolidayReason = SQL.Read_SQL_data("reason", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
+                        string strHolidayReason = m_Sql.ReadSqlDataWithoutOpenClose("reason", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
                         if (strHolidayReason != string.Empty)
                         {
                             xlWorkSheet.Cells[8 + iMonth * 2, 1 + iDateIndex] = strHolidayReason;
@@ -253,10 +261,10 @@ namespace HuaChun_DailyReport
                         }
                         #endregion
 
-                        string strMorningWeather = SQL.Read_SQL_data("morning_weather", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
-                        string strAfternoonWeather = SQL.Read_SQL_data("afternoon_weather", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
-                        string strMorningCondition = SQL.Read_SQL_data("morning_condition", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
-                        string strAfternoonCondition = SQL.Read_SQL_data("afternoon_condition", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
+                        string strMorningWeather = m_Sql.ReadSqlDataWithoutOpenClose("morning_weather", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
+                        string strAfternoonWeather = m_Sql.ReadSqlDataWithoutOpenClose("afternoon_weather", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
+                        string strMorningCondition = m_Sql.ReadSqlDataWithoutOpenClose("morning_condition", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
+                        string strAfternoonCondition = m_Sql.ReadSqlDataWithoutOpenClose("afternoon_condition", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
 
 
 
@@ -309,7 +317,7 @@ namespace HuaChun_DailyReport
                                 else if (g_strComputeHoliday == "1")//國定假日不施工
                                 {
                                     #region
-                                    string working = SQL.Read_SQL_data("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
+                                    string working = m_Sql.ReadSqlDataWithoutOpenClose("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
                                     if (working != string.Empty && working == "1")//遇到國定假日
                                     {
                                         ComputeNonWorkingDay(false, 
@@ -380,7 +388,7 @@ namespace HuaChun_DailyReport
                                     }
                                     else if (g_strComputeHoliday == "1")//國定假日不施工
                                     {
-                                        string working = SQL.Read_SQL_data("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
+                                        string working = m_Sql.ReadSqlDataWithoutOpenClose("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
                                         if (working != string.Empty && working == "1")
                                         {
                                             ComputeNonWorkingDay(false, 
@@ -432,7 +440,7 @@ namespace HuaChun_DailyReport
                                 }
                                 else if (dtDate.DayOfWeek == DayOfWeek.Saturday)
                                 {
-                                    string working = SQL.Read_SQL_data("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
+                                    string working = m_Sql.ReadSqlDataWithoutOpenClose("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
                                     if (working == string.Empty || working == "1")
                                     {
                                         ComputeNonWorkingDay(false,
@@ -479,7 +487,7 @@ namespace HuaChun_DailyReport
                                     }
                                     else if (g_strComputeHoliday == "1")//國定假日不施工
                                     {
-                                        string working = SQL.Read_SQL_data("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
+                                        string working = m_Sql.ReadSqlDataWithoutOpenClose("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
                                         if (working != string.Empty && working == "1")//遇到國定假日
                                         {
                                             ComputeNonWorkingDay(false,
@@ -514,28 +522,69 @@ namespace HuaChun_DailyReport
                             }
                             #endregion         
                         }
+                        if (dtDate.CompareTo(dtDateStart) == 0)
+                        {
+                            PrintStart(iMonth, iDateIndex);
+                        }
                         if (dtDate.CompareTo(dtContractDateEnd) == 0)
                         {
                             PrintFinish(iMonth, iDateIndex, true);
                         }
-                        if (dtDate.CompareTo(dtDateEnd) == 0)
+                        if (dtDate.CompareTo(dtDateEnd) == 0 && !bWriteEmptyChart)
                         {
                             PrintFinish(iMonth, iDateIndex, false);
                         }
                     }
 
+                    fTotalDays += fDaysInMonth;
+                    fTotalHolidays += fHolidaysInMonth;
+                    fTotalWeatherNonWorkingDays += fWeatherNonWorkingDaysInMonth;
+                    fTotalConditionNonWorkingDays += fConditionNonWorkingDaysInMonth;
 
-                    xlWorkSheet.Cells[7 + iMonth * 2, 39] = fDaysInMonth;
-                    xlWorkSheet.Cells[7 + iMonth * 2, 40] = fHolidaysInMonth;
-                    xlWorkSheet.Cells[7 + iMonth * 2, 41] = fWeatherNonWorkingDaysInMonth;
-                    xlWorkSheet.Cells[7 + iMonth * 2, 42] = fConditionNonWorkingDaysInMonth;
+                    if (iYear != iYearStart && iMonth == 1)
+                    {
+                        xlWorkSheet.Cells[10, 39] = fTotalDays;
+                        xlWorkSheet.Cells[10, 40] = fTotalHolidays;
+                        xlWorkSheet.Cells[10, 41] = fTotalWeatherNonWorkingDays;
+                        xlWorkSheet.Cells[10, 42] = fTotalConditionNonWorkingDays;
+                        xlWorkSheet.Cells[10, 43] = fTotalHolidays + fTotalWeatherNonWorkingDays + fTotalConditionNonWorkingDays;
+                        xlWorkSheet.Cells[10, 44] = fTotalDays - (fTotalHolidays + fTotalWeatherNonWorkingDays + fTotalConditionNonWorkingDays);
+                        xlWorkSheet.Cells[9, 45] = fTotalDays - (fTotalHolidays + fTotalWeatherNonWorkingDays + fTotalConditionNonWorkingDays);
+                    }
+
+                    if ((iYear == iYearEnd && iMonth > iMonthEnd) || (iYear == iYearStart && iMonth < iMonthStart))
+                    {
+                        xlWorkSheet.Cells[7 + iMonth * 2, 39] = "";
+                        xlWorkSheet.Cells[7 + iMonth * 2, 40] = "";
+                        xlWorkSheet.Cells[7 + iMonth * 2, 41] = "";
+                        xlWorkSheet.Cells[7 + iMonth * 2, 42] = "";
+                        xlWorkSheet.Cells[7 + iMonth * 2, 43] = "";
+                        xlWorkSheet.Cells[7 + iMonth * 2, 44] = "";
+                        xlWorkSheet.Cells[7 + iMonth * 2, 45] = "";
+                        xlWorkSheet.Cells[8 + iMonth * 2, 39] = "";
+                        xlWorkSheet.Cells[8 + iMonth * 2, 40] = "";
+                        xlWorkSheet.Cells[8 + iMonth * 2, 41] = "";
+                        xlWorkSheet.Cells[8 + iMonth * 2, 42] = "";
+                        xlWorkSheet.Cells[8 + iMonth * 2, 43] = "";
+                        xlWorkSheet.Cells[8 + iMonth * 2, 44] = "";
+                    }
+                    else
+                    {
+                        xlWorkSheet.Cells[7 + iMonth * 2, 39] = fDaysInMonth;
+                        xlWorkSheet.Cells[7 + iMonth * 2, 40] = fHolidaysInMonth;
+                        xlWorkSheet.Cells[7 + iMonth * 2, 41] = fWeatherNonWorkingDaysInMonth;
+                        xlWorkSheet.Cells[7 + iMonth * 2, 42] = fConditionNonWorkingDaysInMonth;
+                    }
+
                 }
             }
+            m_Sql.CloseSqlChannel();
         }
 
         private DateTime ComputeValidFinishDate(DateTime dtStartDate)
         {
-            DayCompute dayCompute = new DayCompute();
+            DayCompute dayCompute = new DayCompute(m_Sql);
+            m_Sql.OpenSqlChannel();
 
             if (g_strComputeType == "1")//限期完工  日曆天
             {
@@ -574,7 +623,7 @@ namespace HuaChun_DailyReport
             }
 
 
-            float fOriginalTotalDuration = Convert.ToSingle(SQL.Read_SQL_data("contractduration", "project_info", "project_no = '" + g_strProjectNo + "'"));
+            float fOriginalTotalDuration = Convert.ToSingle(m_Sql.ReadSqlDataWithoutOpenClose("contractduration", "project_info", "project_no = '" + g_strProjectNo + "'"));
             float fAccumulateExtendDurations = 0;
 
             int i = 0;
@@ -583,7 +632,7 @@ namespace HuaChun_DailyReport
             {
                 DateTime dtDateToday = dtStartDate.AddDays(i);
 
-                string strNonCountingToday = SQL.Read_SQL_data("nonecounting", 
+                string strNonCountingToday = m_Sql.ReadSqlDataWithoutOpenClose("nonecounting", 
                                                                "dailyreport", 
                                                                "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
                 if (strNonCountingToday == "0.5")
@@ -600,7 +649,7 @@ namespace HuaChun_DailyReport
                 float fNonCountingTotal = dayCompute.CountTotalNotWorkingDay(dtStartDate, dtDateToday);
 
 
-                string strExtendDuration = SQL.Read_SQL_data("extendduration", 
+                string strExtendDuration = m_Sql.ReadSqlDataWithoutOpenClose("extendduration", 
                                                              "extendduration", 
                                                              "project_no = '" + g_strProjectNo + "' AND extendstartdate = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
                 if (strExtendDuration != string.Empty)
@@ -618,6 +667,7 @@ namespace HuaChun_DailyReport
                     bStop = true;  
                 }  
             }
+            m_Sql.CloseSqlChannel();
             return dtStartDate.AddDays(i-1);
         }
 
@@ -774,9 +824,9 @@ namespace HuaChun_DailyReport
             {
                 xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\全日停工.png", 
                                               MsoTriState.msoFalse, MsoTriState.msoTrue, 
-                                              g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
-                                              g_fStartPositionV + 1 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
-                                              21, 21);
+                                              g_fStartPositionH + 3 + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
+                                              g_fStartPositionV + 4 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
+                                              15, 15);
                 fConditionNonWorkingDaysInMonth += fNonWorkingCount;
             }
             else if (strMorningCondition == "補假")
@@ -824,9 +874,9 @@ namespace HuaChun_DailyReport
                 {
                     xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\下午停工.png", 
                                                   MsoTriState.msoFalse, MsoTriState.msoTrue, 
-                                                  g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
-                                                  g_fStartPositionV + 1 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
-                                                  21, 21);
+                                                  g_fStartPositionH + 3 +Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
+                                                  g_fStartPositionV + 4 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
+                                                  15, 15);
                 }
                 fConditionNonWorkingDaysInMonth += fNonWorkingCount;
             }
@@ -848,8 +898,17 @@ namespace HuaChun_DailyReport
         {
             xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\例假日.png", 
                                           MsoTriState.msoFalse, MsoTriState.msoTrue, 
+                                          g_fStartPositionH + 3 +Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
+                                          g_fStartPositionV + 2 +Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
+                                          15, 15);
+        }
+
+        private void PrintStart(int iMonth, int iDateIndex)
+        {
+            xlWorkSheet.Shapes.AddPicture(g_strPath + "\\image\\開工日.png",
+                                          MsoTriState.msoFalse, MsoTriState.msoTrue,
                                           g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
-                                          g_fStartPositionV - 1 + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))), 
+                                          g_fStartPositionV + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))),
                                           21, 21);
         }
 

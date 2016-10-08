@@ -41,7 +41,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(13, 38);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(1162, 300);
+            this.dataGridView1.Size = new System.Drawing.Size(1162, 541);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
             // 
@@ -50,7 +50,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(13, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(85, 13);
+            this.label1.Size = new System.Drawing.Size(91, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "工期計算方式：";
             // 
@@ -64,7 +64,7 @@
             // 
             // btnOutput
             // 
-            this.btnOutput.Location = new System.Drawing.Point(12, 344);
+            this.btnOutput.Location = new System.Drawing.Point(12, 585);
             this.btnOutput.Name = "btnOutput";
             this.btnOutput.Size = new System.Drawing.Size(200, 23);
             this.btnOutput.TabIndex = 4;
@@ -74,7 +74,7 @@
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(218, 344);
+            this.btnExit.Location = new System.Drawing.Point(218, 585);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(200, 23);
             this.btnExit.TabIndex = 4;
@@ -86,12 +86,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1187, 372);
+            this.ClientSize = new System.Drawing.Size(1187, 615);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnOutput);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.dataGridView1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Name = "QueryFinishForm";
             this.Text = "完工總表";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();

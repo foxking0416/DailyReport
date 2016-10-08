@@ -12,28 +12,17 @@ namespace HuaChun_DailyReport
 {
     public partial class ProjectIncreaseForm : Form
     {
-        string dbHost;
-        string dbUser;
-        string dbPass;
-        string dbName;
-        protected MySQL SQL;
+        protected MySQL m_Sql;
 
-
-        public ProjectIncreaseForm()
+        public ProjectIncreaseForm(MySQL Sql)
         {
+            m_Sql = Sql;
             InitializeComponent();
             Initialize();
         }
 
         private void Initialize() 
         {
-            dbHost = AppSetting.LoadInitialSetting("DB_IP", "127.0.0.1");
-            dbUser = AppSetting.LoadInitialSetting("DB_USER", "root");
-            dbPass = AppSetting.LoadInitialSetting("DB_PASSWORD", "123");
-            dbName = AppSetting.LoadInitialSetting("DB_NAME", "huachun");
-
-            SQL = new MySQL(dbHost, dbUser, dbPass, dbName);
-
             uiNumericDuration.ReadOnly = true;//初始化工期設定
             uiNumericDays.ReadOnly = true;//初始化天數設定
             uiDateTimeFinish.Enabled = true;
@@ -43,12 +32,10 @@ namespace HuaChun_DailyReport
 
         protected void InsertIntoDB()
         {
-            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
-            MySqlConnection conn = new MySqlConnection(connStr);
-            MySqlCommand command = conn.CreateCommand();
-            conn.Open();
+            Cursor.Current = Cursors.WaitCursor;
+            m_Sql.OpenSqlChannel();
 
-            string commandStr = "Insert into project_info(";
+            string commandStr = "INSERT INTO project_info(";
             commandStr = commandStr + "project_no,";
             commandStr = commandStr + "contract_no,";
             commandStr = commandStr + "project_name,";
@@ -63,6 +50,7 @@ namespace HuaChun_DailyReport
             commandStr = commandStr + "biddate,";
             commandStr = commandStr + "startdate,";
             commandStr = commandStr + "contract_finishdate,";
+            commandStr = commandStr + "modified_finishdate,";
             commandStr = commandStr + "contractamount,";
             commandStr = commandStr + "contractduration,";
             commandStr = commandStr + "contractdays,";
@@ -72,41 +60,42 @@ namespace HuaChun_DailyReport
             commandStr = commandStr + "phone2,";
             commandStr = commandStr + "handle3,";
             commandStr = commandStr + "phone3,";
-            commandStr = commandStr + "phone4,";
             commandStr = commandStr + "handle4,";
+            commandStr = commandStr + "phone4,";
             commandStr = commandStr + "onsite,";
             commandStr = commandStr + "security,";
             commandStr = commandStr + "computetype,";
             commandStr = commandStr + "holiday,";
             commandStr = commandStr + "rainyday";
-            commandStr = commandStr + ") values('";
-            commandStr = commandStr + textBoxProjectNo.Text + "','";
-            commandStr = commandStr + textBoxContractNo.Text + "','";
-            commandStr = commandStr + textBoxProjectName.Text + "','";
-            commandStr = commandStr + textBoxProjectLocation.Text + "','";
-            commandStr = commandStr + textBoxContractor.Text + "','";
-            commandStr = commandStr + textBoxOwner.Text + "','";
-            commandStr = commandStr + textBoxManage.Text + "','";
-            commandStr = commandStr + textBoxDesign.Text + "','";
-            commandStr = commandStr + textBoxSupervisor.Text + "','";
-            commandStr = commandStr + textBoxResponsible.Text + "','";
-            commandStr = commandStr + textBoxQuality.Text + "','";
-            commandStr = commandStr + Functions.TransferDateTimeToSQL(dateTimeBid.Value)  + "','";
-            commandStr = commandStr + Functions.TransferDateTimeToSQL(dateTimeStart.Value) + "','";
-            commandStr = commandStr + Functions.TransferDateTimeToSQL(uiDateTimeFinish.Value) + "','";
-            commandStr = commandStr + numericAmount.Text + "','";
-            commandStr = commandStr + uiNumericDuration.Text + "','";
-            commandStr = commandStr + uiNumericDays.Text + "','";
-            commandStr = commandStr + textBoxHandle1.Text + "','";
-            commandStr = commandStr + textBoxPhone1.Text + "','";
-            commandStr = commandStr + textBoxHandle2.Text + "','";
-            commandStr = commandStr + textBoxPhone2.Text + "','";
-            commandStr = commandStr + textBoxHandle3.Text + "','";
-            commandStr = commandStr + textBoxPhone3.Text + "','";
-            commandStr = commandStr + textBoxHandle4.Text + "','";
-            commandStr = commandStr + textBoxPhone4.Text + "','";
-            commandStr = commandStr + textBoxOnsite.Text + "','";
-            commandStr = commandStr + textBoxSecurity.Text + "','";
+            commandStr = commandStr + ") VALUES('";
+            commandStr = commandStr + textBoxProjectNo.Text + "','";//2
+            commandStr = commandStr + textBoxContractNo.Text + "','";//3
+            commandStr = commandStr + textBoxProjectName.Text + "','";//4
+            commandStr = commandStr + textBoxProjectLocation.Text + "','";//5
+            commandStr = commandStr + textBoxContractor.Text + "','";//6
+            commandStr = commandStr + textBoxOwner.Text + "','";//7
+            commandStr = commandStr + textBoxManage.Text + "','";//8
+            commandStr = commandStr + textBoxDesign.Text + "','";//9
+            commandStr = commandStr + textBoxSupervisor.Text + "','";//10
+            commandStr = commandStr + textBoxResponsible.Text + "','";//11
+            commandStr = commandStr + textBoxQuality.Text + "','";//12
+            commandStr = commandStr + Functions.TransferDateTimeToSQL(dateTimeBid.Value)  + "','";//13
+            commandStr = commandStr + Functions.TransferDateTimeToSQL(dateTimeStart.Value) + "','";//14
+            commandStr = commandStr + Functions.TransferDateTimeToSQL(uiDateTimeFinish.Value) + "','";//15
+            commandStr = commandStr + Functions.TransferDateTimeToSQL(uiDateTimeFinish.Value) + "','";//16
+            commandStr = commandStr + numericAmount.Text + "','";//17
+            commandStr = commandStr + uiNumericDuration.Text + "','";//18
+            commandStr = commandStr + uiNumericDays.Text + "','";//19
+            commandStr = commandStr + textBoxHandle1.Text + "','";//20
+            commandStr = commandStr + textBoxPhone1.Text + "','";//21
+            commandStr = commandStr + textBoxHandle2.Text + "','";//22
+            commandStr = commandStr + textBoxPhone2.Text + "','";//23
+            commandStr = commandStr + textBoxHandle3.Text + "','";//24
+            commandStr = commandStr + textBoxPhone3.Text + "','";//25
+            commandStr = commandStr + textBoxHandle4.Text + "','";//26
+            commandStr = commandStr + textBoxPhone4.Text + "','";//27
+            commandStr = commandStr + textBoxOnsite.Text + "','";//28
+            commandStr = commandStr + textBoxSecurity.Text + "','";//29
             if (uiRadioBtnRestrictSchedule.Checked == true)
             {
                 commandStr = commandStr + "1" + "','";
@@ -122,25 +111,24 @@ namespace HuaChun_DailyReport
                 else if (radioBtnSun.Checked == true)
                     commandStr = commandStr + "4" + "','";
                 else if (radioBtnSatSun.Checked == true)
-                    commandStr = commandStr + "5" + "','";
+                    commandStr = commandStr + "5" + "','";//30
             }
 
             if (radioBtnHolidayNoWorking.Checked)
-                commandStr = commandStr + "1";
+                commandStr = commandStr + "1" + "','";
             else
-                commandStr = commandStr + "0";
+                commandStr = commandStr + "0" + "','";//31
 
             if (radioBtnNoWorkingOnHeavyRainyDay.Checked)
                 commandStr = commandStr + "1";//大雨才不計工期
             else
-                commandStr = commandStr + "0";//小雨就不計工期
+                commandStr = commandStr + "0";//小雨就不計工期 //32
 
             commandStr = commandStr + "')";
 
-
-            command.CommandText = commandStr;
-            command.ExecuteNonQuery();
-            conn.Close();
+            m_Sql.ExecuteNonQueryCommand(commandStr);
+            m_Sql.CloseSqlChannel();
+            Cursor.Current = Cursors.Default;
         }
 
         protected void Clear()
@@ -178,7 +166,7 @@ namespace HuaChun_DailyReport
 
         protected void CalculateByDuration()
         {
-            DayCompute dayCompute = new DayCompute();
+            DayCompute dayCompute = new DayCompute(m_Sql);
 
             //設定工期計算方式 
             if (uiRadioBtnRestrictSchedule.Checked == true || uiRadioBtnCalenderDay.Checked == true)
@@ -252,25 +240,25 @@ namespace HuaChun_DailyReport
 
         private void BtnSearchSponsor_Click(object sender, EventArgs e)
         {
-            MemberSearchForm searchForm = new MemberSearchForm(this.textBoxResponsible);
+            MemberSearchForm searchForm = new MemberSearchForm(this.textBoxResponsible, m_Sql);
             searchForm.ShowDialog();
         }
 
         private void BtnSearchQA_Click(object sender, EventArgs e)
         {
-            MemberSearchForm searchForm = new MemberSearchForm(this.textBoxQuality);
+            MemberSearchForm searchForm = new MemberSearchForm(this.textBoxQuality, m_Sql);
             searchForm.ShowDialog();
         }
 
         private void BtnSearchOnsite_Click(object sender, EventArgs e)
         {
-            MemberSearchForm searchForm = new MemberSearchForm(this.textBoxOnsite);
+            MemberSearchForm searchForm = new MemberSearchForm(this.textBoxOnsite, m_Sql);
             searchForm.ShowDialog();
         }
 
         private void BtnSearchSecurity_Click(object sender, EventArgs e)
         {
-            MemberSearchForm searchForm = new MemberSearchForm(this.textBoxSecurity);
+            MemberSearchForm searchForm = new MemberSearchForm(this.textBoxSecurity, m_Sql);
             searchForm.ShowDialog();
         }
 
@@ -296,7 +284,7 @@ namespace HuaChun_DailyReport
             if (textBoxContractNo.Text == string.Empty)
                 return;
 
-            string[] arrSameNo = SQL.Read1DArray_SQL_Data("project_no", "project_info", "project_no = '" + textBoxProjectNo.Text + "'");
+            string[] arrSameNo = m_Sql.Read1DArray_SQL_Data("project_no", "project_info", "project_no = '" + textBoxProjectNo.Text + "'");
             if (arrSameNo.Length != 0)
             {
                 label28.Text = "已存在相同工程編號";
@@ -304,7 +292,7 @@ namespace HuaChun_DailyReport
                 return;
             }
 
-            arrSameNo = SQL.Read1DArray_SQL_Data("contract_no", "project_info", "contract_no = '" + textBoxContractNo.Text + "'");
+            arrSameNo = m_Sql.Read1DArray_SQL_Data("contract_no", "project_info", "contract_no = '" + textBoxContractNo.Text + "'");
             if (arrSameNo.Length != 0)
             {
                 label30.Text = "已存在相同契約號";

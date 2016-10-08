@@ -14,32 +14,25 @@ namespace HuaChun_DailyReport
 
     public partial class MemberIncreaseForm : Form
     {
-
-        string dbHost;
-        string dbUser;
-        string dbPass;
-        string dbName;
-        protected MySQL SQL;
+        protected MySQL m_Sql;
         ArrayList arrayCity;
 
         public MemberIncreaseForm()
         {
+        }
+
+        public MemberIncreaseForm(MySQL Sql)
+        {
+            m_Sql = Sql;
             InitializeComponent();
             Initialize(); 
         }
 
         private void Initialize()
         {
-            dbHost = AppSetting.LoadInitialSetting("DB_IP", "127.0.0.1");
-            dbUser = AppSetting.LoadInitialSetting("DB_USER", "root");
-            dbPass = AppSetting.LoadInitialSetting("DB_PASSWORD", "123");
-            dbName = AppSetting.LoadInitialSetting("DB_NAME", "huachun");
-
-            SQL = new MySQL(dbHost, dbUser, dbPass, dbName);
-
             arrayCity = new ArrayList();
 
-            string[] cities = SQL.Read1DArrayNoCondition_SQL_Data("distinct city", "city");
+            string[] cities = m_Sql.Read1DArrayNoCondition_SQL_Data("distinct city", "city");
 
             for (int i = 0; i < cities.Length; i++)
             {
@@ -51,10 +44,7 @@ namespace HuaChun_DailyReport
         protected void InsertIntoDB()
         {
             Cursor.Current = Cursors.WaitCursor;
-            string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
-            MySqlConnection conn = new MySqlConnection(connStr);
-            MySqlCommand command = conn.CreateCommand();
-            conn.Open();
+            m_Sql.OpenSqlChannel();
 
             string commandStr = "Insert into member(";
             commandStr = commandStr + "account,";//系統帳號
@@ -129,12 +119,8 @@ namespace HuaChun_DailyReport
                 commandStr = commandStr + "2";
             commandStr = commandStr + "')";
 
-
-
-
-            command.CommandText = commandStr;// "Insert into vendor(vendor_no,vendor_name,vendor_abbre) values('" + textBoxVendor_No.Text + "','" + textBoxVendor_Name.Text + "','" + textBoxVendor_Abbre.Text + "')";
-            command.ExecuteNonQuery();
-            conn.Close();
+            m_Sql.ExecuteNonQueryCommand(commandStr);
+            m_Sql.CloseSqlChannel();
             Cursor.Current = Cursors.Default;
         }
 
@@ -190,7 +176,7 @@ namespace HuaChun_DailyReport
 
         private void comboBoxCity_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string[] districts = SQL.Read1DArray_SQL_Data("district", "city", "city = '" + comboBoxCity.SelectedItem + "'");
+            string[] districts = m_Sql.Read1DArray_SQL_Data("district", "city", "city = '" + comboBoxCity.SelectedItem + "'");
             comboBoxDistrict.Items.Clear();
             for (int i = 0; i < districts.Length; i++)
             {
@@ -201,7 +187,7 @@ namespace HuaChun_DailyReport
 
         private void comboBoxCity2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string[] districts = SQL.Read1DArray_SQL_Data("district", "city", "city = '" + comboBoxCity2.SelectedItem + "'");
+            string[] districts = m_Sql.Read1DArray_SQL_Data("district", "city", "city = '" + comboBoxCity2.SelectedItem + "'");
             comboBoxDistrict2.Items.Clear();
             for (int i = 0; i < districts.Length; i++)
             {

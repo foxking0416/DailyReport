@@ -18,7 +18,11 @@ namespace HuaChun_DailyReport
         private int selectIndex = 0;
         private int vendorCount;
 
-        public VendorEditForm()
+        public VendorEditForm() : base()
+        {
+        }
+
+        public VendorEditForm(MySQL Sql) : base(Sql)
         {
             InitializeComponent();
             Initialize();
@@ -68,7 +72,7 @@ namespace HuaChun_DailyReport
             this.groupBox1.Controls.Add(this.btnNext);
             this.groupBox1.Controls.Add(this.btnSearch);
 
-            vendors = SQL.Read1DArrayNoCondition_SQL_Data("vendor_no", "vendor");
+            vendors = m_Sql.Read1DArrayNoCondition_SQL_Data("vendor_no", "vendor");
             vendorCount = vendors.Length;
             if (vendorCount != 0)
                 this.btnClear.Enabled = true;
@@ -97,30 +101,36 @@ namespace HuaChun_DailyReport
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            VendorSearchForm searchform = new VendorSearchForm(this);
+            VendorSearchForm searchform = new VendorSearchForm(this, m_Sql);
             searchform.Show();
         }
 
         public void LoadInformation(string vendor_no)
         {
-            this.textBoxVendor_No.Text    = SQL.Read_SQL_data("vendor_no", "vendor", "vendor_no = '" + vendor_no + "'");
-            this.textBoxVendor_Name.Text  = SQL.Read_SQL_data("vendor_name", "vendor", "vendor_no = '" + vendor_no + "'");
-            this.textBoxVendor_Abbre.Text = SQL.Read_SQL_data("vendor_abbre", "vendor", "vendor_no = '" + vendor_no + "'");
-            this.textBoxContact1.Text     = SQL.Read_SQL_data("contact1", "vendor", "vendor_no = '" + vendor_no + "'");
-            this.textBoxPhone1.Text       = SQL.Read_SQL_data("phone1", "vendor", "vendor_no = '" + vendor_no + "'");
-            this.textBoxFax.Text          = SQL.Read_SQL_data("fax", "vendor", "vendor_no = '" + vendor_no + "'");
-            this.textBoxContact2.Text     = SQL.Read_SQL_data("contact2", "vendor", "vendor_no = '" + vendor_no + "'");
-            this.textBoxPhone2.Text       = SQL.Read_SQL_data("phone2", "vendor", "vendor_no = '" + vendor_no + "'");
-            this.textBoxCell.Text         = SQL.Read_SQL_data("cell", "vendor", "vendor_no = '" + vendor_no + "'");
-            this.textBoxEmail.Text        = SQL.Read_SQL_data("email", "vendor", "vendor_no = '" + vendor_no + "'");
-            this.textBoxCode2.Text        = SQL.Read_SQL_data("code2", "vendor", "vendor_no = '" + vendor_no + "'");
-            this.comboBoxCity.SelectedItem = SQL.Read_SQL_data("address_city", "vendor", "vendor_no = '" + vendor_no + "'");
-            this.comboBoxDistrict.SelectedItem = SQL.Read_SQL_data("address_district", "vendor", "vendor_no = '" + vendor_no + "'");
-            this.textBoxAddress.Text      = SQL.Read_SQL_data("address_road", "vendor", "vendor_no = '" + vendor_no + "'");
-            this.textBoxID.Text           = SQL.Read_SQL_data("id", "vendor", "vendor_no = '" + vendor_no + "'");
-            this.textBoxTaxTitle.Text     = SQL.Read_SQL_data("taxtitle", "vendor", "vendor_no = '" + vendor_no + "'");
-            this.textBoxBusinessItem.Text = SQL.Read_SQL_data("businessitems", "vendor", "vendor_no = '" + vendor_no + "'");
-            this.textBoxOther.Text        = SQL.Read_SQL_data("other", "vendor", "vendor_no = '" + vendor_no + "'");
+            Cursor.Current = Cursors.WaitCursor;
+            m_Sql.OpenSqlChannel();
+
+            this.textBoxVendor_No.Text    = m_Sql.ReadSqlDataWithoutOpenClose("vendor_no", "vendor", "vendor_no = '" + vendor_no + "'");
+            this.textBoxVendor_Name.Text  = m_Sql.ReadSqlDataWithoutOpenClose("vendor_name", "vendor", "vendor_no = '" + vendor_no + "'");
+            this.textBoxVendor_Abbre.Text = m_Sql.ReadSqlDataWithoutOpenClose("vendor_abbre", "vendor", "vendor_no = '" + vendor_no + "'");
+            this.textBoxContact1.Text     = m_Sql.ReadSqlDataWithoutOpenClose("contact1", "vendor", "vendor_no = '" + vendor_no + "'");
+            this.textBoxPhone1.Text       = m_Sql.ReadSqlDataWithoutOpenClose("phone1", "vendor", "vendor_no = '" + vendor_no + "'");
+            this.textBoxFax.Text          = m_Sql.ReadSqlDataWithoutOpenClose("fax", "vendor", "vendor_no = '" + vendor_no + "'");
+            this.textBoxContact2.Text     = m_Sql.ReadSqlDataWithoutOpenClose("contact2", "vendor", "vendor_no = '" + vendor_no + "'");
+            this.textBoxPhone2.Text       = m_Sql.ReadSqlDataWithoutOpenClose("phone2", "vendor", "vendor_no = '" + vendor_no + "'");
+            this.textBoxCell.Text         = m_Sql.ReadSqlDataWithoutOpenClose("cell", "vendor", "vendor_no = '" + vendor_no + "'");
+            this.textBoxEmail.Text        = m_Sql.ReadSqlDataWithoutOpenClose("email", "vendor", "vendor_no = '" + vendor_no + "'");
+            this.textBoxCode2.Text        = m_Sql.ReadSqlDataWithoutOpenClose("code2", "vendor", "vendor_no = '" + vendor_no + "'");
+            this.comboBoxCity.SelectedItem = m_Sql.ReadSqlDataWithoutOpenClose("address_city", "vendor", "vendor_no = '" + vendor_no + "'");
+            this.comboBoxDistrict.SelectedItem = m_Sql.ReadSqlDataWithoutOpenClose("address_district", "vendor", "vendor_no = '" + vendor_no + "'");
+            this.textBoxAddress.Text      = m_Sql.ReadSqlDataWithoutOpenClose("address_road", "vendor", "vendor_no = '" + vendor_no + "'");
+            this.textBoxID.Text           = m_Sql.ReadSqlDataWithoutOpenClose("id", "vendor", "vendor_no = '" + vendor_no + "'");
+            this.textBoxTaxTitle.Text     = m_Sql.ReadSqlDataWithoutOpenClose("taxtitle", "vendor", "vendor_no = '" + vendor_no + "'");
+            this.textBoxBusinessItem.Text = m_Sql.ReadSqlDataWithoutOpenClose("businessitems", "vendor", "vendor_no = '" + vendor_no + "'");
+            this.textBoxOther.Text        = m_Sql.ReadSqlDataWithoutOpenClose("other", "vendor", "vendor_no = '" + vendor_no + "'");
+
+            m_Sql.CloseSqlChannel();
+            Cursor.Current = Cursors.Default;
         }
 
         protected override void btnSave_Click(object sender, EventArgs e)
@@ -146,24 +156,31 @@ namespace HuaChun_DailyReport
             DialogResult result = MessageBox.Show("確定要修改廠商資料?", "確定", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
             if (result == DialogResult.Yes)
             {
-                SQL.Set_SQL_data("vendor_name", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxVendor_Name.Text);
-                SQL.Set_SQL_data("vendor_abbre", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxVendor_Abbre.Text);
-                SQL.Set_SQL_data("contact1", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxContact1.Text);
-                SQL.Set_SQL_data("phone1", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxPhone1.Text);
-                SQL.Set_SQL_data("fax", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxFax.Text);
-                SQL.Set_SQL_data("contact2", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxContact2.Text);
-                SQL.Set_SQL_data("phone2", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxPhone2.Text);
-                SQL.Set_SQL_data("cell", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxCell.Text);
-                SQL.Set_SQL_data("email", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", "'" + this.textBoxEmail.Text + "'");
-                SQL.Set_SQL_data("code2", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxCode2.Text);
-                SQL.Set_SQL_data("address_city", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.comboBoxCity.SelectedItem.ToString());
-                SQL.Set_SQL_data("address_district", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.comboBoxDistrict.SelectedItem.ToString());
-                SQL.Set_SQL_data("address_road", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxAddress.Text);
-                SQL.Set_SQL_data("id", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxID.Text);
-                SQL.Set_SQL_data("taxtitle", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxTaxTitle.Text);
-                SQL.Set_SQL_data("businessitems", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxBusinessItem.Text);
-                SQL.Set_SQL_data("other", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxOther.Text);
-            }   
+                Cursor.Current = Cursors.WaitCursor;
+                m_Sql.OpenSqlChannel();
+
+                m_Sql.SetSqlDataWithoutOpenClose("vendor_name", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxVendor_Name.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("vendor_abbre", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxVendor_Abbre.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("contact1", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxContact1.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("phone1", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxPhone1.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("fax", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxFax.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("contact2", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxContact2.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("phone2", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxPhone2.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("cell", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxCell.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("email", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", "'" + this.textBoxEmail.Text + "'");
+                m_Sql.SetSqlDataWithoutOpenClose("code2", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxCode2.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("address_city", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.comboBoxCity.SelectedItem.ToString());
+                m_Sql.SetSqlDataWithoutOpenClose("address_district", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.comboBoxDistrict.SelectedItem.ToString());
+                m_Sql.SetSqlDataWithoutOpenClose("address_road", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxAddress.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("id", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxID.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("taxtitle", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxTaxTitle.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("businessitems", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxBusinessItem.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("other", "vendor", "vendor_no = '" + textBoxVendor_No.Text + "'", this.textBoxOther.Text);
+
+                m_Sql.CloseSqlChannel();
+                Cursor.Current = Cursors.Default;
+            }
+            this.Close();
         }
 
         protected override void btnClear_Click(object sender, EventArgs e) 
@@ -171,9 +188,9 @@ namespace HuaChun_DailyReport
             DialogResult result = MessageBox.Show("確定要刪除廠商資料?", "確定", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
             if (result == DialogResult.Yes)
             {
-                SQL.NoHistoryDelete_SQL("vendor", "vendor_no = '" + this.textBoxVendor_No.Text + "'");
+                m_Sql.NoHistoryDelete_SQL("vendor", "vendor_no = '" + this.textBoxVendor_No.Text + "'");
 
-                vendors = SQL.Read1DArrayNoCondition_SQL_Data("vendor_no", "vendor");
+                vendors = m_Sql.Read1DArrayNoCondition_SQL_Data("vendor_no", "vendor");
                 vendorCount = vendors.Length;
                 --selectIndex;
                 if (selectIndex >= 0)

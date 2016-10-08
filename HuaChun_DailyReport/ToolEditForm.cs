@@ -11,16 +11,17 @@ namespace HuaChun_DailyReport
 {
     public partial class ToolEditForm : LaborEditForm
     {
-        public ToolEditForm()
+        public ToolEditForm(MySQL Sql) 
+            : base(Sql)
         {
             InitializeComponent();
 
-            functionName = "機具";
-            functionNameEng = "tool";
+            strFunctionName = "機具";
+            strFunctionNameEng = "tool";
 
             this.Text = "機具編輯作業";
-            this.label1.Text = functionName + "編號";
-            this.label2.Text = functionName + "名稱";
+            this.label1.Text = strFunctionName + "編號";
+            this.label2.Text = strFunctionName + "名稱";
             this.label3.Visible = false;
             this.textBox_Unit.Visible = false;
             this.btnAddEdit.Text = "修改";
@@ -33,16 +34,16 @@ namespace HuaChun_DailyReport
 
         protected override void btnSearch_Click(object sender, EventArgs e)
         {
-            ToolSearchForm searchform = new ToolSearchForm(this);
+            ToolSearchForm searchform = new ToolSearchForm(this, m_Sql);
             searchform.ShowDialog();
         }
 
         protected override void btnDelete_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("確定要刪除" + functionName + "資料?", "確定", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+            DialogResult result = MessageBox.Show("確定要刪除" + strFunctionName + "資料?", "確定", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
             if (result == DialogResult.Yes)
             {
-                SQL.NoHistoryDelete_SQL(functionNameEng, "number = '" + this.textBox_No.Text + "'");
+                m_Sql.NoHistoryDelete_SQL(strFunctionNameEng, "number = '" + this.textBox_No.Text + "'");
 
                 RefreshDatagridview();
                 textBox_No.Clear();

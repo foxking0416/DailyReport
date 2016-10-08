@@ -11,8 +11,10 @@ namespace HuaChun_DailyReport
 {
     public partial class QueryNonworkingDayStatisticForm : Form
     {
-        public QueryNonworkingDayStatisticForm()
+        MySQL m_Sql;
+        public QueryNonworkingDayStatisticForm(MySQL Sql)
         {
+            m_Sql = Sql;
             InitializeComponent();
         }
     }

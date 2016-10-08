@@ -14,7 +14,8 @@ namespace HuaChun_DailyReport
         private MemberEditForm editForm;
         private TextBox textBoxMember;
 
-        public MemberSearchForm(MemberEditForm form)
+        public MemberSearchForm(MemberEditForm form, MySQL Sql) 
+            : base(Sql)
         {
             InitializeComponent();
             editForm = form;
@@ -23,7 +24,8 @@ namespace HuaChun_DailyReport
             formType = 0;
         }
 
-        public MemberSearchForm(DailyReportIncreaseForm form, int index, int row, int column)
+        public MemberSearchForm(DailyReportIncreaseForm form, int index, int row, int column, MySQL Sql) 
+            : base(Sql)
         {
             formType = 1;
             tabIndex = index;
@@ -35,7 +37,8 @@ namespace HuaChun_DailyReport
             Initialize();
         }
 
-        public MemberSearchForm(TextBox textbox)
+        public MemberSearchForm(TextBox textbox, MySQL Sql)
+            : base(Sql)
         {
             InitializeComponent();
             textBoxMember = textbox;

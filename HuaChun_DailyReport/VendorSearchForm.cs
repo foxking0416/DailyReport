@@ -14,7 +14,8 @@ namespace HuaChun_DailyReport
     {
         private VendorEditForm editForm;
 
-        public VendorSearchForm(VendorEditForm form)
+        public VendorSearchForm(VendorEditForm form, MySQL Sql)
+            : base(Sql)
         {
             formType = 0;
             InitializeComponent();
@@ -23,7 +24,8 @@ namespace HuaChun_DailyReport
             Initialize();
         }
 
-        public VendorSearchForm(DailyReportIncreaseForm form, int index, int row, int column)
+        public VendorSearchForm(DailyReportIncreaseForm form, int index, int row, int column, MySQL Sql) 
+            : base(Sql)
         {
             formType = 1;
             tabIndex = index;

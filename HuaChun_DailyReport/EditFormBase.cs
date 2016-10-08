@@ -14,7 +14,8 @@ namespace HuaChun_DailyReport
         protected System.Windows.Forms.Button btnSearch;
         protected System.Windows.Forms.Button btnDelete;
 
-        public EditFormBase()
+        public EditFormBase(MySQL Sql) 
+            : base(Sql)
         {
             InitializeComponent();
             this.btnSearch = new System.Windows.Forms.Button();

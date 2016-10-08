@@ -13,7 +13,8 @@ namespace HuaChun_DailyReport
     {
         private ToolEditForm editForm;
 
-        public ToolSearchForm(ToolEditForm form)
+        public ToolSearchForm(ToolEditForm form, MySQL Sql)
+            : base(Sql)
         {
             InitializeComponent();
             editForm = form;
@@ -21,7 +22,8 @@ namespace HuaChun_DailyReport
             Initialize();
         }
 
-        public ToolSearchForm(DailyReportIncreaseForm form, int index, int row, int column)
+        public ToolSearchForm(DailyReportIncreaseForm form, int index, int row, int column, MySQL Sql) 
+            : base(Sql)
         {
             formType = 1;
             tabIndex = index;

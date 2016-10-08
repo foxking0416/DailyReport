@@ -11,15 +11,15 @@ namespace HuaChun_DailyReport
 {
     public partial class ToolIncreaseForm : LaborIncreaseForm
     {
-        public ToolIncreaseForm()
+        public ToolIncreaseForm(MySQL Sql) : base(Sql)
         {
             InitializeComponent();
-            functionName = "機具";
-            functionNameEng = "tool";
+            strFunctionName = "機具";
+            strFunctionNameEng = "tool";
 
             this.Text = "機具新增作業";
-            this.label1.Text = functionName + "編號";
-            this.label2.Text = functionName + "名稱";
+            this.label1.Text = strFunctionName + "編號";
+            this.label2.Text = strFunctionName + "名稱";
             this.label3.Visible = false;
             this.textBox_Unit.Visible = false;
             this.btnAddEdit.Text = "新增";

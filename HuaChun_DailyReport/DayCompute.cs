@@ -8,11 +8,7 @@ namespace HuaChun_DailyReport
 {
     class DayCompute
     {
-        private string dbHost;
-        private string dbUser;
-        private string dbPass;
-        private string dbName;
-        private MySQL SQL;
+        private MySQL m_Sql;
         public bool restOnSaturday = false;
         public bool restOnSunday = false;
         public bool restOnHoliday = false;
@@ -27,16 +23,11 @@ namespace HuaChun_DailyReport
         private ArrayList arrayHoliday = new ArrayList();
         private ArrayList arrayWorking = new ArrayList();
 
-        public DayCompute()
+        public DayCompute(MySQL Sql)
         {
-            dbHost = AppSetting.LoadInitialSetting("DB_IP", "127.0.0.1");
-            dbUser = AppSetting.LoadInitialSetting("DB_USER", "root");
-            dbPass = AppSetting.LoadInitialSetting("DB_PASSWORD", "123");
-            dbName = AppSetting.LoadInitialSetting("DB_NAME", "huachun");
-            SQL = new MySQL(dbHost, dbUser, dbPass, dbName);
-
-            string[] holidays = SQL.Read1DArray_SQL_Data("date", "holiday", "working = '1'");
-            string[] extraWorkingday = SQL.Read1DArray_SQL_Data("date", "holiday", "working = '2'");
+            m_Sql = Sql;
+            string[] holidays = m_Sql.Read1DArray_SQL_Data("date", "holiday", "working = '1'");
+            string[] extraWorkingday = m_Sql.Read1DArray_SQL_Data("date", "holiday", "working = '2'");
             for (int i = 0; i < holidays.Length; i++)
             {
                 DateTime holiday = Functions.TransferSQLDateToDateTime(holidays[i]);
@@ -341,6 +332,7 @@ namespace HuaChun_DailyReport
 
         public string GetCondition(DateTime today)
         {
+            m_Sql.OpenSqlChannel();
             if (restOnSaturday == true && restOnSunday == true)//週休二日且遇到星期六或星期天
             {
                 if (today.DayOfWeek == DayOfWeek.Sunday)
@@ -352,7 +344,7 @@ namespace HuaChun_DailyReport
                     {
                         if (today.Date.Equals(((DateTime)arrayWorking[j]).Date))//原本星期六不施工 但剛好遇到補班日 
                         {
-                            return SQL.Read_SQL_data("reason", "holiday", "date = '" + Functions.TransferDateTimeToSQL(today) + "'");
+                            return m_Sql.ReadSqlDataWithoutOpenClose("reason", "holiday", "date = '" + Functions.TransferDateTimeToSQL(today) + "'");
                         }
                     }
 
@@ -372,12 +364,12 @@ namespace HuaChun_DailyReport
                 {
                     if (today.Date.Equals(((DateTime)arrayHoliday[j]).Date))
                     {
-                        return SQL.Read_SQL_data("reason", "holiday", "date = '" + Functions.TransferDateTimeToSQL(today) + "'");
+                        return m_Sql.ReadSqlDataWithoutOpenClose("reason", "holiday", "date = '" + Functions.TransferDateTimeToSQL(today) + "'");
                     }
                 }
             }
 
-
+            m_Sql.CloseSqlChannel();
             return "";
         }
 

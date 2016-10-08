@@ -43,7 +43,7 @@
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(12, 229);
+            this.btnAdd.Location = new System.Drawing.Point(12, 530);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(100, 23);
             this.btnAdd.TabIndex = 0;
@@ -53,7 +53,7 @@
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(118, 229);
+            this.btnDelete.Location = new System.Drawing.Point(118, 530);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(100, 23);
             this.btnDelete.TabIndex = 0;
@@ -67,7 +67,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(12, 84);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(313, 139);
+            this.dataGridView1.Size = new System.Drawing.Size(313, 440);
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.CurrentCellChanged += new System.EventHandler(this.dataGridView1_CurrentCellChanged);
             // 
@@ -119,7 +119,7 @@
             // 
             // btnCancle
             // 
-            this.btnCancle.Location = new System.Drawing.Point(225, 229);
+            this.btnCancle.Location = new System.Drawing.Point(225, 530);
             this.btnCancle.Name = "btnCancle";
             this.btnCancle.Size = new System.Drawing.Size(100, 23);
             this.btnCancle.TabIndex = 5;
@@ -131,7 +131,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(338, 258);
+            this.ClientSize = new System.Drawing.Size(338, 559);
             this.Controls.Add(this.btnCancle);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.textBoxReason);

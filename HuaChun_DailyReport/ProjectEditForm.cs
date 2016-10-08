@@ -28,7 +28,8 @@ namespace HuaChun_DailyReport
         protected string rowName;
 
 
-        public ProjectEditForm()
+        public ProjectEditForm(MySQL Sql) 
+            : base(Sql)
         {
             InitializeComponent();
             Initialize();
@@ -150,7 +151,7 @@ namespace HuaChun_DailyReport
             this.Controls.Add(this.btnDeleteExtention);
             this.Controls.Add(this.dataGridView1);
 
-            projects = SQL.Read1DArrayNoCondition_SQL_Data("project_no", "project_info");
+            projects = m_Sql.Read1DArrayNoCondition_SQL_Data("project_no", "project_info");
             projectCount = projects.Length;
             if (projectCount == 0)
                 DisableAll();
@@ -178,20 +179,20 @@ namespace HuaChun_DailyReport
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            ProjectSearchForm searchform = new ProjectSearchForm(this);
+            ProjectSearchForm searchform = new ProjectSearchForm(this, m_Sql);
             searchform.Show();
         }
 
         private void btnAddExtention_Click(object sender, EventArgs e)
         {
-            ExtentionIncreaseForm addExtentionForm = new ExtentionIncreaseForm(textBoxProjectNo.Text);
+            ExtentionIncreaseForm addExtentionForm = new ExtentionIncreaseForm(textBoxProjectNo.Text, m_Sql);
             addExtentionForm.ShowDialog();
             LoadDataTable();
         }
 
         private void btnEditExtention_Click(object sender, EventArgs e)
         {
-            ExtentionEditForm editExtentionForm = new ExtentionEditForm(textBoxProjectNo.Text, grantNo);
+            ExtentionEditForm editExtentionForm = new ExtentionEditForm(textBoxProjectNo.Text, grantNo, m_Sql);
             editExtentionForm.ShowDialog();
             LoadDataTable();
         }
@@ -203,7 +204,7 @@ namespace HuaChun_DailyReport
                 DialogResult result = MessageBox.Show("確定要刪除工期追加資料?", "確定", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
                 if (result == DialogResult.Yes)
                 {
-                    SQL.NoHistoryDelete_SQL("extendduration", "project_no = '" + this.textBoxProjectNo.Text + "' AND grantnumber = '" + grantNo + "'");
+                    m_Sql.NoHistoryDelete_SQL("extendduration", "project_no = '" + this.textBoxProjectNo.Text + "' AND grantnumber = '" + grantNo + "'");
                 }
             }
             else
@@ -235,7 +236,7 @@ namespace HuaChun_DailyReport
             if (textBoxContractNo.Text == string.Empty)
                 return;
 
-            string[] sameNo = SQL.Read1DArray_SQL_Data("contract_no", "project_info", "contract_no = '" + textBoxContractNo.Text + "' AND project_no <> '" + textBoxProjectNo.Text + "'");
+            string[] sameNo = m_Sql.Read1DArray_SQL_Data("contract_no", "project_info", "contract_no = '" + textBoxContractNo.Text + "' AND project_no <> '" + textBoxProjectNo.Text + "'");
             if (sameNo.Length != 0)
             {
                 label30.Text = "已存在相同契約號";
@@ -243,90 +244,92 @@ namespace HuaChun_DailyReport
                 return;
             }
 
+            m_Sql.OpenSqlChannel();
 
             //覆寫原有資料
             DialogResult result = MessageBox.Show("確定要修改工程資料?", "確定", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
             if (result == DialogResult.Yes)
             {
                 //案號及契約號
-                SQL.Set_SQL_data("contract_no", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxContractNo.Text);//
+                m_Sql.SetSqlDataWithoutOpenClose("contract_no", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxContractNo.Text);//
                 //工程名稱
-                SQL.Set_SQL_data("project_name", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxProjectName.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("project_name", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxProjectName.Text);
                 //工程地點
-                SQL.Set_SQL_data("project_location", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxProjectLocation.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("project_location", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxProjectLocation.Text);
                 //承包廠商
-                SQL.Set_SQL_data("contractor", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxContractor.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("contractor", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxContractor.Text);
                 //業主
-                SQL.Set_SQL_data("owner", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxOwner.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("owner", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxOwner.Text);
                 //專業管理
-                SQL.Set_SQL_data("manage", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxManage.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("manage", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxManage.Text);
                 //設計
-                SQL.Set_SQL_data("design", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxDesign.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("design", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxDesign.Text);
                 //監造
-                SQL.Set_SQL_data("supervise", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxSupervisor.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("supervise", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxSupervisor.Text);
                 //工地負責人
-                SQL.Set_SQL_data("responsible", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxResponsible.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("responsible", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxResponsible.Text);
                 //品管
-                SQL.Set_SQL_data("quality", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxQuality.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("quality", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxQuality.Text);
                 //決標日期
-                SQL.Set_SQL_data("biddate", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", Functions.TransferDateTimeToSQL(dateTimeBid.Value));
+                m_Sql.SetSqlDataWithoutOpenClose("biddate", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", Functions.TransferDateTimeToSQL(dateTimeBid.Value));
                 //開工日期
-                SQL.Set_SQL_data("startdate", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", Functions.TransferDateTimeToSQL(dateTimeStart.Value));
+                m_Sql.SetSqlDataWithoutOpenClose("startdate", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", Functions.TransferDateTimeToSQL(dateTimeStart.Value));
                 //契約完工日
-                SQL.Set_SQL_data("contract_finishdate", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", Functions.TransferDateTimeToSQL(uiDateTimeFinish.Value));
+                m_Sql.SetSqlDataWithoutOpenClose("contract_finishdate", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", Functions.TransferDateTimeToSQL(uiDateTimeFinish.Value));
                 //契約金額
-                SQL.Set_SQL_data("contractamount", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.numericAmount.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("contractamount", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.numericAmount.Text);
                 //契約工期
-                SQL.Set_SQL_data("contractduration", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.uiNumericDuration.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("contractduration", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.uiNumericDuration.Text);
                 //工程總天數
-                SQL.Set_SQL_data("contractdays", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.uiNumericDays.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("contractdays", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.uiNumericDays.Text);
                 //主辦1
-                SQL.Set_SQL_data("handle1", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxHandle1.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("handle1", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxHandle1.Text);
                 //主辦1電話
-                SQL.Set_SQL_data("phone1", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxPhone1.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("phone1", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxPhone1.Text);
                 //主辦2
-                SQL.Set_SQL_data("handle2", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxHandle2.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("handle2", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxHandle2.Text);
                 //主辦2電話
-                SQL.Set_SQL_data("phone2", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxPhone2.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("phone2", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxPhone2.Text);
                 //主辦3
-                SQL.Set_SQL_data("handle3", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxHandle3.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("handle3", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxHandle3.Text);
                 //主辦3電話
-                SQL.Set_SQL_data("phone3", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxPhone3.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("phone3", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxPhone3.Text);
                 //主辦4
-                SQL.Set_SQL_data("handle4", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxHandle4.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("handle4", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxHandle4.Text);
                 //主辦4電話
-                SQL.Set_SQL_data("phone4", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxPhone4.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("phone4", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxPhone4.Text);
                 //現場
-                SQL.Set_SQL_data("onsite", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxOnsite.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("onsite", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxOnsite.Text);
                 //勞安
-                SQL.Set_SQL_data("security", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxSecurity.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("security", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", this.textBoxSecurity.Text);
                 //工期型式
                 
                 if (uiRadioBtnRestrictSchedule.Checked == true)
                 {
-                    SQL.Set_SQL_data("computetype", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", "1");
+                    m_Sql.SetSqlDataWithoutOpenClose("computetype", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", "1");
                 }
                 else if (uiRadioBtnCalenderDay.Checked == true)
                 {
-                    SQL.Set_SQL_data("computetype", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", "2");
+                    m_Sql.SetSqlDataWithoutOpenClose("computetype", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", "2");
                 }
                 else if (uiRadioBtnWorkingDay.Checked == true)
                 {
                     if (radioBtnNoWeekend.Checked == true)
-                        SQL.Set_SQL_data("computetype", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", "3");
+                        m_Sql.SetSqlDataWithoutOpenClose("computetype", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", "3");
                     else if (radioBtnSun.Checked == true)
-                        SQL.Set_SQL_data("computetype", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", "4");
+                        m_Sql.SetSqlDataWithoutOpenClose("computetype", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", "4");
                     else if (radioBtnSatSun.Checked == true)
-                        SQL.Set_SQL_data("computetype", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", "5");
+                        m_Sql.SetSqlDataWithoutOpenClose("computetype", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", "5");
                 }
                 //計算假日
                 if(radioBtnHolidayNoWorking.Checked)
-                    SQL.Set_SQL_data("holiday", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", "1");
+                    m_Sql.SetSqlDataWithoutOpenClose("holiday", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", "1");
                 else
-                    SQL.Set_SQL_data("holiday", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", "0");
-               
-                //this.Close();
+                    m_Sql.SetSqlDataWithoutOpenClose("holiday", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", "0");
+
+
             }
+            m_Sql.CloseSqlChannel();
         }
 
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
@@ -342,7 +345,10 @@ namespace HuaChun_DailyReport
         public void LoadInformation(string projectNumber)
         {
             Cursor.Current = Cursors.WaitCursor;
-            if (SQL.Read_SQL_data("computetype", "project_info", "project_no = '" + projectNumber + "'") == "1")
+            m_Sql.OpenSqlChannel();
+            string strComputeType = m_Sql.ReadSqlDataWithoutOpenClose("computetype", "project_info", "project_no = '" + projectNumber + "'");
+
+            if (strComputeType == "1")
             {
                 this.uiRadioBtnRestrictSchedule.Checked = true;
                 this.uiRadioBtnCalenderDay.Checked = false;
@@ -351,7 +357,7 @@ namespace HuaChun_DailyReport
                 this.radioBtnSun.Checked = false;
                 this.radioBtnSatSun.Checked = false;
             }
-            else if (SQL.Read_SQL_data("computetype", "project_info", "project_no = '" + projectNumber + "'") == "2")
+            else if (strComputeType == "2")
             {
                 this.uiRadioBtnRestrictSchedule.Checked = false;
                 this.uiRadioBtnCalenderDay.Checked = true;
@@ -360,7 +366,7 @@ namespace HuaChun_DailyReport
                 this.radioBtnSun.Checked = false;
                 this.radioBtnSatSun.Checked = false;
             }
-            else if (SQL.Read_SQL_data("computetype", "project_info", "project_no = '" + projectNumber + "'") == "3")
+            else if (strComputeType == "3")
             {
                 this.uiRadioBtnRestrictSchedule.Checked = false;
                 this.uiRadioBtnCalenderDay.Checked = false;
@@ -369,7 +375,7 @@ namespace HuaChun_DailyReport
                 this.radioBtnSun.Checked = false;
                 this.radioBtnSatSun.Checked = false;
             }
-            else if (SQL.Read_SQL_data("computetype", "project_info", "project_no = '" + projectNumber + "'") == "4")
+            else if (strComputeType == "4")
             {
                 this.uiRadioBtnRestrictSchedule.Checked = false;
                 this.uiRadioBtnCalenderDay.Checked = false;
@@ -378,7 +384,7 @@ namespace HuaChun_DailyReport
                 this.radioBtnSun.Checked = true;
                 this.radioBtnSatSun.Checked = false;
             }
-            else if (SQL.Read_SQL_data("computetype", "project_info", "project_no = '" + projectNumber + "'") == "5")
+            else if (strComputeType == "5")
             {
                 this.uiRadioBtnRestrictSchedule.Checked = false;
                 this.uiRadioBtnCalenderDay.Checked = false;
@@ -388,69 +394,69 @@ namespace HuaChun_DailyReport
                 this.radioBtnSatSun.Checked = true;
             }
 
-
-
-            if (SQL.Read_SQL_data("holiday", "project_info", "project_no = '" + projectNumber + "'") == "1")
+            string strHoliday = m_Sql.ReadSqlDataWithoutOpenClose("holiday", "project_info", "project_no = '" + projectNumber + "'");
+            if (strHoliday == "1")
             {
                 this.radioBtnHolidayNoWorking.Checked = true;
                 this.radioBtnHolidayNeedWorking.Checked = false;
             }
-            else if (SQL.Read_SQL_data("holiday", "project_info", "project_no = '" + projectNumber + "'") == "0")
+            else if (strHoliday == "0")
             {
                 this.radioBtnHolidayNoWorking.Checked = false;
                 this.radioBtnHolidayNeedWorking.Checked = true;
             }
 
-            if (SQL.Read_SQL_data("rainyday", "project_info", "project_no = '" + projectNumber + "'") == "1")
+            string strRainyDay = m_Sql.ReadSqlDataWithoutOpenClose("rainyday", "project_info", "project_no = '" + projectNumber + "'");
+            if (strRainyDay == "1")
             {
                 this.radioBtnNoWorkingOnHeavyRainyDay.Checked = true;
                 this.radioBtnNoWorkingOnSmallRainyDay.Checked = false;
             }
-            else if (SQL.Read_SQL_data("rainyday", "project_info", "project_no = '" + projectNumber + "'") == "0")
+            else if (strRainyDay == "0")
             {
                 this.radioBtnNoWorkingOnHeavyRainyDay.Checked = false;
                 this.radioBtnNoWorkingOnSmallRainyDay.Checked = true;
             }
 
 
-            this.textBoxProjectNo.Text = SQL.Read_SQL_data("project_no", "project_info", "project_no = '" + projectNumber + "'");
-            this.textBoxProjectName.Text = SQL.Read_SQL_data("project_name", "project_info", "project_no = '" + projectNumber + "'");
-            this.textBoxContractNo.Text = SQL.Read_SQL_data("contract_no", "project_info", "project_no = '" + projectNumber + "'");
-            this.textBoxProjectLocation.Text = SQL.Read_SQL_data("project_location", "project_info", "project_no = '" + projectNumber + "'");
-            this.textBoxContractor.Text = SQL.Read_SQL_data("contractor", "project_info", "project_no = '" + projectNumber + "'");
-            this.textBoxOwner.Text = SQL.Read_SQL_data("owner", "project_info", "project_no = '" + projectNumber + "'");
-            this.textBoxManage.Text = SQL.Read_SQL_data("manage", "project_info", "project_no = '" + projectNumber + "'");
-            this.textBoxDesign.Text = SQL.Read_SQL_data("design", "project_info", "project_no = '" + projectNumber + "'");
-            this.textBoxSupervisor.Text = SQL.Read_SQL_data("supervise", "project_info", "project_no = '" + projectNumber + "'");
-            this.textBoxResponsible.Text = SQL.Read_SQL_data("responsible", "project_info", "project_no = '" + projectNumber + "'");
-            this.textBoxQuality.Text = SQL.Read_SQL_data("quality", "project_info", "project_no = '" + projectNumber + "'");
-            this.textBoxOnsite.Text = SQL.Read_SQL_data("onsite", "project_info", "project_no = '" + projectNumber + "'");
-            this.textBoxSecurity.Text = SQL.Read_SQL_data("security", "project_info", "project_no = '" + projectNumber + "'");
+            this.textBoxProjectNo.Text = m_Sql.ReadSqlDataWithoutOpenClose("project_no", "project_info", "project_no = '" + projectNumber + "'");
+            this.textBoxProjectName.Text = m_Sql.ReadSqlDataWithoutOpenClose("project_name", "project_info", "project_no = '" + projectNumber + "'");
+            this.textBoxContractNo.Text = m_Sql.ReadSqlDataWithoutOpenClose("contract_no", "project_info", "project_no = '" + projectNumber + "'");
+            this.textBoxProjectLocation.Text = m_Sql.ReadSqlDataWithoutOpenClose("project_location", "project_info", "project_no = '" + projectNumber + "'");
+            this.textBoxContractor.Text = m_Sql.ReadSqlDataWithoutOpenClose("contractor", "project_info", "project_no = '" + projectNumber + "'");
+            this.textBoxOwner.Text = m_Sql.ReadSqlDataWithoutOpenClose("owner", "project_info", "project_no = '" + projectNumber + "'");
+            this.textBoxManage.Text = m_Sql.ReadSqlDataWithoutOpenClose("manage", "project_info", "project_no = '" + projectNumber + "'");
+            this.textBoxDesign.Text = m_Sql.ReadSqlDataWithoutOpenClose("design", "project_info", "project_no = '" + projectNumber + "'");
+            this.textBoxSupervisor.Text = m_Sql.ReadSqlDataWithoutOpenClose("supervise", "project_info", "project_no = '" + projectNumber + "'");
+            this.textBoxResponsible.Text = m_Sql.ReadSqlDataWithoutOpenClose("responsible", "project_info", "project_no = '" + projectNumber + "'");
+            this.textBoxQuality.Text = m_Sql.ReadSqlDataWithoutOpenClose("quality", "project_info", "project_no = '" + projectNumber + "'");
+            this.textBoxOnsite.Text = m_Sql.ReadSqlDataWithoutOpenClose("onsite", "project_info", "project_no = '" + projectNumber + "'");
+            this.textBoxSecurity.Text = m_Sql.ReadSqlDataWithoutOpenClose("security", "project_info", "project_no = '" + projectNumber + "'");
 
-            this.numericAmount.Value = Convert.ToDecimal(SQL.Read_SQL_data("contractamount", "project_info", "project_no = '" + projectNumber + "'"));
-            this.textBoxHandle1.Text = SQL.Read_SQL_data("handle1", "project_info", "project_no = '" + projectNumber + "'");
-            this.textBoxHandle2.Text = SQL.Read_SQL_data("handle2", "project_info", "project_no = '" + projectNumber + "'");
-            this.textBoxHandle3.Text = SQL.Read_SQL_data("handle3", "project_info", "project_no = '" + projectNumber + "'");
-            this.textBoxHandle4.Text = SQL.Read_SQL_data("handle4", "project_info", "project_no = '" + projectNumber + "'");
-            this.textBoxPhone1.Text = SQL.Read_SQL_data("phone1", "project_info", "project_no = '" + projectNumber + "'");
-            this.textBoxPhone2.Text = SQL.Read_SQL_data("phone2", "project_info", "project_no = '" + projectNumber + "'");
-            this.textBoxPhone3.Text = SQL.Read_SQL_data("phone3", "project_info", "project_no = '" + projectNumber + "'");
-            this.textBoxPhone4.Text = SQL.Read_SQL_data("phone4", "project_info", "project_no = '" + projectNumber + "'");
-            this.uiNumericDays.Value = Convert.ToDecimal(SQL.Read_SQL_data("contractdays", "project_info", "project_no = '" + projectNumber + "'"));
-            this.uiNumericDuration.Value = Convert.ToDecimal(SQL.Read_SQL_data("contractduration", "project_info", "project_no = '" + projectNumber + "'"));
+            this.numericAmount.Value = Convert.ToDecimal(m_Sql.ReadSqlDataWithoutOpenClose("contractamount", "project_info", "project_no = '" + projectNumber + "'"));
+            this.textBoxHandle1.Text = m_Sql.ReadSqlDataWithoutOpenClose("handle1", "project_info", "project_no = '" + projectNumber + "'");
+            this.textBoxHandle2.Text = m_Sql.ReadSqlDataWithoutOpenClose("handle2", "project_info", "project_no = '" + projectNumber + "'");
+            this.textBoxHandle3.Text = m_Sql.ReadSqlDataWithoutOpenClose("handle3", "project_info", "project_no = '" + projectNumber + "'");
+            this.textBoxHandle4.Text = m_Sql.ReadSqlDataWithoutOpenClose("handle4", "project_info", "project_no = '" + projectNumber + "'");
+            this.textBoxPhone1.Text = m_Sql.ReadSqlDataWithoutOpenClose("phone1", "project_info", "project_no = '" + projectNumber + "'");
+            this.textBoxPhone2.Text = m_Sql.ReadSqlDataWithoutOpenClose("phone2", "project_info", "project_no = '" + projectNumber + "'");
+            this.textBoxPhone3.Text = m_Sql.ReadSqlDataWithoutOpenClose("phone3", "project_info", "project_no = '" + projectNumber + "'");
+            this.textBoxPhone4.Text = m_Sql.ReadSqlDataWithoutOpenClose("phone4", "project_info", "project_no = '" + projectNumber + "'");
+            this.uiNumericDays.Value = Convert.ToDecimal(m_Sql.ReadSqlDataWithoutOpenClose("contractdays", "project_info", "project_no = '" + projectNumber + "'"));
+            this.uiNumericDuration.Value = Convert.ToDecimal(m_Sql.ReadSqlDataWithoutOpenClose("contractduration", "project_info", "project_no = '" + projectNumber + "'"));
 
           
-            string startDate = SQL.Read_SQL_data("startdate", "project_info", "project_no = '" + projectNumber + "'");
+            string startDate = m_Sql.ReadSqlDataWithoutOpenClose("startdate", "project_info", "project_no = '" + projectNumber + "'");
             dateTimeStart.Value = Functions.TransferSQLDateToDateTime(startDate);
          
-            string bidDate = SQL.Read_SQL_data("biddate", "project_info", "project_no = '" + projectNumber + "'");
+            string bidDate = m_Sql.ReadSqlDataWithoutOpenClose("biddate", "project_info", "project_no = '" + projectNumber + "'");
             dateTimeBid.Value = Functions.TransferSQLDateToDateTime(bidDate);
 
-            string finishDate = SQL.Read_SQL_data("contract_finishdate", "project_info", "project_no = '" + projectNumber + "'");
+            string finishDate = m_Sql.ReadSqlDataWithoutOpenClose("contract_finishdate", "project_info", "project_no = '" + projectNumber + "'");
             uiDateTimeFinish.Value = Functions.TransferSQLDateToDateTime(finishDate);
 
 
-
+            m_Sql.CloseSqlChannel();
 
             LoadDataTable();
             Cursor.Current = Cursors.Default;
@@ -458,10 +464,11 @@ namespace HuaChun_DailyReport
 
         private void LoadDataTable()
         {
+            m_Sql.OpenSqlChannel();
             dataTable.Clear();
 
             ArrayList array = new ArrayList();
-            string[] numbers = SQL.Read1DArray_SQL_Data("grantnumber", "extendduration", "project_no = '" + this.textBoxProjectNo.Text + "' ORDER BY grantdate ASC");
+            string[] numbers = m_Sql.Read1DArray_SQL_Data("grantnumber", "extendduration", "project_no = '" + this.textBoxProjectNo.Text + "' ORDER BY grantdate ASC");
 
             double totalValue = Convert.ToDouble(this.numericAmount.Value);
             float accuextendduration = 0;
@@ -472,13 +479,13 @@ namespace HuaChun_DailyReport
             {
                 dataRow = dataTable.NewRow();
                 dataRow["No"] = i.ToString();
-                dataRow["核准日期"] = Functions.TransferSQLDateToDateOnly(SQL.Read_SQL_data("grantdate", "extendduration", "project_no = '" + this.textBoxProjectNo.Text + "' && grantnumber = '" + numbers[i - 1] + "'"));
-                dataRow["核准文號"] = SQL.Read_SQL_data("grantnumber", "extendduration", "project_no = '" + this.textBoxProjectNo.Text + "' && grantnumber = '" + numbers[i - 1] + "'");
-                dataRow["追加金額"] = SQL.Read_SQL_data("extendvalue", "extendduration", "project_no = '" + this.textBoxProjectNo.Text + "' && grantnumber = '" + numbers[i - 1] + "'");
-                totalValue += Convert.ToDouble(SQL.Read_SQL_data("extendvalue", "extendduration", "project_no = '" + this.textBoxProjectNo.Text + "' && grantnumber = '" + numbers[i - 1] + "'"));
+                dataRow["核准日期"] = Functions.TransferSQLDateToDateOnly(m_Sql.ReadSqlDataWithoutOpenClose("grantdate", "extendduration", "project_no = '" + this.textBoxProjectNo.Text + "' && grantnumber = '" + numbers[i - 1] + "'"));
+                dataRow["核准文號"] = m_Sql.ReadSqlDataWithoutOpenClose("grantnumber", "extendduration", "project_no = '" + this.textBoxProjectNo.Text + "' && grantnumber = '" + numbers[i - 1] + "'");
+                dataRow["追加金額"] = m_Sql.ReadSqlDataWithoutOpenClose("extendvalue", "extendduration", "project_no = '" + this.textBoxProjectNo.Text + "' && grantnumber = '" + numbers[i - 1] + "'");
+                totalValue += Convert.ToDouble(m_Sql.ReadSqlDataWithoutOpenClose("extendvalue", "extendduration", "project_no = '" + this.textBoxProjectNo.Text + "' && grantnumber = '" + numbers[i - 1] + "'"));
                 dataRow["總金額"] = totalValue;
-                dataRow["追加起算日"] = Functions.TransferSQLDateToDateOnly(SQL.Read_SQL_data("extendstartdate", "extendduration", "project_no = '" + this.textBoxProjectNo.Text + "' && grantnumber = '" + numbers[i - 1] + "'"));
-                float extendDuration = Convert.ToSingle(SQL.Read_SQL_data("extendduration", "extendduration", "project_no = '" + this.textBoxProjectNo.Text + "' && grantnumber = '" + numbers[i - 1] + "'"));
+                dataRow["追加起算日"] = Functions.TransferSQLDateToDateOnly(m_Sql.ReadSqlDataWithoutOpenClose("extendstartdate", "extendduration", "project_no = '" + this.textBoxProjectNo.Text + "' && grantnumber = '" + numbers[i - 1] + "'"));
+                float extendDuration = Convert.ToSingle(m_Sql.ReadSqlDataWithoutOpenClose("extendduration", "extendduration", "project_no = '" + this.textBoxProjectNo.Text + "' && grantnumber = '" + numbers[i - 1] + "'"));
                 dataRow["追加工期"] = extendDuration;
                 accuextendduration += extendDuration;
                 dataRow["累計追加工期"] = accuextendduration;
@@ -486,16 +493,17 @@ namespace HuaChun_DailyReport
                 dataRow["總工期"] = totalduration;
                 dataRow["契約完工日"] = Functions.GetDateTimeValueSlash(uiDateTimeFinish.Value);
 
-                DayCompute dayCompute = new DayCompute();
+                DayCompute dayCompute = new DayCompute(m_Sql);
 
                 SetupDayComputer(dayCompute);
                 DateTime FinishDate = dayCompute.CountByDuration(dateTimeStart.Value, totalduration);
 
-                dataRow["變動完工日"] = Functions.GetDateTimeValueSlash(FinishDate);//SQL.Read_SQL_data("modified_finishdate", "extendduration", "project_no = '" + this.textBoxProjectNo.Text + "' && grantnumber = '" + numbers[i - 1] + "'");
-                dataRow["填寫日期"] = Functions.TransferSQLDateToDateOnly(SQL.Read_SQL_data("writedate", "extendduration", "project_no = '" + this.textBoxProjectNo.Text + "' && grantnumber = '" + numbers[i - 1] + "'"));
+                dataRow["變動完工日"] = Functions.GetDateTimeValueSlash(FinishDate);//SQL.ReadSqlDataWithoutOpenClose("modified_finishdate", "extendduration", "project_no = '" + this.textBoxProjectNo.Text + "' && grantnumber = '" + numbers[i - 1] + "'");
+                dataRow["填寫日期"] = Functions.TransferSQLDateToDateOnly(m_Sql.ReadSqlDataWithoutOpenClose("writedate", "extendduration", "project_no = '" + this.textBoxProjectNo.Text + "' && grantnumber = '" + numbers[i - 1] + "'"));
 
                 dataTable.Rows.Add(dataRow);
             }
+            m_Sql.CloseSqlChannel();
         }
 
         private void SetupDayComputer(DayCompute dayCompute)

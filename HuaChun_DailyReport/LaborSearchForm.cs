@@ -13,7 +13,8 @@ namespace HuaChun_DailyReport
     {
         private LaborEditForm editForm;
 
-        public LaborSearchForm(LaborEditForm form)
+        public LaborSearchForm(LaborEditForm form, MySQL Sql)
+            : base(Sql)
         {
             InitializeComponent();
             editForm = form;
@@ -21,7 +22,8 @@ namespace HuaChun_DailyReport
             Initialize();
         }
 
-        public LaborSearchForm(DailyReportIncreaseForm form, int index, int row, int column)
+        public LaborSearchForm(DailyReportIncreaseForm form, int index, int row, int column, MySQL Sql)
+            : base(Sql)
         {
             formType = 1;
             tabIndex = index;

@@ -13,11 +13,11 @@ namespace HuaChun_DailyReport
 {
     public partial class DailyReportEditForm : DailyReportIncreaseForm
     {
-
         bool g_DisableHandler = false;
-        DayCompute dayCompute = new DayCompute();
 
-        public DailyReportEditForm(string projectNo)
+
+        public DailyReportEditForm(string projectNo, MySQL Sql)
+            : base(projectNo, Sql)
         {
             InitializeComponent();
             LoadProjectInfo(projectNo);
@@ -25,23 +25,25 @@ namespace HuaChun_DailyReport
 
         public override void LoadProjectInfo(string projectNo)
         {
+            DayCompute dayCompute = new DayCompute(m_Sql);
+            m_Sql.OpenSqlChannel();
             Cursor.Current = Cursors.WaitCursor;
             //專案編號
             this.textBoxProjectNo.Text = projectNo;
             g_ProjectNumber = projectNo;
             //專案名稱   
-            this.textBoxProjectName.Text = SQL.Read_SQL_data("project_name", "project_info", "project_no ='" + projectNo + "'");
+            this.textBoxProjectName.Text = m_Sql.ReadSqlDataWithoutOpenClose("project_name", "project_info", "project_no ='" + projectNo + "'");
             //開工日期
-            g_StartDate = SQL.Read_SQL_data("startdate", "project_info", "project_no ='" + projectNo + "'");
+            g_StartDate = m_Sql.ReadSqlDataWithoutOpenClose("startdate", "project_info", "project_no ='" + projectNo + "'");
             this.dateStart.Value = Functions.TransferSQLDateToDateTime(g_StartDate);
             //契約工期
-            this.textBoxContractDuration.Text = SQL.Read_SQL_data("contractduration", "project_info", "project_no ='" + projectNo + "'");
+            this.textBoxContractDuration.Text = m_Sql.ReadSqlDataWithoutOpenClose("contractduration", "project_info", "project_no ='" + projectNo + "'");
             //契約天數
-            this.textBoxContractDays.Text = SQL.Read_SQL_data("contractdays", "project_info", "project_no ='" + projectNo + "'");
+            this.textBoxContractDays.Text = m_Sql.ReadSqlDataWithoutOpenClose("contractdays", "project_info", "project_no ='" + projectNo + "'");
 
 
             //今日日期
-            string[] reportDates = SQL.Read1DArray_SQL_Data("date", "dailyreport", "project_no ='" + projectNo + "' ORDER BY date DESC");
+            string[] reportDates = m_Sql.Read1DArray_SQL_Data("date", "dailyreport", "project_no ='" + projectNo + "' ORDER BY date DESC");
             //if (reportDates.Length == 0)//表示這個工程目前並沒有輸入任何日報表
             //{
             //    MessageBox.Show("此工程目前並沒有任何已存在的日報表\r\n請重新選擇工程", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -56,7 +58,7 @@ namespace HuaChun_DailyReport
                 //清除掉datagridview的資料
                 ClearDataTable();
                 //今日日期
-                string report = SQL.Read_SQL_data("nonecounting", "dailyreport", "project_no ='" + g_ProjectNumber + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
+                string report = m_Sql.ReadSqlDataWithoutOpenClose("nonecounting", "dailyreport", "project_no ='" + g_ProjectNumber + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
                 if (report == string.Empty)//表示這個日期目前並沒有輸入任何日報表
                 {
                     this.dateToday.Value = Functions.TransferSQLDateToDateTime(reportDates[0]);
@@ -75,8 +77,8 @@ namespace HuaChun_DailyReport
 
 
             //工期計算方式
-            g_ComputeType = SQL.Read_SQL_data("computetype", "project_info", "project_no = '" + projectNo + "'");
-            g_CountHoliday = SQL.Read_SQL_data("holiday", "project_info", "project_no = '" + projectNo + "'");
+            g_ComputeType = m_Sql.ReadSqlDataWithoutOpenClose("computetype", "project_info", "project_no = '" + projectNo + "'");
+            g_CountHoliday = m_Sql.ReadSqlDataWithoutOpenClose("holiday", "project_info", "project_no = '" + projectNo + "'");
 
             if (g_ComputeType == "1")//限期完工  日曆天
             {
@@ -129,41 +131,45 @@ namespace HuaChun_DailyReport
                 this.textBoxTotalDays.Text = Convert.ToString(FinishDate.Subtract(dateStart.Value).Days + 1);
             }
 
+            m_Sql.CloseSqlChannel();
             Cursor.Current = Cursors.Default;
         }
 
         private void LoadReportInfo(string projectNo, DateTime date)
         {
+            Cursor.Current = Cursors.WaitCursor;
+            DayCompute dayCompute = new DayCompute(m_Sql);
+            m_Sql.OpenSqlChannel();
             g_DisableHandler = true;
             //上午天氣
-            comboBoxWeatherMorning.Text = SQL.Read_SQL_data("morning_weather", "dailyreport", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
+            comboBoxWeatherMorning.Text = m_Sql.ReadSqlDataWithoutOpenClose("morning_weather", "dailyreport", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
             //下午天氣
-            comboBoxWeatherAfternoon.Text = SQL.Read_SQL_data("afternoon_weather", "dailyreport", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
+            comboBoxWeatherAfternoon.Text = m_Sql.ReadSqlDataWithoutOpenClose("afternoon_weather", "dailyreport", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
             //干擾因素
-            textBoxInterference.Text = SQL.Read_SQL_data("interference", "dailyreport", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
+            textBoxInterference.Text = m_Sql.ReadSqlDataWithoutOpenClose("interference", "dailyreport", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
             //上午條件
-            comboBoxConditionMorning.Text = SQL.Read_SQL_data("morning_condition", "dailyreport", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
+            comboBoxConditionMorning.Text = m_Sql.ReadSqlDataWithoutOpenClose("morning_condition", "dailyreport", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
             //下午條件
-            comboBoxConditionMorning.Text = SQL.Read_SQL_data("afternoon_condition", "dailyreport", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
+            comboBoxConditionAfternoon.Text = m_Sql.ReadSqlDataWithoutOpenClose("afternoon_condition", "dailyreport", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
             
             //本日不計
-            comboBoxNoCount.Text = SQL.Read_SQL_data("nonecounting", "dailyreport", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
+            comboBoxNoCount.Text = m_Sql.ReadSqlDataWithoutOpenClose("nonecounting", "dailyreport", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
             //今日開始追加工期
             int accuextendduration = 0;
             ArrayList extendDate = new ArrayList();
-            string[] extendDates = SQL.Read1DArray_SQL_Data("extendstartdate", "extendduration", "project_no ='" + projectNo + "'");
+            string[] extendDates = m_Sql.Read1DArray_SQL_Data("extendstartdate", "extendduration", "project_no ='" + projectNo + "'");
             this.textBoxExtendToday.Text = "0";
             for (int i = 0; i < extendDates.Length; i++)
             {
                 DateTime extDate = Functions.TransferSQLDateToDateTime(extendDates[i]);
                 if (extDate.Date.CompareTo(dateToday.Value.Date) == 0)//為追加起始日
                 {
-                    this.textBoxExtendToday.Text = SQL.Read_SQL_data("extendduration", "extendduration", "project_no ='" + projectNo + "' AND extendstartdate = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
+                    this.textBoxExtendToday.Text = m_Sql.ReadSqlDataWithoutOpenClose("extendduration", "extendduration", "project_no ='" + projectNo + "' AND extendstartdate = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
                 }
 
                 if ((extDate.Date.CompareTo(dateToday.Value.Date) == 0 || extDate.Date.CompareTo(dateToday.Value.Date) == -1) && extDate.Date.CompareTo(Functions.TransferSQLDateToDateTime(g_StartDate)) != -1)//0為追加起始日   -1為開始日比今日日期早
                 {
-                    int extendDuration = Convert.ToInt32(SQL.Read_SQL_data("extendduration", "extendduration", "project_no = '" + projectNo + "' AND extendstartdate = '" + Functions.TransferDateTimeToSQL(extDate) + "'"));
+                    int extendDuration = Convert.ToInt32(m_Sql.ReadSqlDataWithoutOpenClose("extendduration", "extendduration", "project_no = '" + projectNo + "' AND extendstartdate = '" + Functions.TransferDateTimeToSQL(extDate) + "'"));
                     accuextendduration += extendDuration;
                 }
             }
@@ -171,7 +177,7 @@ namespace HuaChun_DailyReport
             this.textBoxAccumulateExtend.Text = accuextendduration.ToString();
 
             //工期總計
-            this.textBoxTotalDuration.Text = Convert.ToString(Convert.ToSingle(SQL.Read_SQL_data("contractduration", "project_info", "project_no ='" + projectNo + "'")) + accuextendduration);
+            this.textBoxTotalDuration.Text = Convert.ToString(Convert.ToSingle(m_Sql.ReadSqlDataWithoutOpenClose("contractduration", "project_info", "project_no ='" + projectNo + "'")) + accuextendduration);
             //開工迄今天數 = 今日日期 - 開工日期 + 1
             if (this.dateToday.Value.Date.Subtract(this.dateStart.Value.Date).Days + 1 < 0)
                 this.dateToday.Value = this.dateStart.Value;
@@ -179,12 +185,12 @@ namespace HuaChun_DailyReport
                 this.textBoxDaysStartToCurrent.Text = Convert.ToString(this.dateToday.Value.Date.Subtract(this.dateStart.Value.Date).Days + 1);
 
             //不計工期
-            string[] reportDates = SQL.Read1DArray_SQL_Data("date", "dailyreport", "project_no = '" + projectNo + "'");
+            string[] reportDates = m_Sql.Read1DArray_SQL_Data("date", "dailyreport", "project_no = '" + projectNo + "'");
             for (int i = 0; i < reportDates.Length; i++)
             {
                 if (Functions.TransferSQLDateToDateTime(reportDates[i]).CompareTo(dateToday.Value) == -1)//發生早於今日日期
                 {
-                    float nonCountingDays = Convert.ToSingle(SQL.Read_SQL_data("nonecounting", "dailyreport", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferSQLDateToDateOnly(reportDates[i]) + "'"));
+                    float nonCountingDays = Convert.ToSingle(m_Sql.ReadSqlDataWithoutOpenClose("nonecounting", "dailyreport", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferSQLDateToDateOnly(reportDates[i]) + "'"));
                     if (nonCountingDays == 0.5)
                         dayCompute.AddNotWorking(Functions.TransferSQLDateToDateTime(reportDates[i]), 0);
                     else if (nonCountingDays == 1)
@@ -205,7 +211,7 @@ namespace HuaChun_DailyReport
             {
 
                 //變動完工日從SQL讀出來
-                this.dateProjectEnd_Modify.Value = Functions.TransferSQLDateToDateTime(SQL.Read_SQL_data("modified_finishdate", "project_info", "project_no = '" + g_ProjectNumber + "'"));
+                this.dateProjectEnd_Modify.Value = Functions.TransferSQLDateToDateTime(m_Sql.ReadSqlDataWithoutOpenClose("modified_finishdate", "project_info", "project_no = '" + g_ProjectNumber + "'"));
                 //剩餘天數 = 變動完工日 - 今日日期
                 this.textBoxRestDays.Text = Convert.ToString(this.dateProjectEnd_Modify.Value.Subtract(dateToday.Value).Days);
             }
@@ -214,7 +220,7 @@ namespace HuaChun_DailyReport
                 //變動完工日
                 this.dateProjectEnd_Modify.Value = dayCompute.CountByDuration(dateToday.Value.AddDays(1), Convert.ToSingle(this.textBoxRestDuration.Text));
                 //把變動完工日寫進SQL
-                SQL.Set_SQL_data("modified_finishdate", "project_info", "project_no = '" + g_ProjectNumber + "'", Functions.TransferDateTimeToSQL(this.dateProjectEnd_Modify.Value));
+                m_Sql.Set_SQL_data("modified_finishdate", "project_info", "project_no = '" + g_ProjectNumber + "'", Functions.TransferDateTimeToSQL(this.dateProjectEnd_Modify.Value));
 
 
                 //剩餘天數 = 變動完工日 - 今日日期
@@ -222,101 +228,108 @@ namespace HuaChun_DailyReport
             }
 
 
+            m_Sql.CloseSqlChannel();
+            Cursor.Current = Cursors.Default;
+
             LoadDataTable(projectNo, date);
             g_DisableHandler = false;
         }
 
         private void LoadDataTable(string projectNo, DateTime date)
-        {     
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            m_Sql.OpenSqlChannel();
             //Load 材料使用
-            string[] indexMaterial = SQL.Read1DArray_SQL_Data("data_index", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
+            string[] indexMaterial = m_Sql.Read1DArray_SQL_Data("data_index", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
             for (int i = 0; i < indexMaterial.Length; i++)
             {
                 DataRow dataRow;
                 dataRow = dataTableMaterial.NewRow();
-                dataRow["廠商編號"] = SQL.Read_SQL_data("vendor_no", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
-                dataRow["廠商名稱"] = SQL.Read_SQL_data("vendor_name", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
-                dataRow["料號"] = SQL.Read_SQL_data("material_no", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
-                dataRow["名稱"] = SQL.Read_SQL_data("material_name", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
-                dataRow["單位"] = SQL.Read_SQL_data("unit", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
-                dataRow["位置"] = SQL.Read_SQL_data("location", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
-                dataRow["已進數量"] = SQL.Read_SQL_data("amount_past", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
-                dataRow["本日進量"] = SQL.Read_SQL_data("amount_today", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
-                dataRow["累計進數"] = SQL.Read_SQL_data("amount_all", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
-                dataRow["已使用"] = SQL.Read_SQL_data("used_past", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
-                dataRow["本日用量"] = SQL.Read_SQL_data("used_today", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
-                dataRow["累計用量"] = SQL.Read_SQL_data("used_all", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
-                dataRow["庫存"] = SQL.Read_SQL_data("storage", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
+                dataRow["廠商編號"] = m_Sql.ReadSqlDataWithoutOpenClose("vendor_no", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
+                dataRow["廠商名稱"] = m_Sql.ReadSqlDataWithoutOpenClose("vendor_name", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
+                dataRow["料號"] = m_Sql.ReadSqlDataWithoutOpenClose("material_no", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
+                dataRow["名稱"] = m_Sql.ReadSqlDataWithoutOpenClose("material_name", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
+                dataRow["單位"] = m_Sql.ReadSqlDataWithoutOpenClose("unit", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
+                dataRow["位置"] = m_Sql.ReadSqlDataWithoutOpenClose("location", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
+                dataRow["已進數量"] = m_Sql.ReadSqlDataWithoutOpenClose("amount_past", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
+                dataRow["本日進量"] = m_Sql.ReadSqlDataWithoutOpenClose("amount_today", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
+                dataRow["累計進數"] = m_Sql.ReadSqlDataWithoutOpenClose("amount_all", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
+                dataRow["已使用"] = m_Sql.ReadSqlDataWithoutOpenClose("used_past", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
+                dataRow["本日用量"] = m_Sql.ReadSqlDataWithoutOpenClose("used_today", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
+                dataRow["累計用量"] = m_Sql.ReadSqlDataWithoutOpenClose("used_all", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
+                dataRow["庫存"] = m_Sql.ReadSqlDataWithoutOpenClose("storage", "dailyreport_material", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexMaterial[i] + "'");
                 dataTableMaterial.Rows.Add(dataRow);           
             }
 
 
             //Load 出工人數
-            string[] indexManpower = SQL.Read1DArray_SQL_Data("data_index", "dailyreport_manpower", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
+            string[] indexManpower = m_Sql.Read1DArray_SQL_Data("data_index", "dailyreport_manpower", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
             for (int i = 0; i < indexManpower.Length; i++)
             {
                 DataRow dataRow;
                 dataRow = dataTableManPower.NewRow();
-                dataRow["廠商編號"] = SQL.Read_SQL_data("vendor_no", "dailyreport_manpower", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexManpower[i] + "'");
-                dataRow["廠商名稱"] = SQL.Read_SQL_data("vendor_name", "dailyreport_manpower", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexManpower[i] + "'");
-                dataRow["工別編號"] = SQL.Read_SQL_data("manpower_no", "dailyreport_manpower", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexManpower[i] + "'");
-                dataRow["工別名稱"] = SQL.Read_SQL_data("manpower_name", "dailyreport_manpower", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexManpower[i] + "'");
-                dataRow["出工人數"] = SQL.Read_SQL_data("amount", "dailyreport_manpower", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexManpower[i] + "'");
-                dataRow["工時"] = SQL.Read_SQL_data("hour", "dailyreport_manpower", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexManpower[i] + "'");
-                dataRow["本日工數"] = SQL.Read_SQL_data("amount_today", "dailyreport_manpower", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexManpower[i] + "'");
-                dataRow["備註"] = SQL.Read_SQL_data("ps", "dailyreport_manpower", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexManpower[i] + "'");
+                dataRow["廠商編號"] = m_Sql.ReadSqlDataWithoutOpenClose("vendor_no", "dailyreport_manpower", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexManpower[i] + "'");
+                dataRow["廠商名稱"] = m_Sql.ReadSqlDataWithoutOpenClose("vendor_name", "dailyreport_manpower", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexManpower[i] + "'");
+                dataRow["工別編號"] = m_Sql.ReadSqlDataWithoutOpenClose("manpower_no", "dailyreport_manpower", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexManpower[i] + "'");
+                dataRow["工別名稱"] = m_Sql.ReadSqlDataWithoutOpenClose("manpower_name", "dailyreport_manpower", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexManpower[i] + "'");
+                dataRow["出工人數"] = m_Sql.ReadSqlDataWithoutOpenClose("amount", "dailyreport_manpower", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexManpower[i] + "'");
+                dataRow["工時"] = m_Sql.ReadSqlDataWithoutOpenClose("hour", "dailyreport_manpower", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexManpower[i] + "'");
+                dataRow["本日工數"] = m_Sql.ReadSqlDataWithoutOpenClose("amount_today", "dailyreport_manpower", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexManpower[i] + "'");
+                dataRow["備註"] = m_Sql.ReadSqlDataWithoutOpenClose("ps", "dailyreport_manpower", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexManpower[i] + "'");
                 dataTableManPower.Rows.Add(dataRow);   
             }
 
             //Load 機具使用
-            string[] indexTool = SQL.Read1DArray_SQL_Data("data_index", "dailyreport_tool", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
+            string[] indexTool = m_Sql.Read1DArray_SQL_Data("data_index", "dailyreport_tool", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
             for (int i = 0; i < indexTool.Length; i++)
             {
                 DataRow dataRow;
                 dataRow = dataTableTool.NewRow();
-                dataRow["廠商編號"] = SQL.Read_SQL_data("vendor_no", "dailyreport_tool", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexTool[i] + "'");
-                dataRow["廠商名稱"] = SQL.Read_SQL_data("vendor_name", "dailyreport_tool", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexTool[i] + "'");
-                dataRow["機具編號"] = SQL.Read_SQL_data("tool_no", "dailyreport_tool", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexTool[i] + "'");
-                dataRow["機具名稱"] = SQL.Read_SQL_data("tool_name", "dailyreport_tool", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexTool[i] + "'");
-                dataRow["出工數"] = SQL.Read_SQL_data("amount", "dailyreport_tool", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexTool[i] + "'");
-                dataRow["工時"] = SQL.Read_SQL_data("hour", "dailyreport_tool", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexTool[i] + "'");
-                dataRow["本日工數"] = SQL.Read_SQL_data("amount_today", "dailyreport_tool", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexTool[i] + "'");
-                dataRow["備註"] = SQL.Read_SQL_data("ps", "dailyreport_tool", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexTool[i] + "'");
+                dataRow["廠商編號"] = m_Sql.ReadSqlDataWithoutOpenClose("vendor_no", "dailyreport_tool", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexTool[i] + "'");
+                dataRow["廠商名稱"] = m_Sql.ReadSqlDataWithoutOpenClose("vendor_name", "dailyreport_tool", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexTool[i] + "'");
+                dataRow["機具編號"] = m_Sql.ReadSqlDataWithoutOpenClose("tool_no", "dailyreport_tool", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexTool[i] + "'");
+                dataRow["機具名稱"] = m_Sql.ReadSqlDataWithoutOpenClose("tool_name", "dailyreport_tool", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexTool[i] + "'");
+                dataRow["出工數"] = m_Sql.ReadSqlDataWithoutOpenClose("amount", "dailyreport_tool", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexTool[i] + "'");
+                dataRow["工時"] = m_Sql.ReadSqlDataWithoutOpenClose("hour", "dailyreport_tool", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexTool[i] + "'");
+                dataRow["本日工數"] = m_Sql.ReadSqlDataWithoutOpenClose("amount_today", "dailyreport_tool", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexTool[i] + "'");
+                dataRow["備註"] = m_Sql.ReadSqlDataWithoutOpenClose("ps", "dailyreport_tool", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexTool[i] + "'");
                 dataTableTool.Rows.Add(dataRow);  
             }
             //Load 外包項目
-            string[] indexOutsourcing = SQL.Read1DArray_SQL_Data("data_index", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
+            string[] indexOutsourcing = m_Sql.Read1DArray_SQL_Data("data_index", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
             for (int i = 0; i < indexOutsourcing.Length; i++)
             {
                 DataRow dataRow;
                 dataRow = dataTableOutsourcing.NewRow();
-                dataRow["廠商編號"] = SQL.Read_SQL_data("vendor_no", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
-                dataRow["廠商名稱"] = SQL.Read_SQL_data("vendor_name", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
-                dataRow["施工編號"] = SQL.Read_SQL_data("process_no", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
-                dataRow["施工名稱"] = SQL.Read_SQL_data("process_name", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
-                dataRow["單位"] = SQL.Read_SQL_data("unit", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
-                dataRow["已出工"] = SQL.Read_SQL_data("dispatch_past", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
-                dataRow["出工"] = SQL.Read_SQL_data("dispatch_today", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
-                dataRow["累計出工"] = SQL.Read_SQL_data("dispatch_all", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
-                dataRow["已施作"] = SQL.Read_SQL_data("build_past", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
-                dataRow["施作"] = SQL.Read_SQL_data("build_today", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
-                dataRow["累計施作"] = SQL.Read_SQL_data("build_all", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
-                dataRow["備註"] = SQL.Read_SQL_data("ps", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
+                dataRow["廠商編號"] = m_Sql.ReadSqlDataWithoutOpenClose("vendor_no", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
+                dataRow["廠商名稱"] = m_Sql.ReadSqlDataWithoutOpenClose("vendor_name", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
+                dataRow["施工編號"] = m_Sql.ReadSqlDataWithoutOpenClose("process_no", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
+                dataRow["施工名稱"] = m_Sql.ReadSqlDataWithoutOpenClose("process_name", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
+                dataRow["單位"] = m_Sql.ReadSqlDataWithoutOpenClose("unit", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
+                dataRow["已出工"] = m_Sql.ReadSqlDataWithoutOpenClose("dispatch_past", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
+                dataRow["出工"] = m_Sql.ReadSqlDataWithoutOpenClose("dispatch_today", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
+                dataRow["累計出工"] = m_Sql.ReadSqlDataWithoutOpenClose("dispatch_all", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
+                dataRow["已施作"] = m_Sql.ReadSqlDataWithoutOpenClose("build_past", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
+                dataRow["施作"] = m_Sql.ReadSqlDataWithoutOpenClose("build_today", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
+                dataRow["累計施作"] = m_Sql.ReadSqlDataWithoutOpenClose("build_all", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
+                dataRow["備註"] = m_Sql.ReadSqlDataWithoutOpenClose("ps", "dailyreport_outsourcing", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexOutsourcing[i] + "'");
                 dataTableOutsourcing.Rows.Add(dataRow); 
             }
             //Load 休假紀錄
-            string[] indexVacation = SQL.Read1DArray_SQL_Data("data_index", "dailyreport_vacation", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
+            string[] indexVacation = m_Sql.Read1DArray_SQL_Data("data_index", "dailyreport_vacation", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "'");
             for (int i = 0; i < indexVacation.Length; i++)
             {
                 DataRow dataRow;
                 dataRow = dataTableVacation.NewRow();
-                dataRow["員工編號"] = SQL.Read_SQL_data("employee_no", "dailyreport_vacation", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexVacation[i] + "'");
-                dataRow["姓名"] = SQL.Read_SQL_data("employee_name", "dailyreport_vacation", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexVacation[i] + "'");
-                dataRow["休假天數"] = SQL.Read_SQL_data("days", "dailyreport_vacation", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexVacation[i] + "'");
-                dataRow["備註"] = SQL.Read_SQL_data("ps", "dailyreport_vacation", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexVacation[i] + "'");
+                dataRow["員工編號"] = m_Sql.ReadSqlDataWithoutOpenClose("employee_no", "dailyreport_vacation", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexVacation[i] + "'");
+                dataRow["姓名"] = m_Sql.ReadSqlDataWithoutOpenClose("employee_name", "dailyreport_vacation", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexVacation[i] + "'");
+                dataRow["休假天數"] = m_Sql.ReadSqlDataWithoutOpenClose("days", "dailyreport_vacation", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexVacation[i] + "'");
+                dataRow["備註"] = m_Sql.ReadSqlDataWithoutOpenClose("ps", "dailyreport_vacation", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(date) + "' AND data_index = '" + indexVacation[i] + "'");
 
                 dataTableVacation.Rows.Add(dataRow); 
             }
+            m_Sql.CloseSqlChannel();
+            Cursor.Current = Cursors.Default;
         }
 
         private void ClearDataTable()
@@ -340,7 +353,7 @@ namespace HuaChun_DailyReport
             //清除掉datagridview的資料
             ClearDataTable();
             //今日日期
-            string report = SQL.Read_SQL_data("nonecounting", "dailyreport", "project_no ='" + g_ProjectNumber + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
+            string report = m_Sql.Read_SQL_data("nonecounting", "dailyreport", "project_no ='" + g_ProjectNumber + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
             if (report == string.Empty)//表示這個日期目前並沒有輸入任何日報表
             {
                 this.label25.Text = "此日期尚未輸入日報表，無法編輯";
@@ -375,29 +388,30 @@ namespace HuaChun_DailyReport
             DialogResult result = MessageBox.Show("確定要修改工程資料?", "確定", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
             if (result == DialogResult.Yes)
             {
-                string connStr = "server=" + dbHost + ";uid=" + dbUser + ";pwd=" + dbPass + ";database=" + dbName;
-                MySqlConnection conn = new MySqlConnection(connStr);
-                MySqlCommand command = conn.CreateCommand();
-                conn.Open();
+                m_Sql.OpenSqlChannel();
 
 
                 label25.Visible = false;
                 label26.Visible = false;
 
-                SQL.Set_SQL_data("morning_weather", "dailyreport", "project_no = '" + this.textBoxProjectNo.Text + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'", comboBoxWeatherMorning.Text);
-                SQL.Set_SQL_data("afternoon_weather", "dailyreport", "project_no = '" + this.textBoxProjectNo.Text + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'", comboBoxWeatherAfternoon.Text);
-                SQL.Set_SQL_data("interference", "dailyreport", "project_no = '" + this.textBoxProjectNo.Text + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'", textBoxInterference.Text);
-                SQL.Set_SQL_data("reason", "dailyreport", "project_no = '" + this.textBoxProjectNo.Text + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'", comboBoxConditionMorning.Text);
-                SQL.Set_SQL_data("nonecounting", "dailyreport", "project_no = '" + this.textBoxProjectNo.Text + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'", comboBoxNoCount.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("morning_weather", "dailyreport", "project_no = '" + this.textBoxProjectNo.Text + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'", comboBoxWeatherMorning.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("afternoon_weather", "dailyreport", "project_no = '" + this.textBoxProjectNo.Text + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'", comboBoxWeatherAfternoon.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("interference", "dailyreport", "project_no = '" + this.textBoxProjectNo.Text + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'", textBoxInterference.Text);
+
+                m_Sql.SetSqlDataWithoutOpenClose("morning_condition", "dailyreport", "project_no = '" + this.textBoxProjectNo.Text + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'", comboBoxConditionMorning.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("afternoon_condition", "dailyreport", "project_no = '" + this.textBoxProjectNo.Text + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'", comboBoxConditionAfternoon.Text);
+                m_Sql.SetSqlDataWithoutOpenClose("nonecounting", "dailyreport", "project_no = '" + this.textBoxProjectNo.Text + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'", comboBoxNoCount.Text);
+
+                
 
                 //刪除出工人數資料
-                SQL.NoHistoryDelete_SQL("dailyreport_manpower", "project_no = '" + this.textBoxProjectNo.Text + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
+                m_Sql.NoHistoryDelete_SQL("dailyreport_manpower", "project_no = '" + this.textBoxProjectNo.Text + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
                 //刪除材料使用數量資料
-                SQL.NoHistoryDelete_SQL("dailyreport_material", "project_no = '" + this.textBoxProjectNo.Text + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
+                m_Sql.NoHistoryDelete_SQL("dailyreport_material", "project_no = '" + this.textBoxProjectNo.Text + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
                 //刪除外包項目資料
-                SQL.NoHistoryDelete_SQL("dailyreport_outsourcing", "project_no = '" + this.textBoxProjectNo.Text + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
+                m_Sql.NoHistoryDelete_SQL("dailyreport_outsourcing", "project_no = '" + this.textBoxProjectNo.Text + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
                 //刪除機具使用資料
-                SQL.NoHistoryDelete_SQL("dailyreport_tool", "project_no = '" + this.textBoxProjectNo.Text + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
+                m_Sql.NoHistoryDelete_SQL("dailyreport_tool", "project_no = '" + this.textBoxProjectNo.Text + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
 
                 //儲存材料使用數量資料進SQL
                 #region
@@ -438,8 +452,7 @@ namespace HuaChun_DailyReport
                     commandStr = commandStr + dataGridViewMaterial.Rows[i].Cells[11].Value + "','";//累計用量
                     commandStr = commandStr + dataGridViewMaterial.Rows[i].Cells[12].Value + "')";//庫存
 
-                    command.CommandText = commandStr;
-                    command.ExecuteNonQuery();
+                    m_Sql.ExecuteNonQueryCommand(commandStr);
 
                 }
                 #endregion
@@ -473,8 +486,7 @@ namespace HuaChun_DailyReport
                     commandStr = commandStr + dataGridViewManPower.Rows[i].Cells[6].Value + "','";//本日工數
                     commandStr = commandStr + dataGridViewManPower.Rows[i].Cells[7].Value + "')";//備註
 
-                    command.CommandText = commandStr;
-                    command.ExecuteNonQuery();
+                    m_Sql.ExecuteNonQueryCommand(commandStr);
                 }
                 #endregion
 
@@ -548,7 +560,7 @@ namespace HuaChun_DailyReport
                 }
                 #endregion
 
-                conn.Close();
+                m_Sql.CloseSqlChannel();
             }
         }
     }
