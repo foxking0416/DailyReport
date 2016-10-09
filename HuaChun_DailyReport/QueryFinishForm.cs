@@ -151,7 +151,6 @@ namespace HuaChun_DailyReport
                 uiDataRow["日期"] = dtDateToday.ToString("yyyy/MM/dd");
                 uiDataRow["開工迄今"] = (i + 1).ToString();
                 uiDataRow["星期"] = Functions.ComputeDayOfWeek(dtDateToday);
-                //Image img = Image.FromFile("D:\\12Small.jpg");
                 uiDataRow["節日"] = dayCompute.GetCondition(dtDateToday);
                 string morningWeather = m_Sql.ReadSqlDataWithoutOpenClose("morning_weather", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dtDateToday) + "'");
                 uiDataRow["上午天氣"] = (morningWeather == string.Empty) ? "無資料" : morningWeather;

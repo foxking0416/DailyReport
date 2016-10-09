@@ -433,6 +433,7 @@ namespace HuaChun_DailyReport
             this.comboBoxWeatherMorning.Enabled = false;
             this.textBoxInterference.Enabled = false;
             this.comboBoxConditionMorning.Enabled = false;
+            this.comboBoxConditionAfternoon.Enabled = false;
             this.comboBoxNoCount.Enabled = false;
             this.btnAddData.Enabled = false;
             this.btnDeleteData.Enabled = false;
@@ -639,6 +640,7 @@ namespace HuaChun_DailyReport
                 label25.Visible = true;
                 return;
             }
+
             if (dateToday.Value.CompareTo(dateStart.Value) < 0)
             {
                 label25.Text = "日期早於開工日期";

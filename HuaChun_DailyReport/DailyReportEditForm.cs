@@ -14,7 +14,7 @@ namespace HuaChun_DailyReport
     public partial class DailyReportEditForm : DailyReportIncreaseForm
     {
         bool g_DisableHandler = false;
-
+        DayCompute dayCompute;
 
         public DailyReportEditForm(string projectNo, MySQL Sql)
             : base(projectNo, Sql)
@@ -25,57 +25,9 @@ namespace HuaChun_DailyReport
 
         public override void LoadProjectInfo(string projectNo)
         {
-            DayCompute dayCompute = new DayCompute(m_Sql);
+            dayCompute = new DayCompute(m_Sql);
             m_Sql.OpenSqlChannel();
             Cursor.Current = Cursors.WaitCursor;
-            //專案編號
-            this.textBoxProjectNo.Text = projectNo;
-            g_ProjectNumber = projectNo;
-            //專案名稱   
-            this.textBoxProjectName.Text = m_Sql.ReadSqlDataWithoutOpenClose("project_name", "project_info", "project_no ='" + projectNo + "'");
-            //開工日期
-            g_StartDate = m_Sql.ReadSqlDataWithoutOpenClose("startdate", "project_info", "project_no ='" + projectNo + "'");
-            this.dateStart.Value = Functions.TransferSQLDateToDateTime(g_StartDate);
-            //契約工期
-            this.textBoxContractDuration.Text = m_Sql.ReadSqlDataWithoutOpenClose("contractduration", "project_info", "project_no ='" + projectNo + "'");
-            //契約天數
-            this.textBoxContractDays.Text = m_Sql.ReadSqlDataWithoutOpenClose("contractdays", "project_info", "project_no ='" + projectNo + "'");
-
-
-            //今日日期
-            string[] reportDates = m_Sql.Read1DArray_SQL_Data("date", "dailyreport", "project_no ='" + projectNo + "' ORDER BY date DESC");
-            //if (reportDates.Length == 0)//表示這個工程目前並沒有輸入任何日報表
-            //{
-            //    MessageBox.Show("此工程目前並沒有任何已存在的日報表\r\n請重新選擇工程", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            //    //DisableAll();
-
-            //    return false;
-                
-            //}
-            //else
-            {
-                this.dateToday.Enabled = true;
-                //清除掉datagridview的資料
-                ClearDataTable();
-                //今日日期
-                string report = m_Sql.ReadSqlDataWithoutOpenClose("nonecounting", "dailyreport", "project_no ='" + g_ProjectNumber + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
-                if (report == string.Empty)//表示這個日期目前並沒有輸入任何日報表
-                {
-                    this.dateToday.Value = Functions.TransferSQLDateToDateTime(reportDates[0]);
-                    EnableAll();
-                }
-                else
-                {
-                    this.label25.Visible = false;
-                    EnableAll();
-
-                    //利用工程編號以及今日日期來load工程日報表資料
-                    LoadReportInfo(this.textBoxProjectNo.Text, this.dateToday.Value);
-                }
-            }
-            ComputeDayOfWeek();
-
-
             //工期計算方式
             g_ComputeType = m_Sql.ReadSqlDataWithoutOpenClose("computetype", "project_info", "project_no = '" + projectNo + "'");
             g_CountHoliday = m_Sql.ReadSqlDataWithoutOpenClose("holiday", "project_info", "project_no = '" + projectNo + "'");
@@ -126,6 +78,45 @@ namespace HuaChun_DailyReport
                 }
                 #endregion
 
+
+                //專案編號
+                this.textBoxProjectNo.Text = projectNo;
+                g_ProjectNumber = projectNo;
+                //專案名稱   
+                this.textBoxProjectName.Text = m_Sql.ReadSqlDataWithoutOpenClose("project_name", "project_info", "project_no ='" + projectNo + "'");
+                //開工日期
+                g_StartDate = m_Sql.ReadSqlDataWithoutOpenClose("startdate", "project_info", "project_no ='" + projectNo + "'");
+                this.dateStart.Value = Functions.TransferSQLDateToDateTime(g_StartDate);
+                //契約工期
+                this.textBoxContractDuration.Text = m_Sql.ReadSqlDataWithoutOpenClose("contractduration", "project_info", "project_no ='" + projectNo + "'");
+                //契約天數
+                this.textBoxContractDays.Text = m_Sql.ReadSqlDataWithoutOpenClose("contractdays", "project_info", "project_no ='" + projectNo + "'");
+
+                //今日日期
+                string[] reportDates = m_Sql.Read1DArray_SQL_Data("date", "dailyreport", "project_no ='" + projectNo + "' ORDER BY date DESC");
+                {
+                    this.dateToday.Enabled = true;
+                    //清除掉datagridview的資料
+                    ClearDataTable();
+                    //今日日期
+                    string report = m_Sql.ReadSqlDataWithoutOpenClose("nonecounting", "dailyreport", "project_no ='" + g_ProjectNumber + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
+                    if (report == string.Empty)//表示這個日期目前並沒有輸入任何日報表
+                    {
+                        this.dateToday.Value = Functions.TransferSQLDateToDateTime(reportDates[0]);
+                        EnableAll();
+                    }
+                    else
+                    {
+                        this.label25.Visible = false;
+                        EnableAll();
+
+                        //利用工程編號以及今日日期來load工程日報表資料
+                        LoadReportInfo(this.textBoxProjectNo.Text, this.dateToday.Value);
+                    }
+                }
+                ComputeDayOfWeek();
+
+
                 DateTime FinishDate = dayCompute.CountByDuration(Functions.TransferSQLDateToDateTime(g_StartDate), Convert.ToSingle(this.textBoxTotalDuration.Text));
                 //追加工期後總計天數
                 this.textBoxTotalDays.Text = Convert.ToString(FinishDate.Subtract(dateStart.Value).Days + 1);
@@ -138,7 +129,7 @@ namespace HuaChun_DailyReport
         private void LoadReportInfo(string projectNo, DateTime date)
         {
             Cursor.Current = Cursors.WaitCursor;
-            DayCompute dayCompute = new DayCompute(m_Sql);
+            //DayCompute dayCompute = new DayCompute(m_Sql);
             m_Sql.OpenSqlChannel();
             g_DisableHandler = true;
             //上午天氣
@@ -188,7 +179,7 @@ namespace HuaChun_DailyReport
             string[] reportDates = m_Sql.Read1DArray_SQL_Data("date", "dailyreport", "project_no = '" + projectNo + "'");
             for (int i = 0; i < reportDates.Length; i++)
             {
-                if (Functions.TransferSQLDateToDateTime(reportDates[i]).CompareTo(dateToday.Value) == -1)//發生早於今日日期
+                if (Functions.TransferSQLDateToDateTime(reportDates[i]).CompareTo(dateToday.Value) <= 0)//發生早於今日日期
                 {
                     float nonCountingDays = Convert.ToSingle(m_Sql.ReadSqlDataWithoutOpenClose("nonecounting", "dailyreport", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferSQLDateToDateOnly(reportDates[i]) + "'"));
                     if (nonCountingDays == 0.5)
@@ -212,21 +203,30 @@ namespace HuaChun_DailyReport
 
                 //變動完工日從SQL讀出來
                 this.dateProjectEnd_Modify.Value = Functions.TransferSQLDateToDateTime(m_Sql.ReadSqlDataWithoutOpenClose("modified_finishdate", "project_info", "project_no = '" + g_ProjectNumber + "'"));
+                
                 //剩餘天數 = 變動完工日 - 今日日期
                 this.textBoxRestDays.Text = Convert.ToString(this.dateProjectEnd_Modify.Value.Subtract(dateToday.Value).Days);
+
+                //逾期天數
+                this.textBoxOverDays.Text = Convert.ToString(dateToday.Value.Subtract(dateProjectEnd_Modify.Value).Days);
             }
             else
             {
                 //變動完工日
                 this.dateProjectEnd_Modify.Value = dayCompute.CountByDuration(dateToday.Value.AddDays(1), Convert.ToSingle(this.textBoxRestDuration.Text));
+                
                 //把變動完工日寫進SQL
-                m_Sql.Set_SQL_data("modified_finishdate", "project_info", "project_no = '" + g_ProjectNumber + "'", Functions.TransferDateTimeToSQL(this.dateProjectEnd_Modify.Value));
-
+                m_Sql.SetSqlDataWithoutOpenClose("modified_finishdate", "project_info", "project_no = '" + g_ProjectNumber + "'", Functions.TransferDateTimeToSQL(this.dateProjectEnd_Modify.Value));
 
                 //剩餘天數 = 變動完工日 - 今日日期
                 this.textBoxRestDays.Text = Convert.ToString(this.dateProjectEnd_Modify.Value.Subtract(dateToday.Value).Days);
+
+                //逾期天數
+                this.textBoxOverDays.Text = "0";
             }
 
+            this.textBoxTotalDays.Text = Convert.ToString(this.dateProjectEnd_Modify.Value.Subtract(dateStart.Value).Days + 1);
+            this.dateProjectEnd_Contract.Value = Functions.TransferSQLDateToDateTime(m_Sql.ReadSqlDataWithoutOpenClose("contract_finishdate", "project_info", "project_no = '" + g_ProjectNumber + "'"));
 
             m_Sql.CloseSqlChannel();
             Cursor.Current = Cursors.Default;
