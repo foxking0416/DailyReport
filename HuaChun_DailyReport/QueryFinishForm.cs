@@ -136,6 +136,13 @@ namespace HuaChun_DailyReport
 
             string strStartDate = m_Sql.ReadSqlDataWithoutOpenClose("startdate", "project_info", "project_no = '" + g_strProjectNo + "'");
             dtStartDate = Functions.TransferSQLDateToDateTime(strStartDate);
+
+            string strConfirmFinishDate = m_Sql.ReadSqlDataWithoutOpenClose("confirm_finishdate", "project_info", "project_no = '" + g_strProjectNo + "'");
+
+            string strLatestReportDate = m_Sql.ReadSqlDataWithoutOpenClose("date", "dailyreport", "project_no = '" + g_strProjectNo + "' ORDER BY date DESC");
+            DateTime dtLatestReportDate = Functions.TransferSQLDateToDateTime(strLatestReportDate);
+
+
             DataRow uiDataRow;
 
             int i = 0;
@@ -198,12 +205,35 @@ namespace HuaChun_DailyReport
                 uiDataRow["變動剩餘工期"] = modifiedRestDuration;
 
 
-                DateTime modifiedFinishDate = dayCompute.CountByDuration(dtDateToday.AddDays(1), modifiedRestDuration);
-                uiDataRow["變動完工日"] = modifiedFinishDate.ToString("yyyy/MM/dd");
-                if (dtDateToday.CompareTo(modifiedFinishDate) == 0)
+                DateTime modifiedFinishDate = new DateTime();
+                if (modifiedRestDuration < 0)
                 {
-                    bStop = true;
+                    modifiedFinishDate = dayCompute.CountByDuration(dtDateToday.AddDays(1).AddDays(modifiedRestDuration), 0);
                 }
+                else
+                {
+                    modifiedFinishDate = dayCompute.CountByDuration(dtDateToday.AddDays(1), modifiedRestDuration);
+                }
+
+                
+                uiDataRow["變動完工日"] = modifiedFinishDate.ToString("yyyy/MM/dd");
+
+                if (strConfirmFinishDate == string.Empty)//尚未設定核定完工日
+                {
+                    if (dtDateToday.CompareTo(dtLatestReportDate.CompareTo(modifiedFinishDate) > 0 ? dtLatestReportDate : modifiedFinishDate) == 0)
+                    {
+                        bStop = true;
+                    }
+                }
+                else//已設定核定完工日
+                {
+                    DateTime dtRealFinishDate = dtRealFinishDate = Functions.TransferSQLDateToDateTime(strConfirmFinishDate);
+                    if (dtDateToday.CompareTo(dtRealFinishDate) == 0)
+                    {
+                        bStop = true;
+                    }
+                }
+
                 uiDataRow["變動剩餘天數"] = modifiedFinishDate.Subtract(dtDateToday).Days;
 
                 uiDataRow["原百分比"] = "";

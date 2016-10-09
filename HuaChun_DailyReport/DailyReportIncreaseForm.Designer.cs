@@ -111,6 +111,7 @@
             this.labelProjectName = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.comboBoxNoCountByType = new System.Windows.Forms.ComboBox();
+            this.btnDelete = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMaterial)).BeginInit();
@@ -994,6 +995,18 @@
             this.comboBoxNoCountByType.Size = new System.Drawing.Size(56, 24);
             this.comboBoxNoCountByType.TabIndex = 2;
             // 
+            // btnDelete
+            // 
+            this.btnDelete.Location = new System.Drawing.Point(350, 638);
+            this.btnDelete.Margin = new System.Windows.Forms.Padding(4);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(100, 28);
+            this.btnDelete.TabIndex = 4;
+            this.btnDelete.Text = "刪除日報表";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Visible = false;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            // 
             // DailyReportIncreaseForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1029,6 +1042,7 @@
             this.Controls.Add(this.textBoxTodayStatus);
             this.Controls.Add(this.textBoxProjectNo);
             this.Controls.Add(this.btnExit);
+            this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.dateToday);
             this.Controls.Add(this.dateProjectEnd_Modify);
@@ -1173,5 +1187,6 @@
         protected System.Windows.Forms.Label labelProjectName;
         protected System.Windows.Forms.Label label22;
         protected System.Windows.Forms.ComboBox comboBoxNoCountByType;
+        protected System.Windows.Forms.Button btnDelete;
     }
 }

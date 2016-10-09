@@ -55,20 +55,33 @@ namespace HuaChun_DailyReport
             xlWorkSheet = xlWorkBook.Sheets[1];
             m_Sql.OpenSqlChannel();
 
+
+            string strBiddate = m_Sql.ReadSqlDataWithoutOpenClose("biddate", "project_info", "project_no = '" + g_strProjectNo + "'");
+            string strContractor = m_Sql.ReadSqlDataWithoutOpenClose("contractor", "project_info", "project_no = '" + g_strProjectNo + "'");
+            string strDesigner = m_Sql.ReadSqlDataWithoutOpenClose("design", "project_info", "project_no = '" + g_strProjectNo + "'");
+            string strSupervisor = m_Sql.ReadSqlDataWithoutOpenClose("supervise", "project_info", "project_no = '" + g_strProjectNo + "'");
             g_strProjectName = m_Sql.ReadSqlDataWithoutOpenClose("project_name", "project_info", "project_no = '" + g_strProjectNo + "'");
             string strStartDate = m_Sql.ReadSqlDataWithoutOpenClose("startdate", "project_info", "project_no = '" + g_strProjectNo + "'");
             string strContractEndDate = m_Sql.ReadSqlDataWithoutOpenClose("contract_finishdate", "project_info", "project_no = '" + g_strProjectNo + "'");
 
+            xlWorkSheet.Cells[3, 34] = Functions.TransferSQLDateToDateOnly(strBiddate);
+            xlWorkSheet.Cells[3, 41] = Functions.TransferSQLDateToDateOnly(strStartDate);
+
+            xlWorkSheet.Cells[41, 32] = strDesigner;
+            xlWorkSheet.Cells[42, 32] = strSupervisor;
+            xlWorkSheet.Cells[43, 32] = strContractor;
+            
+
             DateTime dtStartDate = Functions.TransferSQLDateToDateTime(strStartDate);
-            DateTime dtEndDate = new DateTime();
+            DateTime dtStopDate = new DateTime();
             DateTime dtModifiedFinishDate = new DateTime();
             DateTime dtRealFinishDate = new DateTime();
             DateTime dtContractEndDate = Functions.TransferSQLDateToDateTime(strContractEndDate);
             bool bHasRealFinishDate = false;
+            bool bRealFinishBeforeModifiedFinish = false;
 
             if (g_iChartType == (int)ChartType.WeatherChart)
             {
-                //dtEndDate = ComputeValidFinishDate(dtStartDate);
                 dtModifiedFinishDate = ComputeValidFinishDate(dtStartDate);
                 string strConfirmFinishDate = m_Sql.ReadSqlDataWithoutOpenClose("confirm_finishdate", "project_info", "project_no = '" + g_strProjectNo + "'");
 
@@ -77,16 +90,20 @@ namespace HuaChun_DailyReport
 
                 if (strConfirmFinishDate == string.Empty)//尚未設定核定完工日
                 {
-                    dtEndDate = dtModifiedFinishDate.CompareTo(dtLatestReportDate) < 0 ? dtLatestReportDate : dtModifiedFinishDate;
+                    dtStopDate = dtModifiedFinishDate.CompareTo(dtLatestReportDate) < 0 ? dtLatestReportDate : dtModifiedFinishDate;
                     xlWorkSheet.Cells[37, 39] = 0;
                 }
                 else//已設定核定完工日
                 {
-                    dtEndDate = Functions.TransferSQLDateToDateTime(strConfirmFinishDate);
-                    dtRealFinishDate = dtEndDate;
+                    dtRealFinishDate = Functions.TransferSQLDateToDateTime(strConfirmFinishDate);
+
+                    dtStopDate = dtRealFinishDate.CompareTo(dtModifiedFinishDate) > 0 ? dtRealFinishDate : dtModifiedFinishDate;
+                    bRealFinishBeforeModifiedFinish = dtRealFinishDate.CompareTo(dtModifiedFinishDate) < 0 ? true : false; 
+
                     bHasRealFinishDate = true;
 
                     xlWorkSheet.Cells[37, 39] = dtRealFinishDate.Subtract(dtStartDate).Days + 1;//實際完工期限
+
                 }
 
                 xlWorkSheet.Cells[35, 39] = dtContractEndDate.Subtract(dtStartDate).Days + 1;//合約完工期限
@@ -96,12 +113,12 @@ namespace HuaChun_DailyReport
             }
             else if (g_iChartType == (int)ChartType.ExpectFinishChart)
             {
-                dtEndDate = dtContractEndDate;
+                dtStopDate = dtContractEndDate;
             }
             m_Sql.CloseSqlChannel();
 
             int iYearStart = dtStartDate.Year;
-            int iYearEnd = dtEndDate.Year;
+            int iYearEnd = dtStopDate.Year;
             for (int i = 0; i < iYearEnd - iYearStart; ++i)
             {
                 xlWorkSheet.Copy(Type.Missing, xlWorkBook.Sheets[xlWorkBook.Sheets.Count]); // copy
@@ -109,21 +126,23 @@ namespace HuaChun_DailyReport
             if (g_iChartType == (int)ChartType.WeatherChart)
             {
                 WriteDataIntoExcel(dtStartDate,
-                                   dtEndDate,
+                                   dtStopDate,
                                    dtContractEndDate,
                                    dtModifiedFinishDate,
                                    dtRealFinishDate,
                                    false, 
-                                   bHasRealFinishDate);
+                                   bHasRealFinishDate,
+                                   bRealFinishBeforeModifiedFinish);
             }
             else if (g_iChartType == (int)ChartType.ExpectFinishChart)
             {
                 WriteDataIntoExcel(dtStartDate,
-                                   dtEndDate,
+                                   dtStopDate,
                                    dtContractEndDate,
                                    new DateTime(),
                                    new DateTime(),
                                    true, 
+                                   false,
                                    false);
             }
 
@@ -150,7 +169,14 @@ namespace HuaChun_DailyReport
             
         }
 
-        private void WriteDataIntoExcel(DateTime dtDateStart, DateTime dtDrawStop, DateTime dtContractDateEnd, DateTime dtModifiedDateEnd, DateTime dtRealDateEnd, bool bWriteEmptyChart, bool bDrawRealEnd)
+        private void WriteDataIntoExcel(DateTime dtDateStart, 
+                                        DateTime dtDrawStop, 
+                                        DateTime dtContractDateEnd, 
+                                        DateTime dtModifiedDateEnd, 
+                                        DateTime dtRealDateEnd, 
+                                        bool bWriteEmptyChart, 
+                                        bool bDrawRealEnd,
+                                        bool bRealFinishBeforeModifiedFinish)
         {
             m_Sql.OpenSqlChannel();
             int iYearStart = dtDateStart.Year;
@@ -170,6 +196,7 @@ namespace HuaChun_DailyReport
 
                 xlWorkSheet.Name = (iYear - 1911).ToString() + "年度" + g_strProjectName + "工期晴雨表";
 
+                #region 顯示工期計算方式
                 string strPS = "";
                 if (g_strComputeType == "1")//工期計算方式為：限期完工
                 {
@@ -210,6 +237,7 @@ namespace HuaChun_DailyReport
                     strPS += "(下雨即不計工期)";
                 }
                 xlWorkSheet.Cells[33, 3] = strPS;
+                #endregion
 
                 for (int iMonth = 1; iMonth <= 12; iMonth++)
                 {
@@ -219,7 +247,7 @@ namespace HuaChun_DailyReport
                     float fConditionNonWorkingDaysInMonth = 0;
 
 
-                    #region
+                    #region 每個月份有幾天(考慮閏年)
                     int iDayNumbers = 0;
                     switch (iMonth)
                     {
@@ -303,184 +331,168 @@ namespace HuaChun_DailyReport
 
 
                         if (dtDate.CompareTo(dtDateStart) >= 0 && dtDate.CompareTo(dtDrawStop) <= 0)//開工日期之後才需要貼晴雨圖
-                        {             
-                            fDaysInMonth += 1;
-                            #region 例假日
-                            if (g_strComputeType == "1")//工期計算方式為限期完工
+                        {
+                            if (!bRealFinishBeforeModifiedFinish || dtDate.CompareTo(dtRealDateEnd) <= 0)
                             {
-                                ComputeNonWorkingDay(false,
-                                                     iMonth,
-                                                     iDateIndex,
-                                                     strMorningWeather,
-                                                     strAfternoonWeather,
-                                                     strMorningCondition,
-                                                     strAfternoonCondition,
-                                                     ref fWeatherNonWorkingDaysInMonth,
-                                                     ref fConditionNonWorkingDaysInMonth,
-                                                     bWriteEmptyChart);
-                            }
-                            else if (g_strComputeType == "2")//工期計算方式為日曆天
-                            {
-                                ComputeNonWorkingDay(false,
-                                                     iMonth,
-                                                     iDateIndex,
-                                                     strMorningWeather,
-                                                     strAfternoonWeather,
-                                                     strMorningCondition,
-                                                     strAfternoonCondition,
-                                                     ref fWeatherNonWorkingDaysInMonth,
-                                                     ref fConditionNonWorkingDaysInMonth,
-                                                     bWriteEmptyChart);
-                            }
-                            else if (g_strComputeType == "3")//工期計算方式為工作天，無週休二日
-                            {
-                                #region
-                                if (g_strComputeHoliday == "0")//國定假日照常施工
+                                fDaysInMonth += 1;
+                                #region 例假日
+                                if (g_strComputeType == "1")//工期計算方式為限期完工
                                 {
-                                    ComputeNonWorkingDay(true, 
-                                                         iMonth, 
-                                                         iDateIndex, 
-                                                         strMorningWeather, 
-                                                         strAfternoonWeather, 
+                                    ComputeNonWorkingDay(false,
+                                                         iMonth,
+                                                         iDateIndex,
+                                                         strMorningWeather,
+                                                         strAfternoonWeather,
                                                          strMorningCondition,
-                                                         strAfternoonCondition, 
-                                                         ref fWeatherNonWorkingDaysInMonth, 
-                                                         ref fConditionNonWorkingDaysInMonth, 
+                                                         strAfternoonCondition,
+                                                         ref fWeatherNonWorkingDaysInMonth,
+                                                         ref fConditionNonWorkingDaysInMonth,
                                                          bWriteEmptyChart);
                                 }
-                                else if (g_strComputeHoliday == "1")//國定假日不施工
+                                else if (g_strComputeType == "2")//工期計算方式為日曆天
+                                {
+                                    ComputeNonWorkingDay(false,
+                                                         iMonth,
+                                                         iDateIndex,
+                                                         strMorningWeather,
+                                                         strAfternoonWeather,
+                                                         strMorningCondition,
+                                                         strAfternoonCondition,
+                                                         ref fWeatherNonWorkingDaysInMonth,
+                                                         ref fConditionNonWorkingDaysInMonth,
+                                                         bWriteEmptyChart);
+                                }
+                                else if (g_strComputeType == "3")//工期計算方式為工作天，無週休二日
                                 {
                                     #region
-                                    string working = m_Sql.ReadSqlDataWithoutOpenClose("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
-                                    if (working != string.Empty && working == "1")//遇到國定假日
+                                    if (g_strComputeHoliday == "0")//國定假日照常施工
                                     {
-                                        ComputeNonWorkingDay(false, 
-                                                             iMonth, 
-                                                             iDateIndex, 
-                                                             strMorningWeather, 
-                                                             strAfternoonWeather, 
-                                                             strMorningCondition, 
-                                                             strAfternoonCondition, 
-                                                             ref fWeatherNonWorkingDaysInMonth, 
-                                                             ref fConditionNonWorkingDaysInMonth, 
+                                        ComputeNonWorkingDay(true,
+                                                             iMonth,
+                                                             iDateIndex,
+                                                             strMorningWeather,
+                                                             strAfternoonWeather,
+                                                             strMorningCondition,
+                                                             strAfternoonCondition,
+                                                             ref fWeatherNonWorkingDaysInMonth,
+                                                             ref fConditionNonWorkingDaysInMonth,
                                                              bWriteEmptyChart);
-                                            
+                                    }
+                                    else if (g_strComputeHoliday == "1")//國定假日不施工
+                                    {
+                                        #region
+                                        string working = m_Sql.ReadSqlDataWithoutOpenClose("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
+                                        if (working != string.Empty && working == "1")//遇到國定假日
+                                        {
+                                            ComputeNonWorkingDay(false,
+                                                                 iMonth,
+                                                                 iDateIndex,
+                                                                 strMorningWeather,
+                                                                 strAfternoonWeather,
+                                                                 strMorningCondition,
+                                                                 strAfternoonCondition,
+                                                                 ref fWeatherNonWorkingDaysInMonth,
+                                                                 ref fConditionNonWorkingDaysInMonth,
+                                                                 bWriteEmptyChart);
+
+                                            fHolidaysInMonth += 1;
+                                            PrintHoliday(iMonth, iDateIndex);
+                                        }
+                                        else
+                                        {
+
+                                            ComputeNonWorkingDay(true,
+                                                                 iMonth,
+                                                                 iDateIndex,
+                                                                 strMorningWeather,
+                                                                 strAfternoonWeather,
+                                                                 strMorningCondition,
+                                                                 strAfternoonCondition,
+                                                                 ref fWeatherNonWorkingDaysInMonth,
+                                                                 ref fConditionNonWorkingDaysInMonth,
+                                                                 bWriteEmptyChart);
+
+                                        }
+                                        #endregion
+                                    }
+                                    #endregion
+                                }
+                                else if (g_strComputeType == "4")//工期計算方式為工作天，週休一日
+                                {
+                                    #region
+                                    if (dtDate.DayOfWeek == DayOfWeek.Sunday)
+                                    {
+                                        ComputeNonWorkingDay(false,
+                                                             iMonth,
+                                                             iDateIndex,
+                                                             strMorningWeather,
+                                                             strAfternoonWeather,
+                                                             strMorningCondition,
+                                                             strAfternoonCondition,
+                                                             ref fWeatherNonWorkingDaysInMonth,
+                                                             ref fConditionNonWorkingDaysInMonth,
+                                                             bWriteEmptyChart);
                                         fHolidaysInMonth += 1;
                                         PrintHoliday(iMonth, iDateIndex);
                                     }
                                     else
                                     {
-
-                                        ComputeNonWorkingDay(true, 
-                                                             iMonth, 
-                                                             iDateIndex, 
-                                                             strMorningWeather, 
-                                                             strAfternoonWeather, 
-                                                             strMorningCondition, 
-                                                             strAfternoonCondition, 
-                                                             ref fWeatherNonWorkingDaysInMonth, 
-                                                             ref fConditionNonWorkingDaysInMonth,
-                                                             bWriteEmptyChart);
-                                                                         
+                                        if (g_strComputeHoliday == "0")//國定假日照常施工
+                                        {
+                                            ComputeNonWorkingDay(true,
+                                                                 iMonth,
+                                                                 iDateIndex,
+                                                                 strMorningWeather,
+                                                                 strAfternoonWeather,
+                                                                 strMorningCondition,
+                                                                 strAfternoonCondition,
+                                                                 ref fWeatherNonWorkingDaysInMonth,
+                                                                 ref fConditionNonWorkingDaysInMonth,
+                                                                 bWriteEmptyChart);
+                                        }
+                                        else if (g_strComputeHoliday == "1")//國定假日不施工
+                                        {
+                                            string working = m_Sql.ReadSqlDataWithoutOpenClose("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
+                                            if (working != string.Empty && working == "1")
+                                            {
+                                                ComputeNonWorkingDay(false,
+                                                                     iMonth, iDateIndex,
+                                                                     strMorningWeather,
+                                                                     strAfternoonWeather,
+                                                                     strMorningCondition,
+                                                                     strAfternoonCondition,
+                                                                     ref fWeatherNonWorkingDaysInMonth,
+                                                                     ref fConditionNonWorkingDaysInMonth,
+                                                                     bWriteEmptyChart);
+                                                fHolidaysInMonth += 1;
+                                                PrintHoliday(iMonth, iDateIndex);
+                                            }
+                                            else
+                                            {
+                                                ComputeNonWorkingDay(true,
+                                                                     iMonth,
+                                                                     iDateIndex,
+                                                                     strMorningWeather,
+                                                                     strAfternoonWeather,
+                                                                     strMorningCondition,
+                                                                     strAfternoonCondition,
+                                                                     ref fWeatherNonWorkingDaysInMonth,
+                                                                     ref fConditionNonWorkingDaysInMonth,
+                                                                     bWriteEmptyChart);
+                                            }
+                                        }
                                     }
                                     #endregion
                                 }
-                                #endregion
-                            }
-                            else if (g_strComputeType == "4")//工期計算方式為工作天，週休一日
-                            {
-                                #region
-                                if (dtDate.DayOfWeek == DayOfWeek.Sunday)
+                                else if (g_strComputeType == "5")//工期計算方式為工作天，週休二日
                                 {
-                                    ComputeNonWorkingDay(false, 
-                                                         iMonth,
-                                                         iDateIndex, 
-                                                         strMorningWeather,
-                                                         strAfternoonWeather,
-                                                         strMorningCondition,
-                                                         strAfternoonCondition, 
-                                                         ref fWeatherNonWorkingDaysInMonth,
-                                                         ref fConditionNonWorkingDaysInMonth, 
-                                                         bWriteEmptyChart);
-                                    fHolidaysInMonth += 1;
-                                    PrintHoliday(iMonth, iDateIndex);
-                                }
-                                else
-                                {
-                                    if (g_strComputeHoliday == "0")//國定假日照常施工
-                                    {
-                                        ComputeNonWorkingDay(true, 
-                                                             iMonth, 
-                                                             iDateIndex, 
-                                                             strMorningWeather, 
-                                                             strAfternoonWeather, 
-                                                             strMorningCondition, 
-                                                             strAfternoonCondition, 
-                                                             ref fWeatherNonWorkingDaysInMonth,
-                                                             ref fConditionNonWorkingDaysInMonth,
-                                                             bWriteEmptyChart);
-                                    }
-                                    else if (g_strComputeHoliday == "1")//國定假日不施工
-                                    {
-                                        string working = m_Sql.ReadSqlDataWithoutOpenClose("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
-                                        if (working != string.Empty && working == "1")
-                                        {
-                                            ComputeNonWorkingDay(false, 
-                                                                 iMonth, iDateIndex, 
-                                                                 strMorningWeather,
-                                                                 strAfternoonWeather, 
-                                                                 strMorningCondition, 
-                                                                 strAfternoonCondition, 
-                                                                 ref fWeatherNonWorkingDaysInMonth,
-                                                                 ref fConditionNonWorkingDaysInMonth, 
-                                                                 bWriteEmptyChart);
-                                            fHolidaysInMonth += 1;
-                                            PrintHoliday(iMonth, iDateIndex);
-                                        }
-                                        else
-                                        {
-                                            ComputeNonWorkingDay(true, 
-                                                                 iMonth, 
-                                                                 iDateIndex, 
-                                                                 strMorningWeather,
-                                                                 strAfternoonWeather, 
-                                                                 strMorningCondition, 
-                                                                 strAfternoonCondition, 
-                                                                 ref fWeatherNonWorkingDaysInMonth,
-                                                                 ref fConditionNonWorkingDaysInMonth, 
-                                                                 bWriteEmptyChart);
-                                        }
-                                    }
-                                }
-                                #endregion
-                            }
-                            else if (g_strComputeType == "5")//工期計算方式為工作天，週休二日
-                            {
-                                #region
-                                if (dtDate.DayOfWeek == DayOfWeek.Sunday)
-                                {
-                                    ComputeNonWorkingDay(false, 
-                                                         iMonth, 
-                                                         iDateIndex,
-                                                         strMorningWeather, 
-                                                         strAfternoonWeather,
-                                                         strMorningCondition, 
-                                                         strAfternoonCondition,
-                                                         ref fWeatherNonWorkingDaysInMonth,
-                                                         ref fConditionNonWorkingDaysInMonth,
-                                                         bWriteEmptyChart);
-                                    fHolidaysInMonth += 1;
-                                    PrintHoliday(iMonth, iDateIndex);
-                                }
-                                else if (dtDate.DayOfWeek == DayOfWeek.Saturday)
-                                {
-                                    string working = m_Sql.ReadSqlDataWithoutOpenClose("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
-                                    if (working == string.Empty || working == "1")
+                                    #region
+                                    if (dtDate.DayOfWeek == DayOfWeek.Sunday)
                                     {
                                         ComputeNonWorkingDay(false,
                                                              iMonth,
                                                              iDateIndex,
-                                                             strMorningWeather, 
+                                                             strMorningWeather,
                                                              strAfternoonWeather,
                                                              strMorningCondition,
                                                              strAfternoonCondition,
@@ -490,71 +502,90 @@ namespace HuaChun_DailyReport
                                         fHolidaysInMonth += 1;
                                         PrintHoliday(iMonth, iDateIndex);
                                     }
-                                    else//這應該是要補班的狀況
-                                    {
-                                        ComputeNonWorkingDay(true,
-                                                             iMonth,
-                                                             iDateIndex,
-                                                             strMorningWeather, 
-                                                             strAfternoonWeather, 
-                                                             strMorningCondition,
-                                                             strAfternoonCondition,
-                                                             ref fWeatherNonWorkingDaysInMonth,
-                                                             ref fConditionNonWorkingDaysInMonth, 
-                                                             bWriteEmptyChart);
-                                    }
-                                }
-                                else
-                                {
-                                    if (g_strComputeHoliday == "0")//國定假日照常施工
-                                    {
-                                        ComputeNonWorkingDay(true, 
-                                                             iMonth, 
-                                                             iDateIndex, 
-                                                             strMorningWeather, 
-                                                             strAfternoonWeather,
-                                                             strMorningCondition, 
-                                                             strAfternoonCondition,
-                                                             ref fWeatherNonWorkingDaysInMonth,
-                                                             ref fConditionNonWorkingDaysInMonth, 
-                                                             bWriteEmptyChart);
-                                    }
-                                    else if (g_strComputeHoliday == "1")//國定假日不施工
+                                    else if (dtDate.DayOfWeek == DayOfWeek.Saturday)
                                     {
                                         string working = m_Sql.ReadSqlDataWithoutOpenClose("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
-                                        if (working != string.Empty && working == "1")//遇到國定假日
+                                        if (working == string.Empty || working == "1")
                                         {
                                             ComputeNonWorkingDay(false,
-                                                                 iMonth, 
+                                                                 iMonth,
                                                                  iDateIndex,
                                                                  strMorningWeather,
                                                                  strAfternoonWeather,
                                                                  strMorningCondition,
-                                                                 strAfternoonCondition, 
+                                                                 strAfternoonCondition,
                                                                  ref fWeatherNonWorkingDaysInMonth,
-                                                                 ref fConditionNonWorkingDaysInMonth, 
+                                                                 ref fConditionNonWorkingDaysInMonth,
                                                                  bWriteEmptyChart);
                                             fHolidaysInMonth += 1;
                                             PrintHoliday(iMonth, iDateIndex);
                                         }
-                                        else
+                                        else//這應該是要補班的狀況
                                         {
                                             ComputeNonWorkingDay(true,
-                                                                 iMonth, 
-                                                                 iDateIndex, 
+                                                                 iMonth,
+                                                                 iDateIndex,
                                                                  strMorningWeather,
-                                                                 strAfternoonWeather, 
-                                                                 strMorningCondition, 
-                                                                 strAfternoonCondition, 
+                                                                 strAfternoonWeather,
+                                                                 strMorningCondition,
+                                                                 strAfternoonCondition,
                                                                  ref fWeatherNonWorkingDaysInMonth,
-                                                                 ref fConditionNonWorkingDaysInMonth, 
+                                                                 ref fConditionNonWorkingDaysInMonth,
                                                                  bWriteEmptyChart);
                                         }
                                     }
+                                    else
+                                    {
+                                        if (g_strComputeHoliday == "0")//國定假日照常施工
+                                        {
+                                            ComputeNonWorkingDay(true,
+                                                                 iMonth,
+                                                                 iDateIndex,
+                                                                 strMorningWeather,
+                                                                 strAfternoonWeather,
+                                                                 strMorningCondition,
+                                                                 strAfternoonCondition,
+                                                                 ref fWeatherNonWorkingDaysInMonth,
+                                                                 ref fConditionNonWorkingDaysInMonth,
+                                                                 bWriteEmptyChart);
+                                        }
+                                        else if (g_strComputeHoliday == "1")//國定假日不施工
+                                        {
+                                            string working = m_Sql.ReadSqlDataWithoutOpenClose("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dtDate) + "'");
+                                            if (working != string.Empty && working == "1")//遇到國定假日
+                                            {
+                                                ComputeNonWorkingDay(false,
+                                                                     iMonth,
+                                                                     iDateIndex,
+                                                                     strMorningWeather,
+                                                                     strAfternoonWeather,
+                                                                     strMorningCondition,
+                                                                     strAfternoonCondition,
+                                                                     ref fWeatherNonWorkingDaysInMonth,
+                                                                     ref fConditionNonWorkingDaysInMonth,
+                                                                     bWriteEmptyChart);
+                                                fHolidaysInMonth += 1;
+                                                PrintHoliday(iMonth, iDateIndex);
+                                            }
+                                            else
+                                            {
+                                                ComputeNonWorkingDay(true,
+                                                                     iMonth,
+                                                                     iDateIndex,
+                                                                     strMorningWeather,
+                                                                     strAfternoonWeather,
+                                                                     strMorningCondition,
+                                                                     strAfternoonCondition,
+                                                                     ref fWeatherNonWorkingDaysInMonth,
+                                                                     ref fConditionNonWorkingDaysInMonth,
+                                                                     bWriteEmptyChart);
+                                            }
+                                        }
+                                    }
+                                    #endregion
                                 }
                                 #endregion
                             }
-                            #endregion         
                         }
                         if (dtDate.CompareTo(dtDateStart) == 0)
                         {
@@ -564,13 +595,14 @@ namespace HuaChun_DailyReport
                         {
                             PrintFinish(iMonth, iDateIndex, 1);
                         }
-                        if (dtDate.CompareTo(dtModifiedDateEnd) == 0 && !bWriteEmptyChart)
-                        {
-                            PrintFinish(iMonth, iDateIndex, 2);
-                        }
+                        
                         if (dtDate.CompareTo(dtRealDateEnd) == 0 && bDrawRealEnd)
                         {
                             PrintFinish(iMonth, iDateIndex, 3);
+                        }
+                        else if (dtDate.CompareTo(dtModifiedDateEnd) == 0 && !bWriteEmptyChart)
+                        {
+                            PrintFinish(iMonth, iDateIndex, 2);
                         }
 
                         if (dtDate.CompareTo(dtDrawStop) == 0 )

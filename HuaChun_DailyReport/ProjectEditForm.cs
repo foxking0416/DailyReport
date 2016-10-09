@@ -130,7 +130,7 @@ namespace HuaChun_DailyReport
 
         protected override void btnConfirmFinish_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show("確定設定此日期為核定完工日", "確定?", MessageBoxButtons.OKCancel);
+            DialogResult dialogResult = MessageBox.Show("確定設定此日期為核定完工日", "確定?", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
             if (dialogResult == DialogResult.OK)
             {
                 m_Sql.Set_SQL_data("confirm_finishdate", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", Functions.TransferDateTimeToSQL(dtPickerConfirmFinish.Value));
@@ -149,7 +149,7 @@ namespace HuaChun_DailyReport
 
         protected override void btnDeleteFinish_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show("確定刪除核定完工日", "確定?", MessageBoxButtons.OKCancel);
+            DialogResult dialogResult = MessageBox.Show("確定刪除核定完工日", "確定?", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
             if (dialogResult == DialogResult.OK)
             {
                 m_Sql.Set_SQL_data("confirm_finishdate", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", "");

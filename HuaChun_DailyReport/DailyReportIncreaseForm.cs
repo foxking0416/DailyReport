@@ -489,6 +489,7 @@ namespace HuaChun_DailyReport
             this.comboBoxNoCount.Enabled = false;
             this.btnAddData.Enabled = false;
             this.btnDeleteData.Enabled = false;
+            this.btnDelete.Enabled = false;
         }
 
         protected void EnableAll()
@@ -502,6 +503,7 @@ namespace HuaChun_DailyReport
             this.comboBoxConditionAfternoon.Enabled = true;
             this.btnAddData.Enabled = true;
             this.btnDeleteData.Enabled = true;
+            this.btnDelete.Enabled = true;
         }
 
         ///////////Event Handler////////
@@ -920,7 +922,10 @@ namespace HuaChun_DailyReport
             this.Close();
         }
 
-        
+        protected virtual void btnDelete_Click(object sender, EventArgs e)
+        {
+
+        }
 
         #region dataGridView related
         private void dataGridViewMaterial_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -1095,6 +1100,8 @@ namespace HuaChun_DailyReport
             }
         }
         #endregion
+
+
 
 
 

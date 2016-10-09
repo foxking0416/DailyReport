@@ -16,6 +16,7 @@ namespace HuaChun_DailyReport
         public DailyReportEditForm(string projectNo, MySQL Sql)
             : base(projectNo, Sql)
         {
+            this.btnDelete.Visible = true;
             InitializeComponent();
             ClearDataTable();
         }
@@ -367,6 +368,17 @@ namespace HuaChun_DailyReport
 
                 m_Sql.CloseSqlChannel();
             }
+        }
+
+        protected override void btnDelete_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("確定要刪除這天的日報表?", "確定", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+            if (result == DialogResult.Yes)
+            {
+                m_Sql.NoHistoryDelete_SQL("dailyreport", "project_no ='" + g_ProjectNumber + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
+            }
+            
+            this.Close();
         }
     }
 }
