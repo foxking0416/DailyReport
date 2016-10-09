@@ -374,6 +374,7 @@ namespace HuaChun_DailyReport
             if (this.dateToday.Value.Date.Subtract(this.dateStart.Value.Date).Days + 1 < 0)
             {
                 this.dateToday.Value = this.dateStart.Value;
+                ComputeDayOfWeek();
                 this.textBoxDaysStartToCurrent.Text = "1";
             }
             else
@@ -453,6 +454,7 @@ namespace HuaChun_DailyReport
             {
                 DateTime lastInputDate = Functions.TransferSQLDateToDateTime(strLatestDailyReportDate);
                 this.dateToday.Value = lastInputDate.AddDays(1);
+                ComputeDayOfWeek();
             }
         }
 
@@ -460,6 +462,7 @@ namespace HuaChun_DailyReport
         {
             EnableAllEvent();
             this.dateToday.Value = dtDate;
+            ComputeDayOfWeek();
         }
 
         protected void DisableAll()

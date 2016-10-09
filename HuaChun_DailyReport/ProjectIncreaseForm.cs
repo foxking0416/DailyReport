@@ -23,6 +23,14 @@ namespace HuaChun_DailyReport
 
         private void Initialize() 
         {
+            this.Size = new System.Drawing.Size(900, 550);
+            this.btnLast.Visible = false;
+            this.btnNext.Visible = false;
+            this.btnSearch.Visible = false;
+            this.btnSave.Location = new System.Drawing.Point(10, 485);
+            this.btnExit.Location = new System.Drawing.Point(220, 485);
+            this.tabControl1.Visible = false;
+
             uiNumericDuration.ReadOnly = true;//初始化工期設定
             uiNumericDays.ReadOnly = true;//初始化天數設定
             uiDateTimeFinish.Enabled = true;
@@ -238,6 +246,34 @@ namespace HuaChun_DailyReport
         //    numericDuration.Value = dayCompute.CountByFinishDay(dateTimeStart.Value, dateTimeFinish.Value);
         //}
 
+        protected virtual void btnLast_Click(object sender, EventArgs e)
+        {
+        }
+
+        protected virtual void btnNext_Click(object sender, EventArgs e)
+        {
+        }
+
+        protected virtual void btnSearch_Click(object sender, EventArgs e)
+        {
+        }
+
+        protected virtual void btnAddExtention_Click(object sender, EventArgs e)
+        {
+        }
+
+        protected virtual void btnEditExtention_Click(object sender, EventArgs e)
+        {
+        }
+
+        protected virtual void btnDeleteExtention_Click(object sender, EventArgs e)
+        {
+        }
+
+        protected virtual void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        {
+        }
+
         private void BtnSearchSponsor_Click(object sender, EventArgs e)
         {
             MemberSearchForm searchForm = new MemberSearchForm(this.textBoxResponsible, m_Sql);
@@ -423,5 +459,17 @@ namespace HuaChun_DailyReport
                 this.uiNumericDuration.Value = Convert.ToDecimal(duration) + 1;
             }
         }
+
+        protected virtual void btnConfirmFinish_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected virtual void btnDeleteFinish_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
     }
 }

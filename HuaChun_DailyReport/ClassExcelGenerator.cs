@@ -58,19 +58,47 @@ namespace HuaChun_DailyReport
             g_strProjectName = m_Sql.ReadSqlDataWithoutOpenClose("project_name", "project_info", "project_no = '" + g_strProjectNo + "'");
             string strStartDate = m_Sql.ReadSqlDataWithoutOpenClose("startdate", "project_info", "project_no = '" + g_strProjectNo + "'");
             string strContractEndDate = m_Sql.ReadSqlDataWithoutOpenClose("contract_finishdate", "project_info", "project_no = '" + g_strProjectNo + "'");
-            m_Sql.CloseSqlChannel();
+
             DateTime dtStartDate = Functions.TransferSQLDateToDateTime(strStartDate);
             DateTime dtEndDate = new DateTime();
+            DateTime dtModifiedFinishDate = new DateTime();
+            DateTime dtRealFinishDate = new DateTime();
             DateTime dtContractEndDate = Functions.TransferSQLDateToDateTime(strContractEndDate);
+            bool bHasRealFinishDate = false;
 
             if (g_iChartType == (int)ChartType.WeatherChart)
             {
-                dtEndDate = ComputeValidFinishDate(dtStartDate);
+                //dtEndDate = ComputeValidFinishDate(dtStartDate);
+                dtModifiedFinishDate = ComputeValidFinishDate(dtStartDate);
+                string strConfirmFinishDate = m_Sql.ReadSqlDataWithoutOpenClose("confirm_finishdate", "project_info", "project_no = '" + g_strProjectNo + "'");
+
+                string strLatestReportDate = m_Sql.ReadSqlDataWithoutOpenClose("date", "dailyreport", "project_no = '" + g_strProjectNo + "' ORDER BY date DESC");
+                DateTime dtLatestReportDate = Functions.TransferSQLDateToDateTime(strLatestReportDate);
+
+                if (strConfirmFinishDate == string.Empty)//尚未設定核定完工日
+                {
+                    dtEndDate = dtModifiedFinishDate.CompareTo(dtLatestReportDate) < 0 ? dtLatestReportDate : dtModifiedFinishDate;
+                    xlWorkSheet.Cells[37, 39] = 0;
+                }
+                else//已設定核定完工日
+                {
+                    dtEndDate = Functions.TransferSQLDateToDateTime(strConfirmFinishDate);
+                    dtRealFinishDate = dtEndDate;
+                    bHasRealFinishDate = true;
+
+                    xlWorkSheet.Cells[37, 39] = dtRealFinishDate.Subtract(dtStartDate).Days + 1;//實際完工期限
+                }
+
+                xlWorkSheet.Cells[35, 39] = dtContractEndDate.Subtract(dtStartDate).Days + 1;//合約完工期限
+                xlWorkSheet.Cells[36, 39] = dtModifiedFinishDate.Subtract(dtStartDate).Days + 1;//變動完工期限
+
+
             }
             else if (g_iChartType == (int)ChartType.ExpectFinishChart)
             {
                 dtEndDate = dtContractEndDate;
             }
+            m_Sql.CloseSqlChannel();
 
             int iYearStart = dtStartDate.Year;
             int iYearEnd = dtEndDate.Year;
@@ -83,14 +111,20 @@ namespace HuaChun_DailyReport
                 WriteDataIntoExcel(dtStartDate,
                                    dtEndDate,
                                    dtContractEndDate,
-                                   false);
+                                   dtModifiedFinishDate,
+                                   dtRealFinishDate,
+                                   false, 
+                                   bHasRealFinishDate);
             }
             else if (g_iChartType == (int)ChartType.ExpectFinishChart)
             {
                 WriteDataIntoExcel(dtStartDate,
                                    dtEndDate,
                                    dtContractEndDate,
-                                   true);
+                                   new DateTime(),
+                                   new DateTime(),
+                                   true, 
+                                   false);
             }
 
 
@@ -116,13 +150,13 @@ namespace HuaChun_DailyReport
             
         }
 
-        private void WriteDataIntoExcel(DateTime dtDateStart, DateTime dtDateEnd, DateTime dtContractDateEnd, bool bWriteEmptyChart)
+        private void WriteDataIntoExcel(DateTime dtDateStart, DateTime dtDrawStop, DateTime dtContractDateEnd, DateTime dtModifiedDateEnd, DateTime dtRealDateEnd, bool bWriteEmptyChart, bool bDrawRealEnd)
         {
             m_Sql.OpenSqlChannel();
             int iYearStart = dtDateStart.Year;
-            int iYearEnd = dtDateEnd.Year;
+            int iYearEnd = dtDrawStop.Year;
             int iMonthStart = dtDateStart.Month;
-            int iMonthEnd = dtDateEnd.Month;
+            int iMonthEnd = dtDrawStop.Month;
             float fTotalDays = 0;
             float fTotalHolidays = 0;
             float fTotalWeatherNonWorkingDays = 0;
@@ -268,7 +302,7 @@ namespace HuaChun_DailyReport
 
 
 
-                        if (dtDate.CompareTo(dtDateStart) >= 0 && dtDate.CompareTo(dtDateEnd) <= 0)//開工日期之後才需要貼晴雨圖
+                        if (dtDate.CompareTo(dtDateStart) >= 0 && dtDate.CompareTo(dtDrawStop) <= 0)//開工日期之後才需要貼晴雨圖
                         {             
                             fDaysInMonth += 1;
                             #region 例假日
@@ -528,11 +562,20 @@ namespace HuaChun_DailyReport
                         }
                         if (dtDate.CompareTo(dtContractDateEnd) == 0)
                         {
-                            PrintFinish(iMonth, iDateIndex, true);
+                            PrintFinish(iMonth, iDateIndex, 1);
                         }
-                        if (dtDate.CompareTo(dtDateEnd) == 0 && !bWriteEmptyChart)
+                        if (dtDate.CompareTo(dtModifiedDateEnd) == 0 && !bWriteEmptyChart)
                         {
-                            PrintFinish(iMonth, iDateIndex, false);
+                            PrintFinish(iMonth, iDateIndex, 2);
+                        }
+                        if (dtDate.CompareTo(dtRealDateEnd) == 0 && bDrawRealEnd)
+                        {
+                            PrintFinish(iMonth, iDateIndex, 3);
+                        }
+
+                        if (dtDate.CompareTo(dtDrawStop) == 0 )
+                        {
+                            break;
                         }
                     }
 
@@ -912,9 +955,23 @@ namespace HuaChun_DailyReport
                                           21, 21);
         }
 
-        private void PrintFinish(int iMonth, int iDateIndex, bool bContract)
+        private void PrintFinish(int iMonth, int iDateIndex, int iType)
         {
-            xlWorkSheet.Shapes.AddPicture(bContract ? g_strPath + "\\image\\完工.png" : g_strPath + "\\image\\變動完工日.png",
+            string strFileName = "";
+            switch (iType)
+            {
+                case 1:
+                    strFileName = g_strPath + "\\image\\契約完工日.png";
+                    break;
+                case 2:
+                    strFileName = g_strPath + "\\image\\變動完工日.png";
+                    break;
+                case 3:
+                    strFileName = g_strPath + "\\image\\核定完工日.png";
+                    break;
+            }
+
+            xlWorkSheet.Shapes.AddPicture(strFileName,
                                           MsoTriState.msoFalse, MsoTriState.msoTrue,
                                           g_fStartPositionH + Convert.ToInt32(Math.Round(g_fCellWidth * (iDateIndex - 1))),
                                           g_fStartPositionV + Convert.ToInt32(Math.Round(g_fCellHeight * (iMonth - 1))),

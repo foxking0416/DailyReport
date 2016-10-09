@@ -106,6 +106,20 @@
             this.radioBtnNoWorkingOnSmallRainyDay = new System.Windows.Forms.RadioButton();
             this.radioBtnNoWorkingOnHeavyRainyDay = new System.Windows.Forms.RadioButton();
             this.numericAmount = new System.Windows.Forms.NumericUpDown();
+            this.btnLast = new System.Windows.Forms.Button();
+            this.btnNext = new System.Windows.Forms.Button();
+            this.btnSearch = new System.Windows.Forms.Button();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnDeleteExtention = new System.Windows.Forms.Button();
+            this.btnEditExtention = new System.Windows.Forms.Button();
+            this.btnAddExtention = new System.Windows.Forms.Button();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.labelConfirmFinishDate = new System.Windows.Forms.Label();
+            this.btnDeleteFinish = new System.Windows.Forms.Button();
+            this.btnConfirmFinish = new System.Windows.Forms.Button();
+            this.dtPickerConfirmFinish = new System.Windows.Forms.DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)(this.uiNumericDays)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.uiNumericDuration)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -114,6 +128,10 @@
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericAmount)).BeginInit();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -216,24 +234,24 @@
             this.label10.TabIndex = 0;
             this.label10.Text = "品　　管";
             // 
-            // radioBtnCalenderDay
+            // uiRadioBtnCalenderDay
             // 
             this.uiRadioBtnCalenderDay.AutoSize = true;
             this.uiRadioBtnCalenderDay.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.uiRadioBtnCalenderDay.Location = new System.Drawing.Point(100, 10);
-            this.uiRadioBtnCalenderDay.Name = "radioBtnCalenderDay";
+            this.uiRadioBtnCalenderDay.Name = "uiRadioBtnCalenderDay";
             this.uiRadioBtnCalenderDay.Size = new System.Drawing.Size(71, 20);
             this.uiRadioBtnCalenderDay.TabIndex = 29;
             this.uiRadioBtnCalenderDay.Text = "日曆天";
             this.uiRadioBtnCalenderDay.UseVisualStyleBackColor = true;
             this.uiRadioBtnCalenderDay.CheckedChanged += new System.EventHandler(this.RadioButton123_CheckedChanged);
             // 
-            // radioBtnWorkingDay
+            // uiRadioBtnWorkingDay
             // 
             this.uiRadioBtnWorkingDay.AutoSize = true;
             this.uiRadioBtnWorkingDay.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.uiRadioBtnWorkingDay.Location = new System.Drawing.Point(175, 10);
-            this.uiRadioBtnWorkingDay.Name = "radioBtnWorkingDay";
+            this.uiRadioBtnWorkingDay.Name = "uiRadioBtnWorkingDay";
             this.uiRadioBtnWorkingDay.Size = new System.Drawing.Size(71, 20);
             this.uiRadioBtnWorkingDay.TabIndex = 30;
             this.uiRadioBtnWorkingDay.Text = "工作天";
@@ -357,11 +375,11 @@
             this.dateTimeStart.TabIndex = 24;
             this.dateTimeStart.ValueChanged += new System.EventHandler(this.DateTimeStart_ValueChanged);
             // 
-            // dateTimeFinish
+            // uiDateTimeFinish
             // 
             this.uiDateTimeFinish.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.uiDateTimeFinish.Location = new System.Drawing.Point(410, 207);
-            this.uiDateTimeFinish.Name = "dateTimeFinish";
+            this.uiDateTimeFinish.Name = "uiDateTimeFinish";
             this.uiDateTimeFinish.Size = new System.Drawing.Size(200, 22);
             this.uiDateTimeFinish.TabIndex = 26;
             this.uiDateTimeFinish.ValueChanged += new System.EventHandler(this.DateTimeFinish_ValueChanged);
@@ -426,7 +444,7 @@
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(220, 485);
+            this.btnExit.Location = new System.Drawing.Point(220, 635);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(200, 23);
             this.btnExit.TabIndex = 51;
@@ -436,7 +454,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(10, 485);
+            this.btnSave.Location = new System.Drawing.Point(10, 635);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(200, 23);
             this.btnSave.TabIndex = 50;
@@ -612,7 +630,7 @@
             this.textBoxSecurity.Size = new System.Drawing.Size(165, 22);
             this.textBoxSecurity.TabIndex = 12;
             // 
-            // numericDays
+            // uiNumericDays
             // 
             this.uiNumericDays.DecimalPlaces = 1;
             this.uiNumericDays.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -632,7 +650,7 @@
             0,
             0,
             0});
-            this.uiNumericDays.Name = "numericDays";
+            this.uiNumericDays.Name = "uiNumericDays";
             this.uiNumericDays.Size = new System.Drawing.Size(200, 22);
             this.uiNumericDays.TabIndex = 27;
             this.uiNumericDays.ThousandsSeparator = true;
@@ -643,7 +661,7 @@
             0});
             this.uiNumericDays.ValueChanged += new System.EventHandler(this.NumericDays_ValueChanged);
             // 
-            // numericDuration
+            // uiNumericDuration
             // 
             this.uiNumericDuration.DecimalPlaces = 1;
             this.uiNumericDuration.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -663,7 +681,7 @@
             0,
             0,
             0});
-            this.uiNumericDuration.Name = "numericDuration";
+            this.uiNumericDuration.Name = "uiNumericDuration";
             this.uiNumericDuration.Size = new System.Drawing.Size(200, 22);
             this.uiNumericDuration.TabIndex = 25;
             this.uiNumericDuration.ThousandsSeparator = true;
@@ -777,13 +795,13 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             // 
-            // radioBtnRestrictSchedule
+            // uiRadioBtnRestrictSchedule
             // 
             this.uiRadioBtnRestrictSchedule.AutoSize = true;
             this.uiRadioBtnRestrictSchedule.Checked = true;
             this.uiRadioBtnRestrictSchedule.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.uiRadioBtnRestrictSchedule.Location = new System.Drawing.Point(10, 10);
-            this.uiRadioBtnRestrictSchedule.Name = "radioBtnRestrictSchedule";
+            this.uiRadioBtnRestrictSchedule.Name = "uiRadioBtnRestrictSchedule";
             this.uiRadioBtnRestrictSchedule.Size = new System.Drawing.Size(86, 20);
             this.uiRadioBtnRestrictSchedule.TabIndex = 28;
             this.uiRadioBtnRestrictSchedule.TabStop = true;
@@ -939,11 +957,163 @@
             this.numericAmount.TabIndex = 52;
             this.numericAmount.ThousandsSeparator = true;
             // 
+            // btnLast
+            // 
+            this.btnLast.Location = new System.Drawing.Point(650, 7);
+            this.btnLast.Name = "btnLast";
+            this.btnLast.Size = new System.Drawing.Size(100, 23);
+            this.btnLast.TabIndex = 53;
+            this.btnLast.Text = "上一個";
+            this.btnLast.UseVisualStyleBackColor = true;
+            this.btnLast.Click += new System.EventHandler(this.btnLast_Click);
+            // 
+            // btnNext
+            // 
+            this.btnNext.Location = new System.Drawing.Point(650, 47);
+            this.btnNext.Name = "btnNext";
+            this.btnNext.Size = new System.Drawing.Size(100, 23);
+            this.btnNext.TabIndex = 54;
+            this.btnNext.Text = "下一個";
+            this.btnNext.UseVisualStyleBackColor = true;
+            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.Location = new System.Drawing.Point(650, 87);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(100, 23);
+            this.btnSearch.TabIndex = 55;
+            this.btnSearch.Text = "搜尋";
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Location = new System.Drawing.Point(13, 482);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(974, 147);
+            this.tabControl1.TabIndex = 56;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.btnDeleteExtention);
+            this.tabPage1.Controls.Add(this.btnEditExtention);
+            this.tabPage1.Controls.Add(this.btnAddExtention);
+            this.tabPage1.Controls.Add(this.dataGridView1);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(966, 121);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "設定追加工期";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // btnDeleteExtention
+            // 
+            this.btnDeleteExtention.Location = new System.Drawing.Point(885, 64);
+            this.btnDeleteExtention.Name = "btnDeleteExtention";
+            this.btnDeleteExtention.Size = new System.Drawing.Size(75, 23);
+            this.btnDeleteExtention.TabIndex = 1;
+            this.btnDeleteExtention.Text = "刪除追加";
+            this.btnDeleteExtention.UseVisualStyleBackColor = true;
+            this.btnDeleteExtention.Click += new System.EventHandler(this.btnDeleteExtention_Click);
+            // 
+            // btnEditExtention
+            // 
+            this.btnEditExtention.Location = new System.Drawing.Point(885, 35);
+            this.btnEditExtention.Name = "btnEditExtention";
+            this.btnEditExtention.Size = new System.Drawing.Size(75, 23);
+            this.btnEditExtention.TabIndex = 1;
+            this.btnEditExtention.Text = "編輯追加";
+            this.btnEditExtention.UseVisualStyleBackColor = true;
+            this.btnEditExtention.Click += new System.EventHandler(this.btnEditExtention_Click);
+            // 
+            // btnAddExtention
+            // 
+            this.btnAddExtention.Location = new System.Drawing.Point(885, 6);
+            this.btnAddExtention.Name = "btnAddExtention";
+            this.btnAddExtention.Size = new System.Drawing.Size(75, 23);
+            this.btnAddExtention.TabIndex = 1;
+            this.btnAddExtention.Text = "追加工期";
+            this.btnAddExtention.UseVisualStyleBackColor = true;
+            this.btnAddExtention.Click += new System.EventHandler(this.btnAddExtention_Click);
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(6, 6);
+            this.dataGridView1.MultiSelect = false;
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.Size = new System.Drawing.Size(873, 109);
+            this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.labelConfirmFinishDate);
+            this.tabPage2.Controls.Add(this.btnDeleteFinish);
+            this.tabPage2.Controls.Add(this.btnConfirmFinish);
+            this.tabPage2.Controls.Add(this.dtPickerConfirmFinish);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(966, 121);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "設定核定完工日";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // labelConfirmFinishDate
+            // 
+            this.labelConfirmFinishDate.AutoSize = true;
+            this.labelConfirmFinishDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelConfirmFinishDate.Location = new System.Drawing.Point(3, 9);
+            this.labelConfirmFinishDate.Name = "labelConfirmFinishDate";
+            this.labelConfirmFinishDate.Size = new System.Drawing.Size(57, 20);
+            this.labelConfirmFinishDate.TabIndex = 2;
+            this.labelConfirmFinishDate.Text = "完工日";
+            // 
+            // btnDeleteFinish
+            // 
+            this.btnDeleteFinish.Location = new System.Drawing.Point(138, 66);
+            this.btnDeleteFinish.Name = "btnDeleteFinish";
+            this.btnDeleteFinish.Size = new System.Drawing.Size(75, 23);
+            this.btnDeleteFinish.TabIndex = 1;
+            this.btnDeleteFinish.Text = "刪除完工日";
+            this.btnDeleteFinish.UseVisualStyleBackColor = true;
+            this.btnDeleteFinish.Click += new System.EventHandler(this.btnDeleteFinish_Click);
+            // 
+            // btnConfirmFinish
+            // 
+            this.btnConfirmFinish.Location = new System.Drawing.Point(138, 37);
+            this.btnConfirmFinish.Name = "btnConfirmFinish";
+            this.btnConfirmFinish.Size = new System.Drawing.Size(75, 23);
+            this.btnConfirmFinish.TabIndex = 1;
+            this.btnConfirmFinish.Text = "設定完工日";
+            this.btnConfirmFinish.UseVisualStyleBackColor = true;
+            this.btnConfirmFinish.Click += new System.EventHandler(this.btnConfirmFinish_Click);
+            // 
+            // dtPickerConfirmFinish
+            // 
+            this.dtPickerConfirmFinish.Location = new System.Drawing.Point(7, 38);
+            this.dtPickerConfirmFinish.Name = "dtPickerConfirmFinish";
+            this.dtPickerConfirmFinish.Size = new System.Drawing.Size(125, 20);
+            this.dtPickerConfirmFinish.TabIndex = 0;
+            // 
             // ProjectIncreaseForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(890, 518);
+            this.ClientSize = new System.Drawing.Size(990, 667);
+            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.btnSearch);
+            this.Controls.Add(this.btnNext);
+            this.Controls.Add(this.btnLast);
             this.Controls.Add(this.numericAmount);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.label30);
@@ -1023,6 +1193,11 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericAmount)).EndInit();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1108,5 +1283,19 @@
         private System.Windows.Forms.GroupBox groupBox4;
         protected System.Windows.Forms.RadioButton radioBtnNoWorkingOnSmallRainyDay;
         protected System.Windows.Forms.RadioButton radioBtnNoWorkingOnHeavyRainyDay;
+        protected System.Windows.Forms.Button btnLast;
+        protected System.Windows.Forms.Button btnNext;
+        protected System.Windows.Forms.Button btnSearch;
+        protected System.Windows.Forms.TabControl tabControl1;
+        protected System.Windows.Forms.TabPage tabPage1;
+        protected System.Windows.Forms.TabPage tabPage2;
+        protected System.Windows.Forms.Button btnAddExtention;
+        protected System.Windows.Forms.DataGridView dataGridView1;
+        protected System.Windows.Forms.Button btnEditExtention;
+        protected System.Windows.Forms.Button btnDeleteExtention;
+        protected System.Windows.Forms.Button btnConfirmFinish;
+        protected System.Windows.Forms.DateTimePicker dtPickerConfirmFinish;
+        protected System.Windows.Forms.Button btnDeleteFinish;
+        protected System.Windows.Forms.Label labelConfirmFinishDate;
     }
 }

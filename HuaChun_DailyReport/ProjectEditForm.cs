@@ -12,13 +12,6 @@ namespace HuaChun_DailyReport
 {
     public partial class ProjectEditForm : ProjectIncreaseForm
     {
-        private System.Windows.Forms.Button btnLast;
-        private System.Windows.Forms.Button btnNext;
-        private System.Windows.Forms.Button btnSearch;
-        private System.Windows.Forms.Button btnAddExtention;
-        private System.Windows.Forms.Button btnEditExtention;
-        private System.Windows.Forms.Button btnDeleteExtention;
-        private System.Windows.Forms.DataGridView dataGridView1;
         private string[] projects;
         private int selectIndex = 0;
         private int projectCount;
@@ -37,7 +30,19 @@ namespace HuaChun_DailyReport
 
         private void Initialize()
         {
-            this.Size = new System.Drawing.Size(1000, 645);
+            this.Size = new System.Drawing.Size(1000, 700);
+            this.btnLast.Visible = true;
+            this.btnNext.Visible = true;
+            this.btnSearch.Visible = true;
+
+            this.btnSave.Location = new System.Drawing.Point(10, 635);
+            this.btnExit.Location = new System.Drawing.Point(220, 635);
+            this.tabControl1.Visible = true;
+            this.textBoxProjectNo.ReadOnly = true;
+            
+            
+
+
             dataTable = new DataTable("MyNewTable");
             dataTable.Columns.Add("No", typeof(String));
             dataTable.Columns.Add("核准日期", typeof(String));
@@ -52,104 +57,13 @@ namespace HuaChun_DailyReport
             dataTable.Columns.Add("變動完工日", typeof(String));
             dataTable.Columns.Add("填寫日期", typeof(String));
             // 
-            // dataGridView1
-            // 
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(10, 475);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(900, 100);
-            this.dataGridView1.TabIndex = 5;
-            this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
+
+
             this.dataGridView1.DataSource = dataTable;
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.MultiSelect = false;
-            this.dataGridView1.Visible = true;
-            this.Text = "工程編輯作業";
-
-            this.textBoxProjectNo.ReadOnly = true;
 
 
-            this.btnSave.Location = new System.Drawing.Point(10, 580);
-            this.btnExit.Location = new System.Drawing.Point(220, 580);
 
-            this.btnLast = new System.Windows.Forms.Button();
-            this.btnNext = new System.Windows.Forms.Button();
-            this.btnSearch = new System.Windows.Forms.Button();
-            this.btnAddExtention = new System.Windows.Forms.Button();
-            this.btnEditExtention = new System.Windows.Forms.Button();
-            this.btnDeleteExtention = new System.Windows.Forms.Button();
 
-            // 
-            // btnLast
-            // 
-            this.btnLast.Location = new System.Drawing.Point(650, 7);
-            this.btnLast.Name = "btnLast";
-            this.btnLast.Size = new System.Drawing.Size(100, 23);
-            this.btnLast.TabIndex = 38;
-            this.btnLast.Text = "上一個";
-            this.btnLast.UseVisualStyleBackColor = true;
-            this.btnLast.Click += new System.EventHandler(this.btnLast_Click);
-            // 
-            // btnNext
-            // 
-            this.btnNext.Location = new System.Drawing.Point(650, 47);
-            this.btnNext.Name = "btnNext";
-            this.btnNext.Size = new System.Drawing.Size(100, 23);
-            this.btnNext.TabIndex = 39;
-            this.btnNext.Text = "下一個";
-            this.btnNext.UseVisualStyleBackColor = true;
-            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
-            // 
-            // btnSearch
-            // 
-            this.btnSearch.Location = new System.Drawing.Point(650, 87);
-            this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(100, 23);
-            this.btnSearch.TabIndex = 40;
-            this.btnSearch.Text = "搜尋";
-            this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
-            // 
-            // btnAddExtention
-            // 
-            this.btnAddExtention.Location = new System.Drawing.Point(915, 475);
-            this.btnAddExtention.Name = "btnAddExtention";
-            this.btnAddExtention.Size = new System.Drawing.Size(70, 23);
-            this.btnAddExtention.TabIndex = 41;
-            this.btnAddExtention.Text = "追加工期";
-            this.btnAddExtention.UseVisualStyleBackColor = true;
-            this.btnAddExtention.Click += new System.EventHandler(this.btnAddExtention_Click);
-            // 
-            // btnEditExtention
-            // 
-            this.btnEditExtention.Location = new System.Drawing.Point(915, 510);
-            this.btnEditExtention.Name = "btnAddExtention";
-            this.btnEditExtention.Size = new System.Drawing.Size(70, 23);
-            this.btnEditExtention.TabIndex = 42;
-            this.btnEditExtention.Text = "編輯追加";
-            this.btnEditExtention.UseVisualStyleBackColor = true;
-            this.btnEditExtention.Click += new System.EventHandler(this.btnEditExtention_Click);
-            // 
-            // btnDeleteExtention
-            // 
-            this.btnDeleteExtention.Location = new System.Drawing.Point(915, 545);
-            this.btnDeleteExtention.Name = "btnDeleteExtention";
-            this.btnDeleteExtention.Size = new System.Drawing.Size(70, 23);
-            this.btnDeleteExtention.TabIndex = 43;
-            this.btnDeleteExtention.Text = "刪除追加";
-            this.btnDeleteExtention.UseVisualStyleBackColor = true;
-            this.btnDeleteExtention.Click += new System.EventHandler(this.btnDeleteExtention_Click);
-
-            this.Controls.Add(this.btnLast);
-            this.Controls.Add(this.btnNext);
-            this.Controls.Add(this.btnSearch);
-            this.Controls.Add(this.btnAddExtention);
-            this.Controls.Add(this.btnEditExtention);
-            this.Controls.Add(this.btnDeleteExtention);
-            this.Controls.Add(this.dataGridView1);
 
             projects = m_Sql.Read1DArrayNoCondition_SQL_Data("project_no", "project_info");
             projectCount = projects.Length;
@@ -159,7 +73,7 @@ namespace HuaChun_DailyReport
                 LoadInformation(projects[selectIndex]);
         }
 
-        private void btnLast_Click(object sender, EventArgs e)
+        protected override void btnLast_Click(object sender, EventArgs e)
         {
             selectIndex--;
             if (selectIndex < 0)
@@ -168,7 +82,7 @@ namespace HuaChun_DailyReport
             LoadInformation(projects[selectIndex]);
         }
 
-        private void btnNext_Click(object sender, EventArgs e)
+        protected override void btnNext_Click(object sender, EventArgs e)
         {
             selectIndex++;
             if (selectIndex >= projectCount)
@@ -177,27 +91,27 @@ namespace HuaChun_DailyReport
             LoadInformation(projects[selectIndex]);
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        protected override void btnSearch_Click(object sender, EventArgs e)
         {
             ProjectSearchForm searchform = new ProjectSearchForm(this, m_Sql);
             searchform.Show();
         }
 
-        private void btnAddExtention_Click(object sender, EventArgs e)
+        protected override void btnAddExtention_Click(object sender, EventArgs e)
         {
             ExtentionIncreaseForm addExtentionForm = new ExtentionIncreaseForm(textBoxProjectNo.Text, m_Sql);
             addExtentionForm.ShowDialog();
             LoadDataTable();
         }
 
-        private void btnEditExtention_Click(object sender, EventArgs e)
+        protected override void btnEditExtention_Click(object sender, EventArgs e)
         {
             ExtentionEditForm editExtentionForm = new ExtentionEditForm(textBoxProjectNo.Text, grantNo, m_Sql);
             editExtentionForm.ShowDialog();
             LoadDataTable();
         }
 
-        private void btnDeleteExtention_Click(object sender, EventArgs e)
+        protected override void btnDeleteExtention_Click(object sender, EventArgs e)
         {
             if (grantNo != string.Empty)
             {
@@ -212,6 +126,35 @@ namespace HuaChun_DailyReport
                 MessageBox.Show("請選擇要刪除的資料?", "確定", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             LoadDataTable();
+        }
+
+        protected override void btnConfirmFinish_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("確定設定此日期為核定完工日", "確定?", MessageBoxButtons.OKCancel);
+            if (dialogResult == DialogResult.OK)
+            {
+                m_Sql.Set_SQL_data("confirm_finishdate", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", Functions.TransferDateTimeToSQL(dtPickerConfirmFinish.Value));
+
+                string strConfirmFinishDate = m_Sql.Read_SQL_data("confirm_finishdate", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'");
+                if (strConfirmFinishDate == string.Empty)
+                {
+                    this.labelConfirmFinishDate.Text = "此工程尚無核定完工日";
+                }
+                else
+                {
+                    this.labelConfirmFinishDate.Text = "此工程核定完工日為：" + Functions.TransferSQLDateToDateOnly(strConfirmFinishDate);
+                }
+            }
+        }
+
+        protected override void btnDeleteFinish_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("確定刪除核定完工日", "確定?", MessageBoxButtons.OKCancel);
+            if (dialogResult == DialogResult.OK)
+            {
+                m_Sql.Set_SQL_data("confirm_finishdate", "project_info", "project_no = '" + this.textBoxProjectNo.Text + "'", "");
+                this.labelConfirmFinishDate.Text = "此工程尚無核定完工日";
+            }
         }
 
         protected override void BtnSave_Click(object sender, EventArgs e)
@@ -332,7 +275,7 @@ namespace HuaChun_DailyReport
             m_Sql.CloseSqlChannel();
         }
 
-        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        protected override void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
             try
             {
@@ -347,6 +290,18 @@ namespace HuaChun_DailyReport
             Cursor.Current = Cursors.WaitCursor;
             m_Sql.OpenSqlChannel();
             string strComputeType = m_Sql.ReadSqlDataWithoutOpenClose("computetype", "project_info", "project_no = '" + projectNumber + "'");
+
+            string strConfirmFinishDate = m_Sql.ReadSqlDataWithoutOpenClose("confirm_finishdate", "project_info", "project_no = '" + projectNumber + "'");
+            if(strConfirmFinishDate == string.Empty)
+            {
+                this.labelConfirmFinishDate.Text = "此工程尚無核定完工日";
+            }
+            else
+            {
+                this.labelConfirmFinishDate.Text = "此工程核定完工日為：" + Functions.TransferSQLDateToDateOnly(strConfirmFinishDate);
+            }
+
+
 
             if (strComputeType == "1")
             {
