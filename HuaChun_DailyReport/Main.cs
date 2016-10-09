@@ -307,6 +307,10 @@ namespace HuaChun_DailyReport
 
         private void button1_Click(object sender, EventArgs e)
         {
+           string test = g_Sql.Read_SQL_data("", "project_info", "project_no = 'A01'");
+           string[] arrtest = g_Sql.Read1DArray_SQL_Data("project_no, contract_no, project_name", "project_info", "project_no = 'A01'");
+           string artest = g_Sql.Read_SQL_data("project_no, contract_no, project_name", "project_info", "project_no = 'A01'");
+           bool stop = true;
         }
 
         private void button2_Click(object sender, EventArgs e)

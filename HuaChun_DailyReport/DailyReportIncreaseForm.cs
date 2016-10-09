@@ -27,11 +27,9 @@ namespace HuaChun_DailyReport
         protected string g_RainydayCountType;
         protected bool g_LockDate = false;
 
-        public DailyReportIncreaseForm()
-        {
-            InitializeComponent();
-            Initialize();
-        }
+        protected bool bDisableComboBoxNoCount = false;
+        protected bool bDisableComboBoxWeatherAndCondition = false;
+        protected bool bDisableDateToday = false;
 
         public DailyReportIncreaseForm(string projectNo, MySQL Sql)
         {
@@ -50,6 +48,7 @@ namespace HuaChun_DailyReport
 
         private void Initialize()
         {
+            DisableAllEvent();
             this.comboBoxWeatherMorning.Items.Add("晴");
             this.comboBoxWeatherMorning.Items.Add("雨");
             this.comboBoxWeatherMorning.Items.Add("豪雨");
@@ -87,7 +86,7 @@ namespace HuaChun_DailyReport
             this.comboBoxNoCountByType.Items.Add("1");
             this.comboBoxNoCountByType.SelectedIndex = 0;
             ComputeDayOfWeek();
-
+            EnableAllEvent();
 
             ///////////////////////////材料使用//////////////////////////////
             dataTableMaterial = new DataTable("MaterialTable");
@@ -182,13 +181,9 @@ namespace HuaChun_DailyReport
             this.textBoxWeekDay.Text = Functions.ComputeDayOfWeek(dateToday.Value);
         }
 
-        public virtual void LoadProjectInfo(string projectNo) 
+        public virtual void LoadProjectInfo(string projectNo)
         {
-            Cursor.Current = Cursors.WaitCursor;
-            //專案編號
-            this.textBoxProjectNo.Text = projectNo;
-            g_ProjectNumber = projectNo;
-            if (this.textBoxProjectNo.Text != string.Empty)
+            if (projectNo != string.Empty)
             {
                 EnableAll();
             }
@@ -197,24 +192,36 @@ namespace HuaChun_DailyReport
                 return;
             }
 
+            DisableAllEvent();
+
+            g_ProjectNumber = projectNo;
+
             Cursor.Current = Cursors.WaitCursor;
             m_Sql.OpenSqlChannel();
-            //專案名稱   
-            this.textBoxProjectName.Text = m_Sql.ReadSqlDataWithoutOpenClose("project_name", "project_info", "project_no ='" + projectNo + "'");
-            //開工日期
-            g_StartDate = m_Sql.ReadSqlDataWithoutOpenClose("startdate", "project_info", "project_no ='" + projectNo + "'");
-            this.dateStart.Value = Functions.TransferSQLDateToDateTime(g_StartDate);
-            //契約工期
-            this.textBoxContractDuration.Text = m_Sql.ReadSqlDataWithoutOpenClose("contractduration", "project_info", "project_no ='" + projectNo + "'");
-            //契約天數
-            this.textBoxContractDays.Text = m_Sql.ReadSqlDataWithoutOpenClose("contractdays", "project_info", "project_no ='" + projectNo + "'");
 
-            if (m_Sql.ReadSqlDataWithoutOpenClose("date", "dailyreport", "project_no = '" + projectNo + "'") != string.Empty)
+            //專案info
             {
-                DateTime lastInputDate = Functions.TransferSQLDateToDateTime(m_Sql.ReadSqlDataWithoutOpenClose("date", "dailyreport", "project_no = '" + projectNo + "' ORDER BY date DESC"));
-                this.dateToday.Value = lastInputDate.AddDays(1);
+                //專案編號
+                this.textBoxProjectNo.Text = projectNo;
+                //專案名稱   
+                this.textBoxProjectName.Text = m_Sql.ReadSqlDataWithoutOpenClose("project_name", "project_info", "project_no ='" + projectNo + "'");
+                //開工日期
+                g_StartDate = m_Sql.ReadSqlDataWithoutOpenClose("startdate", "project_info", "project_no ='" + projectNo + "'");
+                this.dateStart.Value = Functions.TransferSQLDateToDateTime(g_StartDate);
+                //契約工期
+                this.textBoxContractDuration.Text = m_Sql.ReadSqlDataWithoutOpenClose("contractduration", "project_info", "project_no ='" + projectNo + "'");
+                //契約天數
+                this.textBoxContractDays.Text = m_Sql.ReadSqlDataWithoutOpenClose("contractdays", "project_info", "project_no ='" + projectNo + "'");
             }
 
+            //搜尋最新日期的日報表
+            string strLatestDailyReportDate = m_Sql.ReadSqlDataWithoutOpenClose("date", "dailyreport", "project_no = '" + projectNo + "' ORDER BY date DESC");
+            if (strLatestDailyReportDate != string.Empty)
+            {
+                DateTime lastInputDate = Functions.TransferSQLDateToDateTime(strLatestDailyReportDate);
+                this.dateToday.Value = lastInputDate.AddDays(1);
+            }
+            ComputeDayOfWeek();
             LoadInfoByDate(g_ProjectNumber);
 
             //追加工期後總計天數
@@ -230,6 +237,7 @@ namespace HuaChun_DailyReport
 
 
             Cursor.Current = Cursors.Default;
+            EnableAllEvent();
         }
 
         private void LoadInfoByDate(string projectNo)
@@ -296,7 +304,6 @@ namespace HuaChun_DailyReport
                     if (dateToday.Value.DayOfWeek == DayOfWeek.Sunday)
                     {
                         comboBoxNoCountByType.Text = "1";
-                        
                     }   
                 }
                 else if (computeType == "5")//工作天 周休二日
@@ -305,14 +312,17 @@ namespace HuaChun_DailyReport
                     dayCompute.restOnSunday = true;
                     this.label29.Text = "工期計算方式為工作工，週休二日";
                     if (dateToday.Value.DayOfWeek == DayOfWeek.Sunday)
+                    {
                         comboBoxNoCountByType.Text = "1";
+                    }
                     else if (dateToday.Value.DayOfWeek == DayOfWeek.Saturday)
                     {
                         string extraDay = m_Sql.ReadSqlDataWithoutOpenClose("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
-                        if(extraDay == string.Empty || extraDay == "1")
+                        if (extraDay == string.Empty || extraDay == "1")
+                        {
                             comboBoxNoCountByType.Text = "1";
+                        }
                     }
-
                 }
 
                 if (countHoliday == "1")
@@ -321,7 +331,9 @@ namespace HuaChun_DailyReport
                     this.label29.Text += "，國定假日不施工";
                     string holiday = m_Sql.ReadSqlDataWithoutOpenClose("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
                     if (holiday == "1")
+                    {
                         comboBoxNoCountByType.Text = "1";
+                    }
                 }
                 else if (countHoliday == "0")
                 {
@@ -331,20 +343,21 @@ namespace HuaChun_DailyReport
 
 
                 DateTime FinishDateAfterExtention = dayCompute.CountByDuration(Functions.TransferSQLDateToDateTime(startDate), Convert.ToSingle(this.textBoxTotalDuration.Text));
-                //DateTime FinishDateContract = dayCompute.CountByDuration(Functions.TransferSQLDateToDateTime(startDate), Convert.ToSingle(this.textBoxContractDuration.Text));
                 //追加工期後總計天數
                 this.textBoxTotalDays.Text = Convert.ToString(FinishDateAfterExtention.Subtract(dateStart.Value).Days + 1);
-                ////契約天數
-                //this.textBoxContractDays.Text = Convert.ToString(FinishDateContract.Subtract(dateStart.Value).Days + 1);
-            
             }
 
 
             //開工迄今天數 = 今日日期 - 開工日期 + 1
             if (this.dateToday.Value.Date.Subtract(this.dateStart.Value.Date).Days + 1 < 0)
+            {
                 this.dateToday.Value = this.dateStart.Value;
+                this.textBoxDaysStartToCurrent.Text = "1";
+            }
             else
+            {
                 this.textBoxDaysStartToCurrent.Text = Convert.ToString(this.dateToday.Value.Date.Subtract(this.dateStart.Value.Date).Days + 1);
+            }
 
             //不計工期
             string[] reportDates = m_Sql.Read1DArray_SQL_Data("date", "dailyreport", "project_no = '" + projectNo + "'");
@@ -354,7 +367,9 @@ namespace HuaChun_DailyReport
                 {
                     float nonCountingDays = Convert.ToSingle(m_Sql.ReadSqlDataWithoutOpenClose("nonecounting", "dailyreport", "project_no = '" + projectNo + "' AND date = '" + Functions.TransferSQLDateToDateOnly(reportDates[i]) + "'"));
                     if (nonCountingDays == 0.5)
+                    {
                         dayCompute.AddNotWorking(Functions.TransferSQLDateToDateTime(reportDates[i]), 0);
+                    }
                     else if (nonCountingDays == 1)
                     {
                         dayCompute.AddNotWorking(Functions.TransferSQLDateToDateTime(reportDates[i]), 0);
@@ -363,7 +378,9 @@ namespace HuaChun_DailyReport
                 }
             }
             if (comboBoxNoCount.Text == "0.5")
+            {
                 dayCompute.AddNotWorking(dateToday.Value, 0);
+            }
             else if (comboBoxNoCount.Text == "1")
             {
                 dayCompute.AddNotWorking(dateToday.Value, 0);
@@ -374,8 +391,8 @@ namespace HuaChun_DailyReport
             this.textBoxRealDuration.Text = Convert.ToString(Convert.ToDecimal(this.textBoxDaysStartToCurrent.Text) - Convert.ToDecimal(this.textBoxDurationNotCount.Text));
             //剩餘工期 = 工期總計 - 實際工期 
             this.textBoxRestDuration.Text = Convert.ToString(Convert.ToDecimal(this.textBoxTotalDuration.Text) - Convert.ToDecimal(this.textBoxRealDuration.Text));
-            //契約完工日
-            this.dateProjectEnd_Contract.Value = Functions.TransferSQLDateToDateTime(m_Sql.ReadSqlDataWithoutOpenClose("contract_finishdate", "project_info", "project_no ='" + projectNo + "'"));
+            ////契約完工日
+            //this.dateProjectEnd_Contract.Value = Functions.TransferSQLDateToDateTime(m_Sql.ReadSqlDataWithoutOpenClose("contract_finishdate", "project_info", "project_no ='" + projectNo + "'"));
 
             if (Convert.ToSingle(this.textBoxRestDuration.Text) < 0)
             {
@@ -404,14 +421,10 @@ namespace HuaChun_DailyReport
             m_Sql.CloseSqlChannel();
         }
 
-       
-
-        public virtual void SetDateTodayValue(DateTime date)
+        public void SetDateTodayValue(DateTime date)
         {
             dateToday.Value = date;
         }
-
-
         
         protected void DisableAll()
         {
@@ -448,7 +461,6 @@ namespace HuaChun_DailyReport
             this.textBoxInterference.Enabled = true;
             this.comboBoxConditionMorning.Enabled = true;
             this.comboBoxConditionAfternoon.Enabled = true;
-            this.comboBoxNoCount.Enabled = true;
             this.btnAddData.Enabled = true;
             this.btnDeleteData.Enabled = true;
         }
@@ -456,29 +468,31 @@ namespace HuaChun_DailyReport
         ///////////Event Handler////////
         protected virtual void comboBoxNoCount_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (bDisableComboBoxNoCount)
+            {
+                return;
+            }
+            DisableAllEvent();
             if (g_ProjectNumber != null && g_ComputeType != null && g_CountHoliday != null && g_StartDate != null)
-            //LoadProjectInfo(g_ProjectNumber);
             {
                 Cursor.Current = Cursors.WaitCursor;
                 Compute(g_ProjectNumber, g_ComputeType, g_CountHoliday, g_StartDate);
                 Cursor.Current = Cursors.Default;
             }
+            EnableAllEvent();
         }
 
-        private void comboBoxWeatherAndCondition_SelectedIndexChanged(object sender, EventArgs e)
+        protected void comboBoxWeatherAndCondition_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            if (bDisableComboBoxWeatherAndCondition)
+            {
+                return;
+            }
+            DisableAllEvent();
             int morningNoCount = 0;
             int afternoonNoCount = 0;
 
-
-            int totalNoCount = 0;
-
-            if (comboBoxWeatherMorning.Text == "晴")
-            {
-                morningNoCount = 0;
-            }
-            else if (comboBoxWeatherMorning.Text == "雨")
+            if (comboBoxWeatherMorning.Text == "雨")
             {
                 if (g_RainydayCountType == "0")//小雨就不計工期
                 {
@@ -507,11 +521,7 @@ namespace HuaChun_DailyReport
             }
 
 
-            if (comboBoxWeatherAfternoon.Text == "晴")
-            {
-                afternoonNoCount |= 0;
-            }
-            else if (comboBoxWeatherAfternoon.Text == "雨")
+            if (comboBoxWeatherAfternoon.Text == "雨")
             {
                 if (g_RainydayCountType == "0")//小雨就不計工期
                 {
@@ -558,6 +568,7 @@ namespace HuaChun_DailyReport
             else if (comboBoxConditionMorning.Text == "雨後泥濘")
             {
                 morningNoCount |= 1;
+                comboBoxConditionAfternoon.Text = "雨後泥濘";
             }
             else if (comboBoxConditionMorning.Text == "補假")
             {
@@ -596,14 +607,27 @@ namespace HuaChun_DailyReport
                 comboBoxNoCount.Text = "0.5";
             else if (morningNoCount + afternoonNoCount == 2)
                 comboBoxNoCount.Text = "1";
+
+            if (g_ProjectNumber != null && g_ComputeType != null && g_CountHoliday != null && g_StartDate != null)
+            {
+                Cursor.Current = Cursors.WaitCursor;
+                Compute(g_ProjectNumber, g_ComputeType, g_CountHoliday, g_StartDate);
+                Cursor.Current = Cursors.Default;
+            }
+            EnableAllEvent();
         }
 
         protected virtual void dateToday_ValueChanged(object sender, EventArgs e)
         {
+            if (bDisableDateToday)
+            {
+                return;
+            }
+            DisableAllEvent();
             ComputeDayOfWeek();
 
-            string[] report = m_Sql.Read1DArray_SQL_Data("nonecounting", "dailyreport", "project_no = '" + g_ProjectNumber + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
-            if (report.Length != 0)
+            string[] arrReport = m_Sql.Read1DArray_SQL_Data("nonecounting", "dailyreport", "project_no = '" + g_ProjectNumber + "' AND date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
+            if (arrReport.Length != 0)
             {
                 label25.Visible = true;
                 DisableAllExceptDateToday();
@@ -611,16 +635,32 @@ namespace HuaChun_DailyReport
             else
             {
                 label25.Visible = false;
-                //LoadProjectInfo(projectNumber);
                 LoadInfoByDate(g_ProjectNumber);
-                //追加工期後總計天數
 
                 if (g_ProjectNumber != null && g_ComputeType != null && g_CountHoliday != null && g_StartDate != null)
-                Compute(g_ProjectNumber, g_ComputeType, g_CountHoliday, g_StartDate);
+                {
+                    Compute(g_ProjectNumber, g_ComputeType, g_CountHoliday, g_StartDate);
+                }
 
                 EnableAll();
             }
+            EnableAllEvent();
         }
+
+        protected void DisableAllEvent()
+        {
+            bDisableComboBoxNoCount = true;
+            bDisableComboBoxWeatherAndCondition = true;
+            bDisableDateToday = true;
+        }
+
+        protected void EnableAllEvent()
+        {
+            bDisableComboBoxNoCount = false;
+            bDisableComboBoxWeatherAndCondition = false;
+            bDisableDateToday = false;
+        }
+
 
         protected virtual void btnSave_Click(object sender, EventArgs e)
         {
