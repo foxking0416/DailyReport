@@ -6,7 +6,7 @@ using System.Collections;
 
 namespace HuaChun_DailyReport
 {
-    class DayCompute
+    public class DayCompute
     {
         private MySQL m_Sql;
         public bool restOnSaturday = false;
@@ -16,8 +16,6 @@ namespace HuaChun_DailyReport
         public bool countBadConditionDay = false;
 
 
-        private ArrayList arrayBadWeatherDay = new ArrayList();
-        private ArrayList arrayBadConditionDay = new ArrayList();
         private ArrayList arrayNotWorkingMorning = new ArrayList();
         private ArrayList arrayNotWorkingAfternoon = new ArrayList();
         private ArrayList arrayHoliday = new ArrayList();
@@ -39,6 +37,12 @@ namespace HuaChun_DailyReport
                 DateTime workingDay = Functions.TransferSQLDateToDateTime(extraWorkingday[i]);
                 arrayWorking.Add(workingDay);
             }
+        }
+
+        public void EmptyNotWorking()
+        {
+            arrayNotWorkingMorning.Clear();
+            arrayNotWorkingAfternoon.Clear();
         }
 
         public void AddNotWorking(DateTime date, int morningOrAfternoon)

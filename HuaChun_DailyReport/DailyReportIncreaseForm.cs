@@ -20,6 +20,7 @@ namespace HuaChun_DailyReport
         protected DataTable dataTableTool;
         protected DataTable dataTableOutsourcing;
         protected DataTable dataTableVacation;
+        public DayCompute dayCompute;
         protected string g_ProjectNumber;
         protected string g_StartDate;
         protected string g_ComputeType;
@@ -181,7 +182,7 @@ namespace HuaChun_DailyReport
             this.textBoxWeekDay.Text = Functions.ComputeDayOfWeek(dateToday.Value);
         }
 
-        public virtual void LoadProjectInfo(string projectNo)
+        public void LoadProjectInfo(string projectNo)
         {
             if (projectNo != string.Empty)
             {
@@ -212,22 +213,24 @@ namespace HuaChun_DailyReport
                 this.textBoxContractDuration.Text = m_Sql.ReadSqlDataWithoutOpenClose("contractduration", "project_info", "project_no ='" + projectNo + "'");
                 //契約天數
                 this.textBoxContractDays.Text = m_Sql.ReadSqlDataWithoutOpenClose("contractdays", "project_info", "project_no ='" + projectNo + "'");
+                //工期計算方式
+                g_ComputeType = m_Sql.ReadSqlDataWithoutOpenClose("computetype", "project_info", "project_no = '" + projectNo + "'");
+                g_CountHoliday = m_Sql.ReadSqlDataWithoutOpenClose("holiday", "project_info", "project_no = '" + projectNo + "'");
+                g_RainydayCountType = m_Sql.ReadSqlDataWithoutOpenClose("rainyday", "project_info", "project_no = '" + projectNo + "'");
             }
 
-            //搜尋最新日期的日報表
-            string strLatestDailyReportDate = m_Sql.ReadSqlDataWithoutOpenClose("date", "dailyreport", "project_no = '" + projectNo + "' ORDER BY date DESC");
-            if (strLatestDailyReportDate != string.Empty)
+            if (g_ProjectNumber != null && g_ComputeType != null && g_CountHoliday != null && g_StartDate != null)
             {
-                DateTime lastInputDate = Functions.TransferSQLDateToDateTime(strLatestDailyReportDate);
-                this.dateToday.Value = lastInputDate.AddDays(1);
+                dayCompute = new DayCompute(m_Sql);
+                SetupDayComputeType(g_ComputeType, g_CountHoliday);
             }
-            ComputeDayOfWeek();
-            LoadInfoByDate(g_ProjectNumber);
 
-            //追加工期後總計天數
-            g_ComputeType = m_Sql.ReadSqlDataWithoutOpenClose("computetype", "project_info", "project_no = '" + projectNo + "'");
-            g_CountHoliday = m_Sql.ReadSqlDataWithoutOpenClose("holiday", "project_info", "project_no = '" + projectNo + "'");
-            g_RainydayCountType = m_Sql.ReadSqlDataWithoutOpenClose("rainyday", "project_info", "project_no = '" + projectNo + "'");
+            SetDateTodayValue();
+
+            ComputeDayOfWeek();
+            LoadInfoByDate(g_ProjectNumber);//不應該有任何Event
+
+
 
             m_Sql.CloseSqlChannel();
             if (g_ProjectNumber != null && g_ComputeType != null && g_CountHoliday != null && g_StartDate != null)
@@ -240,7 +243,7 @@ namespace HuaChun_DailyReport
             EnableAllEvent();
         }
 
-        private void LoadInfoByDate(string projectNo)
+        public void LoadInfoByDate(string projectNo)
         {
             //今日開始追加工期
             int accuextendduration = 0;
@@ -271,9 +274,36 @@ namespace HuaChun_DailyReport
             m_Sql.CloseSqlChannel();
         }
 
+        private void SetupDayComputeType(string computeType, string countHoliday)
+        {
+            if (computeType == "3")//工作天 無休
+            {
+                dayCompute.restOnSaturday = false;
+                dayCompute.restOnSunday = false;
+            }
+            else if (computeType == "4")//工作天 周休一日
+            {
+                dayCompute.restOnSaturday = false;
+                dayCompute.restOnSunday = true;
+            }
+            else if (computeType == "5")//工作天 周休二日
+            {
+                dayCompute.restOnSaturday = true;
+                dayCompute.restOnSunday = true;
+            }
+
+            if (countHoliday == "1")
+            {
+                dayCompute.restOnHoliday = true;
+            }
+            else if (countHoliday == "0")
+            {
+                dayCompute.restOnHoliday = false;
+            }
+        }
+
         protected void Compute(string projectNo, string computeType, string countHoliday, string startDate)
         {
-            DayCompute dayCompute = new DayCompute(m_Sql);
             comboBoxNoCountByType.Text = "0";
             m_Sql.OpenSqlChannel();
             if (computeType == "1")//限期完工  日曆天
@@ -292,14 +322,10 @@ namespace HuaChun_DailyReport
             {
                 if (computeType == "3")//工作天 無休
                 {
-                    dayCompute.restOnSaturday = false;
-                    dayCompute.restOnSunday = false;
                     this.label29.Text = "工期計算方式為工作工，無週休二日";
                 }
                 else if (computeType == "4")//工作天 周休一日
                 {
-                    dayCompute.restOnSaturday = false;
-                    dayCompute.restOnSunday = true;
                     this.label29.Text = "工期計算方式為工作工，週休一日";
                     if (dateToday.Value.DayOfWeek == DayOfWeek.Sunday)
                     {
@@ -308,8 +334,6 @@ namespace HuaChun_DailyReport
                 }
                 else if (computeType == "5")//工作天 周休二日
                 {
-                    dayCompute.restOnSaturday = true;
-                    dayCompute.restOnSunday = true;
                     this.label29.Text = "工期計算方式為工作工，週休二日";
                     if (dateToday.Value.DayOfWeek == DayOfWeek.Sunday)
                     {
@@ -327,7 +351,6 @@ namespace HuaChun_DailyReport
 
                 if (countHoliday == "1")
                 {
-                    dayCompute.restOnHoliday = true;
                     this.label29.Text += "，國定假日不施工";
                     string holiday = m_Sql.ReadSqlDataWithoutOpenClose("working", "holiday", "date = '" + Functions.TransferDateTimeToSQL(dateToday.Value) + "'");
                     if (holiday == "1")
@@ -337,7 +360,6 @@ namespace HuaChun_DailyReport
                 }
                 else if (countHoliday == "0")
                 {
-                    dayCompute.restOnHoliday = false;
                     this.label29.Text += "，國定假日照常施工";
                 }
 
@@ -360,6 +382,8 @@ namespace HuaChun_DailyReport
             }
 
             //不計工期
+            //先清空儲存的not working
+            dayCompute.EmptyNotWorking();
             string[] reportDates = m_Sql.Read1DArray_SQL_Data("date", "dailyreport", "project_no = '" + projectNo + "'");
             for (int i = 0; i < reportDates.Length; i++)
             {
@@ -421,11 +445,23 @@ namespace HuaChun_DailyReport
             m_Sql.CloseSqlChannel();
         }
 
-        public void SetDateTodayValue(DateTime date)
+        public virtual void SetDateTodayValue()
         {
-            dateToday.Value = date;
+            //搜尋最新日期的日報表
+            string strLatestDailyReportDate = m_Sql.ReadSqlDataWithoutOpenClose("date", "dailyreport", "project_no = '" + g_ProjectNumber + "' ORDER BY date DESC");
+            if (strLatestDailyReportDate != string.Empty)
+            {
+                DateTime lastInputDate = Functions.TransferSQLDateToDateTime(strLatestDailyReportDate);
+                this.dateToday.Value = lastInputDate.AddDays(1);
+            }
         }
-        
+
+        public void SetDateTodayValue(DateTime dtDate)
+        {
+            EnableAllEvent();
+            this.dateToday.Value = dtDate;
+        }
+
         protected void DisableAll()
         {
             this.dateToday.Enabled = false;

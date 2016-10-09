@@ -220,8 +220,7 @@ namespace HuaChun_DailyReport
             string morningWeather = m_Sql.Read_SQL_data("morning_weather", "dailyreport", "project_no = '" + g_strProjectNo + "' AND date = '" + Functions.TransferDateTimeToSQL(dateClick) + "'");
             if (morningWeather == string.Empty)//表示這天沒有日報表
             {
-                DailyReportIncreaseForm reportBuildForm = new DailyReportIncreaseForm(false, m_Sql);
-                reportBuildForm.LoadProjectInfo(g_strProjectNo);
+                DailyReportIncreaseForm reportBuildForm = new DailyReportIncreaseForm(g_strProjectNo, m_Sql);
                 reportBuildForm.SetDateTodayValue(dateClick);
                 reportBuildForm.ShowDialog();
                 LoadProjectInfo(g_strProjectNo);
@@ -229,7 +228,6 @@ namespace HuaChun_DailyReport
             else//表示這天已經有日報表
             {
                 DailyReportEditForm reportEditForm = new DailyReportEditForm(g_strProjectNo, m_Sql);
-                reportEditForm.LoadProjectInfo(g_strProjectNo);
                 reportEditForm.SetDateTodayValue(dateClick);
                 reportEditForm.ShowDialog();
                 LoadProjectInfo(g_strProjectNo);
