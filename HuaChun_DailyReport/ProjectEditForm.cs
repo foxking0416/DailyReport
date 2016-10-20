@@ -39,7 +39,7 @@ namespace HuaChun_DailyReport
             this.btnExit.Location = new System.Drawing.Point(220, 635);
             this.tabControl1.Visible = true;
             this.textBoxProjectNo.ReadOnly = true;
-            
+            this.Text = "工程編輯作業";
             
 
 

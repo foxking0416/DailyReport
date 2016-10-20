@@ -17,6 +17,7 @@ namespace HuaChun_DailyReport
             : base(projectNo, Sql)
         {
             this.btnDelete.Visible = true;
+            this.Text = "日報表編輯作業";
             InitializeComponent();
             ClearDataTable();
         }
