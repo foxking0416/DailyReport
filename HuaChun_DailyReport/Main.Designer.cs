@@ -90,6 +90,7 @@
             this.button3 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.labelProject = new System.Windows.Forms.Label();
+            this.標單處理ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -123,7 +124,7 @@
             this.MenuItemLogin.Name = "MenuItemLogin";
             this.MenuItemLogin.Size = new System.Drawing.Size(126, 22);
             this.MenuItemLogin.Text = "登入";
-            this.MenuItemLogin.Click += new System.EventHandler(this.MenuItemLogin_Click);
+            this.MenuItemLogin.Click += new System.EventHandler(this.EventMenuItemLogin_Click);
             // 
             // MenuItemLogout
             // 
@@ -131,7 +132,7 @@
             this.MenuItemLogout.Name = "MenuItemLogout";
             this.MenuItemLogout.Size = new System.Drawing.Size(126, 22);
             this.MenuItemLogout.Text = "登出";
-            this.MenuItemLogout.Click += new System.EventHandler(this.MenuItemLogout_Click);
+            this.MenuItemLogout.Click += new System.EventHandler(this.EventMenuItemLogout_Click);
             // 
             // MenuItemSelectProject
             // 
@@ -139,7 +140,7 @@
             this.MenuItemSelectProject.Name = "MenuItemSelectProject";
             this.MenuItemSelectProject.Size = new System.Drawing.Size(126, 22);
             this.MenuItemSelectProject.Text = "選擇專案";
-            this.MenuItemSelectProject.Click += new System.EventHandler(this.MenuItemSelectProject_Click);
+            this.MenuItemSelectProject.Click += new System.EventHandler(this.EventMenuItemSelectProject_Click);
             // 
             // MenuItemBasicInfo
             // 
@@ -154,7 +155,8 @@
             this.MenuItemProcessCode,
             this.MenuItemEmployeeManage,
             this.toolStripSeparator3,
-            this.MenuItemHolidayManage});
+            this.MenuItemHolidayManage,
+            this.標單處理ToolStripMenuItem});
             this.MenuItemBasicInfo.Enabled = false;
             this.MenuItemBasicInfo.Name = "MenuItemBasicInfo";
             this.MenuItemBasicInfo.Size = new System.Drawing.Size(97, 20);
@@ -165,14 +167,14 @@
             this.MenuItemProjectIncrease.Name = "MenuItemProjectIncrease";
             this.MenuItemProjectIncrease.Size = new System.Drawing.Size(178, 22);
             this.MenuItemProjectIncrease.Text = "工程檔新增";
-            this.MenuItemProjectIncrease.Click += new System.EventHandler(this.MenuItemProjectIncrease_Click);
+            this.MenuItemProjectIncrease.Click += new System.EventHandler(this.EventMenuItemProjectIncrease_Click);
             // 
             // MenuItemProjectEdit
             // 
             this.MenuItemProjectEdit.Name = "MenuItemProjectEdit";
             this.MenuItemProjectEdit.Size = new System.Drawing.Size(178, 22);
             this.MenuItemProjectEdit.Text = "工程檔修正";
-            this.MenuItemProjectEdit.Click += new System.EventHandler(this.MenuItemProjectEdit_Click);
+            this.MenuItemProjectEdit.Click += new System.EventHandler(this.EventMenuItemProjectEdit_Click);
             // 
             // toolStripSeparator1
             // 
@@ -193,14 +195,14 @@
             this.MenuItemVendorIncrease.Name = "MenuItemVendorIncrease";
             this.MenuItemVendorIncrease.Size = new System.Drawing.Size(152, 22);
             this.MenuItemVendorIncrease.Text = "新增廠商";
-            this.MenuItemVendorIncrease.Click += new System.EventHandler(this.MenuItemVendorIncrease_Click);
+            this.MenuItemVendorIncrease.Click += new System.EventHandler(this.EventMenuItemVendorIncrease_Click);
             // 
             // MenuItemVendorEdit
             // 
             this.MenuItemVendorEdit.Name = "MenuItemVendorEdit";
             this.MenuItemVendorEdit.Size = new System.Drawing.Size(152, 22);
             this.MenuItemVendorEdit.Text = "編輯現有廠商";
-            this.MenuItemVendorEdit.Click += new System.EventHandler(this.MenuItemVendorEdit_Click);
+            this.MenuItemVendorEdit.Click += new System.EventHandler(this.EventMenuItemVendorEdit_Click);
             // 
             // MenuItemMaterialManage
             // 
@@ -216,14 +218,14 @@
             this.MenuItemMaterialIncrease.Name = "MenuItemMaterialIncrease";
             this.MenuItemMaterialIncrease.Size = new System.Drawing.Size(152, 22);
             this.MenuItemMaterialIncrease.Text = "新增材料";
-            this.MenuItemMaterialIncrease.Click += new System.EventHandler(this.MenuItemMaterialIncrease_Click);
+            this.MenuItemMaterialIncrease.Click += new System.EventHandler(this.EventMenuItemMaterialIncrease_Click);
             // 
             // MenuItemMaterialEdit
             // 
             this.MenuItemMaterialEdit.Name = "MenuItemMaterialEdit";
             this.MenuItemMaterialEdit.Size = new System.Drawing.Size(152, 22);
             this.MenuItemMaterialEdit.Text = "編輯現有材料";
-            this.MenuItemMaterialEdit.Click += new System.EventHandler(this.MenuItemMaterialEdit_Click);
+            this.MenuItemMaterialEdit.Click += new System.EventHandler(this.EventMenuItemMaterialEdit_Click);
             // 
             // MenuItemLaborManage
             // 
@@ -239,14 +241,14 @@
             this.MenuItemLaborIncrease.Name = "MenuItemLaborIncrease";
             this.MenuItemLaborIncrease.Size = new System.Drawing.Size(165, 22);
             this.MenuItemLaborIncrease.Text = "新增工人別";
-            this.MenuItemLaborIncrease.Click += new System.EventHandler(this.MenuItemLaborIncrease_Click);
+            this.MenuItemLaborIncrease.Click += new System.EventHandler(this.EventMenuItemLaborIncrease_Click);
             // 
             // MenuItemLaborEdit
             // 
             this.MenuItemLaborEdit.Name = "MenuItemLaborEdit";
             this.MenuItemLaborEdit.Size = new System.Drawing.Size(165, 22);
             this.MenuItemLaborEdit.Text = "編輯現有工人別";
-            this.MenuItemLaborEdit.Click += new System.EventHandler(this.MenuItemLaborEdit_Click);
+            this.MenuItemLaborEdit.Click += new System.EventHandler(this.EventMenuItemLaborEdit_Click);
             // 
             // MenuItemToolManage
             // 
@@ -262,14 +264,14 @@
             this.MenuItemToolIncrease.Name = "MenuItemToolIncrease";
             this.MenuItemToolIncrease.Size = new System.Drawing.Size(152, 22);
             this.MenuItemToolIncrease.Text = "新增機具";
-            this.MenuItemToolIncrease.Click += new System.EventHandler(this.MenuItemToolIncrease_Click);
+            this.MenuItemToolIncrease.Click += new System.EventHandler(this.EventMenuItemToolIncrease_Click);
             // 
             // MenuItemToolEdit
             // 
             this.MenuItemToolEdit.Name = "MenuItemToolEdit";
             this.MenuItemToolEdit.Size = new System.Drawing.Size(152, 22);
             this.MenuItemToolEdit.Text = "編輯現有機具";
-            this.MenuItemToolEdit.Click += new System.EventHandler(this.MenuItemToolEdit_Click);
+            this.MenuItemToolEdit.Click += new System.EventHandler(this.EventMenuItemToolEdit_Click);
             // 
             // MenuItemProcessCode
             // 
@@ -285,14 +287,14 @@
             this.MenuItemProcessCodeIncrease.Name = "MenuItemProcessCodeIncrease";
             this.MenuItemProcessCodeIncrease.Size = new System.Drawing.Size(178, 22);
             this.MenuItemProcessCodeIncrease.Text = "新增施工項目";
-            this.MenuItemProcessCodeIncrease.Click += new System.EventHandler(this.MenuItemProcessCodeIncrease_Click);
+            this.MenuItemProcessCodeIncrease.Click += new System.EventHandler(this.EventMenuItemProcessCodeIncrease_Click);
             // 
             // MenuItemProcessCodeEdit
             // 
             this.MenuItemProcessCodeEdit.Name = "MenuItemProcessCodeEdit";
             this.MenuItemProcessCodeEdit.Size = new System.Drawing.Size(178, 22);
             this.MenuItemProcessCodeEdit.Text = "編輯現有施工項目";
-            this.MenuItemProcessCodeEdit.Click += new System.EventHandler(this.MenuItemProcessCodeEdit_Click);
+            this.MenuItemProcessCodeEdit.Click += new System.EventHandler(this.EventMenuItemProcessCodeEdit_Click);
             // 
             // MenuItemEmployeeManage
             // 
@@ -308,14 +310,14 @@
             this.MenuItemEmployeeIncrease.Name = "MenuItemEmployeeIncrease";
             this.MenuItemEmployeeIncrease.Size = new System.Drawing.Size(152, 22);
             this.MenuItemEmployeeIncrease.Text = "新增人事";
-            this.MenuItemEmployeeIncrease.Click += new System.EventHandler(this.MenuItemEmployeeIncrease_Click);
+            this.MenuItemEmployeeIncrease.Click += new System.EventHandler(this.EventMenuItemEmployeeIncrease_Click);
             // 
             // MenuItemEmployeeEdit
             // 
             this.MenuItemEmployeeEdit.Name = "MenuItemEmployeeEdit";
             this.MenuItemEmployeeEdit.Size = new System.Drawing.Size(152, 22);
             this.MenuItemEmployeeEdit.Text = "編輯現有人事";
-            this.MenuItemEmployeeEdit.Click += new System.EventHandler(this.MenuItemEmployeeEdit_Click);
+            this.MenuItemEmployeeEdit.Click += new System.EventHandler(this.EventMenuItemEmployeeEdit_Click);
             // 
             // toolStripSeparator3
             // 
@@ -327,7 +329,7 @@
             this.MenuItemHolidayManage.Name = "MenuItemHolidayManage";
             this.MenuItemHolidayManage.Size = new System.Drawing.Size(178, 22);
             this.MenuItemHolidayManage.Text = "例假日管理作業";
-            this.MenuItemHolidayManage.Click += new System.EventHandler(this.MenuItemHolidayManage_Click);
+            this.MenuItemHolidayManage.Click += new System.EventHandler(this.EventMenuItemHolidayManage_Click);
             // 
             // MenuItemDailyReport
             // 
@@ -345,14 +347,14 @@
             this.MenuItemDailyReportBuild.Name = "MenuItemDailyReportBuild";
             this.MenuItemDailyReportBuild.Size = new System.Drawing.Size(191, 22);
             this.MenuItemDailyReportBuild.Text = "日報表建檔作業";
-            this.MenuItemDailyReportBuild.Click += new System.EventHandler(this.MenuItemDailyReportBuild_Click);
+            this.MenuItemDailyReportBuild.Click += new System.EventHandler(this.EventMenuItemDailyReportBuild_Click);
             // 
             // MenuItemDailyReportEdit
             // 
             this.MenuItemDailyReportEdit.Name = "MenuItemDailyReportEdit";
             this.MenuItemDailyReportEdit.Size = new System.Drawing.Size(191, 22);
             this.MenuItemDailyReportEdit.Text = "日報表重新作業系統";
-            this.MenuItemDailyReportEdit.Click += new System.EventHandler(this.MenuItemDailyReportEdit_Click);
+            this.MenuItemDailyReportEdit.Click += new System.EventHandler(this.EventMenuItemDailyReportEdit_Click);
             // 
             // MenuItemDailyReportCheck
             // 
@@ -592,6 +594,13 @@
             this.labelProject.TabIndex = 6;
             this.labelProject.Text = "無";
             // 
+            // 標單處理ToolStripMenuItem
+            // 
+            this.標單處理ToolStripMenuItem.Name = "標單處理ToolStripMenuItem";
+            this.標單處理ToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.標單處理ToolStripMenuItem.Text = "標單處理";
+            this.標單處理ToolStripMenuItem.Click += new System.EventHandler(this.標單處理ToolStripMenuItem_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -678,6 +687,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label labelProject;
         private System.Windows.Forms.ToolStripMenuItem MenuItemEepectFinishChart;
+        private System.Windows.Forms.ToolStripMenuItem 標單處理ToolStripMenuItem;
     }
 }
 

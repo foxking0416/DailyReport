@@ -16,7 +16,7 @@ namespace HuaChun_DailyReport
         private MySQL g_Sql;
         private string g_strProjectNo = "";
 
-        LoginForm loginForm;
+        LoginForm formLogin;
         public Main()
         {
             InitializeComponent();
@@ -29,113 +29,113 @@ namespace HuaChun_DailyReport
         //MenuItem Click Event
 
         //登入登出
-        private void MenuItemLogin_Click(object sender, EventArgs e)
+        private void EventMenuItemLogin_Click(object sender, EventArgs e)
         {
-            loginForm = new LoginForm(this, g_Sql);
-            loginForm.ShowDialog();
+            formLogin = new LoginForm(this, g_Sql);
+            formLogin.ShowDialog();
         }
 
-        private void MenuItemLogout_Click(object sender, EventArgs e)
+        private void EventMenuItemLogout_Click(object sender, EventArgs e)
         {
             Logout();
         }
         //選擇專案
-        private void MenuItemSelectProject_Click(object sender, EventArgs e)
+        private void EventMenuItemSelectProject_Click(object sender, EventArgs e)
         {
-            ProjectSearchForm form = new ProjectSearchForm(this, g_Sql);
-            form.ShowDialog();
+            ProjectSearchForm formProjectSearch = new ProjectSearchForm(this, g_Sql);
+            formProjectSearch.ShowDialog();
         }
 
         //基本資料維護
-        private void MenuItemProjectIncrease_Click(object sender, EventArgs e)
+        private void EventMenuItemProjectIncrease_Click(object sender, EventArgs e)
         {
-            ProjectIncreaseForm form = new ProjectIncreaseForm(g_Sql);
-            form.ShowDialog();
+            ProjectIncreaseForm formProjectIncrease = new ProjectIncreaseForm(g_Sql);
+            formProjectIncrease.ShowDialog();
         }
 
-        private void MenuItemProjectEdit_Click(object sender, EventArgs e)
+        private void EventMenuItemProjectEdit_Click(object sender, EventArgs e)
         {
-            ProjectEditForm form = new ProjectEditForm(g_Sql);
-            form.ShowDialog();
+            ProjectEditForm formProjectEdit = new ProjectEditForm(g_Sql);
+            formProjectEdit.ShowDialog();
         }
 
-        private void MenuItemVendorIncrease_Click(object sender, EventArgs e)
+        private void EventMenuItemVendorIncrease_Click(object sender, EventArgs e)
         {
-            VendorIncreaseForm form = new VendorIncreaseForm(g_Sql);
-            form.ShowDialog();
+            VendorIncreaseForm formVendorIncrease = new VendorIncreaseForm(g_Sql);
+            formVendorIncrease.ShowDialog();
         }
 
-        private void MenuItemVendorEdit_Click(object sender, EventArgs e)
+        private void EventMenuItemVendorEdit_Click(object sender, EventArgs e)
         {
-            VendorEditForm form = new VendorEditForm(g_Sql);
-            form.ShowDialog();
+            VendorEditForm formVendorEdit = new VendorEditForm(g_Sql);
+            formVendorEdit.ShowDialog();
         }
 
-        private void MenuItemMaterialIncrease_Click(object sender, EventArgs e)
+        private void EventMenuItemMaterialIncrease_Click(object sender, EventArgs e)
         {
-            MaterialIncreaseForm materialIncreaseForm = new MaterialIncreaseForm(g_Sql);
-            materialIncreaseForm.ShowDialog();
+            MaterialIncreaseForm formMaterialIncrease = new MaterialIncreaseForm(g_Sql);
+            formMaterialIncrease.ShowDialog();
         }
 
-        private void MenuItemMaterialEdit_Click(object sender, EventArgs e)
+        private void EventMenuItemMaterialEdit_Click(object sender, EventArgs e)
         {
-            MaterialEditForm materialEditForm = new MaterialEditForm(g_Sql);
-            materialEditForm.ShowDialog();
+            MaterialEditForm formMaterialEdit = new MaterialEditForm(g_Sql);
+            formMaterialEdit.ShowDialog();
         }
 
-        private void MenuItemToolIncrease_Click(object sender, EventArgs e)
+        private void EventMenuItemToolIncrease_Click(object sender, EventArgs e)
         {
-            ToolIncreaseForm toolIncreaseForm = new ToolIncreaseForm(g_Sql);
-            toolIncreaseForm.ShowDialog();
+            ToolIncreaseForm formToolIncrease = new ToolIncreaseForm(g_Sql);
+            formToolIncrease.ShowDialog();
         }
 
-        private void MenuItemToolEdit_Click(object sender, EventArgs e)
+        private void EventMenuItemToolEdit_Click(object sender, EventArgs e)
         {
-            ToolEditForm toolEditForm = new ToolEditForm(g_Sql);
-            toolEditForm.ShowDialog();
+            ToolEditForm formToolEdit = new ToolEditForm(g_Sql);
+            formToolEdit.ShowDialog();
         }
 
-        private void MenuItemLaborIncrease_Click(object sender, EventArgs e)
+        private void EventMenuItemLaborIncrease_Click(object sender, EventArgs e)
         {
             //新增工人別
-            LaborIncreaseForm laborIncreaseForm = new LaborIncreaseForm(g_Sql);
-            laborIncreaseForm.ShowDialog();
+            LaborIncreaseForm formLaborIncrease = new LaborIncreaseForm(g_Sql);
+            formLaborIncrease.ShowDialog();
         }
 
-        private void MenuItemLaborEdit_Click(object sender, EventArgs e)
+        private void EventMenuItemLaborEdit_Click(object sender, EventArgs e)
         {
-            LaborEditForm laborEditForm = new LaborEditForm(g_Sql);
-            laborEditForm.ShowDialog();
+            LaborEditForm formLaborEdit = new LaborEditForm(g_Sql);
+            formLaborEdit.ShowDialog();
         }
 
-        private void MenuItemEmployeeIncrease_Click(object sender, EventArgs e)
+        private void EventMenuItemEmployeeIncrease_Click(object sender, EventArgs e)
         {
-            MemberIncreaseForm form = new MemberIncreaseForm(g_Sql);
-            form.ShowDialog();
+            MemberIncreaseForm formMemberIncrease = new MemberIncreaseForm(g_Sql);
+            formMemberIncrease.ShowDialog();
         }
 
-        private void MenuItemEmployeeEdit_Click(object sender, EventArgs e)
+        private void EventMenuItemEmployeeEdit_Click(object sender, EventArgs e)
         {
-            MemberEditForm form = new MemberEditForm(g_Sql);
-            form.ShowDialog();
+            MemberEditForm formMemberEdit = new MemberEditForm(g_Sql);
+            formMemberEdit.ShowDialog();
         }
 
-        private void MenuItemHolidayManage_Click(object sender, EventArgs e)
+        private void EventMenuItemHolidayManage_Click(object sender, EventArgs e)
         {
-            HolidaySettingForm holidaySettingForm = new HolidaySettingForm(g_Sql);
-            holidaySettingForm.ShowDialog();
+            HolidaySettingForm formHolidaySetting = new HolidaySettingForm(g_Sql);
+            formHolidaySetting.ShowDialog();
         }
 
-        private void MenuItemProcessCodeIncrease_Click(object sender, EventArgs e)
+        private void EventMenuItemProcessCodeIncrease_Click(object sender, EventArgs e)
         {
-            ProcessCodeIncreaseForm processCodeIncreaseForm = new ProcessCodeIncreaseForm(g_Sql);
-            processCodeIncreaseForm.ShowDialog();
+            ProcessCodeIncreaseForm formProcessCodeIncrease = new ProcessCodeIncreaseForm(g_Sql);
+            formProcessCodeIncrease.ShowDialog();
         }
 
-        private void MenuItemProcessCodeEdit_Click(object sender, EventArgs e)
+        private void EventMenuItemProcessCodeEdit_Click(object sender, EventArgs e)
         {
-            ProcessCodeEditForm processCodeEditForm = new ProcessCodeEditForm(g_Sql);
-            processCodeEditForm.ShowDialog();
+            ProcessCodeEditForm formProcessCodeEdit = new ProcessCodeEditForm(g_Sql);
+            formProcessCodeEdit.ShowDialog();
         }
 
         private void MenuItemHolidayName_Click(object sender, EventArgs e)
@@ -146,13 +146,13 @@ namespace HuaChun_DailyReport
 
 
         //日報表作業
-        private void MenuItemDailyReportBuild_Click(object sender, EventArgs e)
+        private void EventMenuItemDailyReportBuild_Click(object sender, EventArgs e)
         {
-            DailyReportIncreaseForm reportBuildForm = new DailyReportIncreaseForm(g_strProjectNo, g_Sql);
-            reportBuildForm.ShowDialog();
+            DailyReportIncreaseForm formDailyReportIncrease = new DailyReportIncreaseForm(g_strProjectNo, g_Sql);
+            formDailyReportIncrease.ShowDialog();
         }
 
-        private void MenuItemDailyReportEdit_Click(object sender, EventArgs e)
+        private void EventMenuItemDailyReportEdit_Click(object sender, EventArgs e)
         {
             string[] reportDates = g_Sql.Read1DArray_SQL_Data("date", "dailyreport", "project_no ='" + g_strProjectNo + "' ORDER BY date DESC");
             if (reportDates.Length == 0)//表示這個工程目前並沒有輸入任何日報表
@@ -307,10 +307,8 @@ namespace HuaChun_DailyReport
 
         private void button1_Click(object sender, EventArgs e)
         {
-           string test = g_Sql.Read_SQL_data("", "project_info", "project_no = 'A01'");
-           string[] arrtest = g_Sql.Read1DArray_SQL_Data("project_no, contract_no, project_name", "project_info", "project_no = 'A01'");
-           string artest = g_Sql.Read_SQL_data("project_no, contract_no, project_name", "project_info", "project_no = 'A01'");
-           bool stop = true;
+            BiddingForm form = new BiddingForm();
+            form.Show();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -329,6 +327,12 @@ namespace HuaChun_DailyReport
             this.MenuItemDailyReport.Enabled = true;
             this.MenuItemQuery.Enabled = true;
 
+        }
+
+        private void 標單處理ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            BiddingForm form = new BiddingForm();
+            form.Show();
         }
 
 
