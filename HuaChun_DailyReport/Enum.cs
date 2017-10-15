@@ -10,4 +10,12 @@ namespace HuaChun_DailyReport
         WeatherChart = 0,
         ExpectFinishChart
     };
+
+    enum AuthorityLevle
+    {
+        NON = 0,
+        GENERAL_EMPLOYEE,
+        MANAGER,
+        POWER_USE,
+    };
 }

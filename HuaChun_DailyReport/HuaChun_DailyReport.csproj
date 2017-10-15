@@ -82,69 +82,69 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassExcelGenerator.cs" />
-    <Compile Include="DailyReportEditForm.cs">
+    <Compile Include="3.DailyReport\DailyReportEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DailyReportEditForm.Designer.cs">
+    <Compile Include="3.DailyReport\DailyReportEditForm.Designer.cs">
       <DependentUpon>DailyReportEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Enum.cs" />
-    <Compile Include="ExtentionEditForm.cs">
+    <Compile Include="2.BasicInfo\ProjectManage\Extention\ExtentionEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ExtentionEditForm.Designer.cs">
+    <Compile Include="2.BasicInfo\ProjectManage\Extention\ExtentionEditForm.Designer.cs">
       <DependentUpon>ExtentionEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExtentionIncreaseForm.cs">
+    <Compile Include="2.BasicInfo\ProjectManage\Extention\ExtentionIncreaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ExtentionIncreaseForm.Designer.cs">
+    <Compile Include="2.BasicInfo\ProjectManage\Extention\ExtentionIncreaseForm.Designer.cs">
       <DependentUpon>ExtentionIncreaseForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AppSetting.cs" />
+    <Compile Include="0.Base\MySQL\AppSetting.cs" />
     <Compile Include="ClassPDFGenerator.cs" />
     <Compile Include="DayCompute.cs" />
-    <Compile Include="EditFormBase.cs">
+    <Compile Include="0.Base\EditFormBase.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EditFormBase.Designer.cs">
+    <Compile Include="0.Base\EditFormBase.Designer.cs">
       <DependentUpon>EditFormBase.cs</DependentUpon>
     </Compile>
     <Compile Include="Functions.cs" />
-    <Compile Include="HolidaySettingForm.cs">
+    <Compile Include="2.BasicInfo\HolidaySettingForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HolidaySettingForm.Designer.cs">
+    <Compile Include="2.BasicInfo\HolidaySettingForm.Designer.cs">
       <DependentUpon>HolidaySettingForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="IncreaseEditFormBase.cs">
+    <Compile Include="0.Base\IncreaseEditFormBase.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="IncreaseEditFormBase.Designer.cs">
+    <Compile Include="0.Base\IncreaseEditFormBase.Designer.cs">
       <DependentUpon>IncreaseEditFormBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="LaborEditForm.cs">
+    <Compile Include="2.BasicInfo\Labor\LaborEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LaborEditForm.Designer.cs">
+    <Compile Include="2.BasicInfo\Labor\LaborEditForm.Designer.cs">
       <DependentUpon>LaborEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="LaborIncreaseForm.cs">
+    <Compile Include="2.BasicInfo\Labor\LaborIncreaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LaborIncreaseForm.Designer.cs">
+    <Compile Include="2.BasicInfo\Labor\LaborIncreaseForm.Designer.cs">
       <DependentUpon>LaborIncreaseForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="LaborSearchForm.cs">
+    <Compile Include="2.BasicInfo\Labor\LaborSearchForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LaborSearchForm.Designer.cs">
+    <Compile Include="2.BasicInfo\Labor\LaborSearchForm.Designer.cs">
       <DependentUpon>LaborSearchForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="LoginForm.cs">
+    <Compile Include="1.LogIn_Out\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LoginForm.Designer.cs">
+    <Compile Include="1.LogIn_Out\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Main.cs">
@@ -153,223 +153,220 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="MaterialEditForm.cs">
+    <Compile Include="2.BasicInfo\Material\MaterialEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MaterialEditForm.Designer.cs">
+    <Compile Include="2.BasicInfo\Material\MaterialEditForm.Designer.cs">
       <DependentUpon>MaterialEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MaterialIncreaseForm.cs">
+    <Compile Include="2.BasicInfo\Material\MaterialIncreaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MaterialIncreaseForm.Designer.cs">
+    <Compile Include="2.BasicInfo\Material\MaterialIncreaseForm.Designer.cs">
       <DependentUpon>MaterialIncreaseForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MaterialSearchForm.cs">
+    <Compile Include="2.BasicInfo\Material\MaterialSearchForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MaterialSearchForm.Designer.cs">
+    <Compile Include="2.BasicInfo\Material\MaterialSearchForm.Designer.cs">
       <DependentUpon>MaterialSearchForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MemberEditForm.cs">
+    <Compile Include="2.BasicInfo\Member\MemberEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MemberEditForm.Designer.cs">
+    <Compile Include="2.BasicInfo\Member\MemberEditForm.Designer.cs">
       <DependentUpon>MemberEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MemberSearchForm.cs">
+    <Compile Include="2.BasicInfo\Member\MemberSearchForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MemberSearchForm.Designer.cs">
+    <Compile Include="2.BasicInfo\Member\MemberSearchForm.Designer.cs">
       <DependentUpon>MemberSearchForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProcessCodeEditForm.cs">
+    <Compile Include="2.BasicInfo\ProcessCode\ProcessCodeEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ProcessCodeEditForm.Designer.cs">
+    <Compile Include="2.BasicInfo\ProcessCode\ProcessCodeEditForm.Designer.cs">
       <DependentUpon>ProcessCodeEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProcessCodeIncreaseForm.cs">
+    <Compile Include="2.BasicInfo\ProcessCode\ProcessCodeIncreaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ProcessCodeIncreaseForm.Designer.cs">
+    <Compile Include="2.BasicInfo\ProcessCode\ProcessCodeIncreaseForm.Designer.cs">
       <DependentUpon>ProcessCodeIncreaseForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProcessCodeSearchForm.cs">
+    <Compile Include="2.BasicInfo\ProcessCode\ProcessCodeSearchForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ProcessCodeSearchForm.Designer.cs">
+    <Compile Include="2.BasicInfo\ProcessCode\ProcessCodeSearchForm.Designer.cs">
       <DependentUpon>ProcessCodeSearchForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProgressForm.cs">
+    <Compile Include="2.BasicInfo\ProjectManage\ProjectEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ProgressForm.Designer.cs">
-      <DependentUpon>ProgressForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ProjectEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ProjectEditForm.Designer.cs">
+    <Compile Include="2.BasicInfo\ProjectManage\ProjectEditForm.Designer.cs">
       <DependentUpon>ProjectEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProjectSearchForm.cs">
+    <Compile Include="2.BasicInfo\ProjectManage\ProjectSearchForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ProjectSearchForm.Designer.cs">
+    <Compile Include="2.BasicInfo\ProjectManage\ProjectSearchForm.Designer.cs">
       <DependentUpon>ProjectSearchForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="QueryDailyReportListForm.cs">
+    <Compile Include="4.Query\QueryDailyReportListForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="QueryDailyReportListForm.Designer.cs">
+    <Compile Include="4.Query\QueryDailyReportListForm.Designer.cs">
       <DependentUpon>QueryDailyReportListForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="QueryFinishForm.cs">
+    <Compile Include="4.Query\QueryFinishForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="QueryFinishForm.Designer.cs">
+    <Compile Include="4.Query\QueryFinishForm.Designer.cs">
       <DependentUpon>QueryFinishForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="QueryFormBase.cs">
+    <Compile Include="4.Query\QueryFormBase.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="QueryFormBase.Designer.cs">
+    <Compile Include="4.Query\QueryFormBase.Designer.cs">
       <DependentUpon>QueryFormBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="QueryNonworkingDayChartForm.cs">
+    <Compile Include="4.Query\QueryNonworkingDayChartForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="QueryNonworkingDayChartForm.Designer.cs">
+    <Compile Include="4.Query\QueryNonworkingDayChartForm.Designer.cs">
       <DependentUpon>QueryNonworkingDayChartForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="QueryNonworkingDayDetailForm.cs">
+    <Compile Include="4.Query\QueryNonworkingDayDetailForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="QueryNonworkingDayDetailForm.Designer.cs">
+    <Compile Include="4.Query\QueryNonworkingDayDetailForm.Designer.cs">
       <DependentUpon>QueryNonworkingDayDetailForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="QueryNonworkingDayStatisticForm.cs">
+    <Compile Include="4.Query\QueryNonworkingDayStatisticForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="QueryNonworkingDayStatisticForm.Designer.cs">
+    <Compile Include="4.Query\QueryNonworkingDayStatisticForm.Designer.cs">
       <DependentUpon>QueryNonworkingDayStatisticForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="QueryWeatherChartForm.cs">
+    <Compile Include="4.Query\QueryWeatherChartForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="QueryWeatherChartForm.Designer.cs">
+    <Compile Include="4.Query\QueryWeatherChartForm.Designer.cs">
       <DependentUpon>QueryWeatherChartForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SearchFormBase.cs">
+    <Compile Include="0.Base\SearchFormBase.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SearchFormBase.Designer.cs">
+    <Compile Include="0.Base\SearchFormBase.Designer.cs">
       <DependentUpon>SearchFormBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="MemberIncreaseForm.cs">
+    <Compile Include="2.BasicInfo\Member\MemberIncreaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MemberIncreaseForm.Designer.cs">
+    <Compile Include="2.BasicInfo\Member\MemberIncreaseForm.Designer.cs">
       <DependentUpon>MemberIncreaseForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MySQL.cs" />
+    <Compile Include="0.Base\MySQL\MySQL.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="ProjectIncreaseForm.cs">
+    <Compile Include="2.BasicInfo\ProjectManage\ProjectIncreaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ProjectIncreaseForm.Designer.cs">
+    <Compile Include="2.BasicInfo\ProjectManage\ProjectIncreaseForm.Designer.cs">
       <DependentUpon>ProjectIncreaseForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DailyReportIncreaseForm.cs">
+    <Compile Include="3.DailyReport\DailyReportIncreaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DailyReportIncreaseForm.Designer.cs">
+    <Compile Include="3.DailyReport\DailyReportIncreaseForm.Designer.cs">
       <DependentUpon>DailyReportIncreaseForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ToolEditForm.cs">
+    <Compile Include="TendorManageForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ToolEditForm.Designer.cs">
+    <Compile Include="TendorManageForm.Designer.cs">
+      <DependentUpon>TendorManageForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="2.BasicInfo\Tool\ToolEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2.BasicInfo\Tool\ToolEditForm.Designer.cs">
       <DependentUpon>ToolEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ToolIncreaseForm.cs">
+    <Compile Include="2.BasicInfo\Tool\ToolIncreaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ToolIncreaseForm.Designer.cs">
+    <Compile Include="2.BasicInfo\Tool\ToolIncreaseForm.Designer.cs">
       <DependentUpon>ToolIncreaseForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ToolSearchForm.cs">
+    <Compile Include="2.BasicInfo\Tool\ToolSearchForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ToolSearchForm.Designer.cs">
+    <Compile Include="2.BasicInfo\Tool\ToolSearchForm.Designer.cs">
       <DependentUpon>ToolSearchForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="VendorSearchForm.cs">
+    <Compile Include="2.BasicInfo\Vendor\VendorSearchForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="VendorSearchForm.Designer.cs">
+    <Compile Include="2.BasicInfo\Vendor\VendorSearchForm.Designer.cs">
       <DependentUpon>VendorSearchForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="VendorEditForm.cs">
+    <Compile Include="2.BasicInfo\Vendor\VendorEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="VendorEditForm.Designer.cs">
+    <Compile Include="2.BasicInfo\Vendor\VendorEditForm.Designer.cs">
       <DependentUpon>VendorEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="VendorIncreaseForm.cs">
+    <Compile Include="2.BasicInfo\Vendor\VendorIncreaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="VendorIncreaseForm.Designer.cs">
+    <Compile Include="2.BasicInfo\Vendor\VendorIncreaseForm.Designer.cs">
       <DependentUpon>VendorIncreaseForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="ExtentionIncreaseForm.resx">
+    <EmbeddedResource Include="2.BasicInfo\ProjectManage\Extention\ExtentionIncreaseForm.resx">
       <DependentUpon>ExtentionIncreaseForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EditFormBase.resx">
+    <EmbeddedResource Include="0.Base\EditFormBase.resx">
       <DependentUpon>EditFormBase.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="HolidaySettingForm.resx">
+    <EmbeddedResource Include="2.BasicInfo\HolidaySettingForm.resx">
       <DependentUpon>HolidaySettingForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="IncreaseEditFormBase.resx">
+    <EmbeddedResource Include="0.Base\IncreaseEditFormBase.resx">
       <DependentUpon>IncreaseEditFormBase.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LoginForm.resx">
+    <EmbeddedResource Include="1.LogIn_Out\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MaterialSearchForm.resx">
+    <EmbeddedResource Include="2.BasicInfo\Material\MaterialSearchForm.resx">
       <DependentUpon>MaterialSearchForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ProgressForm.resx">
-      <DependentUpon>ProgressForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ProjectEditForm.resx">
+    <EmbeddedResource Include="2.BasicInfo\ProjectManage\ProjectEditForm.resx">
       <DependentUpon>ProjectEditForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="QueryFinishForm.resx">
+    <EmbeddedResource Include="4.Query\QueryFinishForm.resx">
       <DependentUpon>QueryFinishForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="QueryFormBase.resx">
+    <EmbeddedResource Include="4.Query\QueryFormBase.resx">
       <DependentUpon>QueryFormBase.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="QueryNonworkingDayChartForm.resx">
+    <EmbeddedResource Include="4.Query\QueryNonworkingDayChartForm.resx">
       <DependentUpon>QueryNonworkingDayChartForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="QueryWeatherChartForm.resx">
+    <EmbeddedResource Include="4.Query\QueryWeatherChartForm.resx">
       <DependentUpon>QueryWeatherChartForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SearchFormBase.resx">
+    <EmbeddedResource Include="0.Base\SearchFormBase.resx">
       <DependentUpon>SearchFormBase.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MemberIncreaseForm.resx">
+    <EmbeddedResource Include="2.BasicInfo\Member\MemberIncreaseForm.resx">
       <DependentUpon>MemberIncreaseForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ProjectIncreaseForm.resx">
+    <EmbeddedResource Include="2.BasicInfo\ProjectManage\ProjectIncreaseForm.resx">
       <DependentUpon>ProjectIncreaseForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -381,13 +378,16 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="DailyReportIncreaseForm.resx">
+    <EmbeddedResource Include="3.DailyReport\DailyReportIncreaseForm.resx">
       <DependentUpon>DailyReportIncreaseForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="VendorSearchForm.resx">
+    <EmbeddedResource Include="TendorManageForm.resx">
+      <DependentUpon>TendorManageForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2.BasicInfo\Vendor\VendorSearchForm.resx">
       <DependentUpon>VendorSearchForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="VendorIncreaseForm.resx">
+    <EmbeddedResource Include="2.BasicInfo\Vendor\VendorIncreaseForm.resx">
       <DependentUpon>VendorIncreaseForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
@@ -428,6 +428,9 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="4.Query\FileGenerate\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

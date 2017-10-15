@@ -27,7 +27,7 @@ namespace HuaChun_DailyReport
         float g_fStartPositionH = 37;
         float g_fCellHeight = 39.75f;
         float g_fStartPositionV = 174;
-        int g_iChartType = 0;
+        int g_nChartType = 0;
         Excel.Worksheet xlWorkSheet;
         Excel.Workbook xlWorkBook;
         
@@ -44,7 +44,7 @@ namespace HuaChun_DailyReport
             g_strProjectNo = strProjectNo;
             g_strPath = Directory.GetCurrentDirectory();
             g_strSavePath = strSavePath;
-            g_iChartType = iType;
+            g_nChartType = iType;
         }
 
         public void GenerateExcel()
@@ -80,7 +80,7 @@ namespace HuaChun_DailyReport
             bool bHasRealFinishDate = false;
             bool bRealFinishBeforeModifiedFinish = false;
 
-            if (g_iChartType == (int)ChartType.WeatherChart)
+            if (g_nChartType == (int)ChartType.WeatherChart)
             {
                 dtModifiedFinishDate = ComputeValidFinishDate(dtStartDate);
                 string strConfirmFinishDate = m_Sql.ReadSqlDataWithoutOpenClose("confirm_finishdate", "project_info", "project_no = '" + g_strProjectNo + "'");
@@ -111,7 +111,7 @@ namespace HuaChun_DailyReport
 
 
             }
-            else if (g_iChartType == (int)ChartType.ExpectFinishChart)
+            else if (g_nChartType == (int)ChartType.ExpectFinishChart)
             {
                 dtStopDate = dtContractEndDate;
             }
@@ -123,7 +123,7 @@ namespace HuaChun_DailyReport
             {
                 xlWorkSheet.Copy(Type.Missing, xlWorkBook.Sheets[xlWorkBook.Sheets.Count]); // copy
             }
-            if (g_iChartType == (int)ChartType.WeatherChart)
+            if (g_nChartType == (int)ChartType.WeatherChart)
             {
                 WriteDataIntoExcel(dtStartDate,
                                    dtStopDate,
@@ -134,7 +134,7 @@ namespace HuaChun_DailyReport
                                    bHasRealFinishDate,
                                    bRealFinishBeforeModifiedFinish);
             }
-            else if (g_iChartType == (int)ChartType.ExpectFinishChart)
+            else if (g_nChartType == (int)ChartType.ExpectFinishChart)
             {
                 WriteDataIntoExcel(dtStartDate,
                                    dtStopDate,
@@ -158,11 +158,11 @@ namespace HuaChun_DailyReport
             Marshal.ReleaseComObject(xlWorkBook);
             Marshal.ReleaseComObject(xlApp.Workbooks);
             Marshal.ReleaseComObject(xlApp);
-            if (g_iChartType == (int)ChartType.WeatherChart)
+            if (g_nChartType == (int)ChartType.WeatherChart)
             {
                 MessageBox.Show("晴雨表儲存完成", "完成");
             }
-            else if (g_iChartType == (int)ChartType.ExpectFinishChart)
+            else if (g_nChartType == (int)ChartType.ExpectFinishChart)
             {
                 MessageBox.Show("預計完工表儲存完成", "完成");
             }

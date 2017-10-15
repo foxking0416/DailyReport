@@ -17,8 +17,8 @@ Global
 		{78051F99-57FD-48BC-A263-4632C9469CFF}.Debug|x86.Build.0 = Debug|x86
 		{78051F99-57FD-48BC-A263-4632C9469CFF}.Release|x64.ActiveCfg = Release|x64
 		{78051F99-57FD-48BC-A263-4632C9469CFF}.Release|x64.Build.0 = Release|x64
-		{78051F99-57FD-48BC-A263-4632C9469CFF}.Release|x86.ActiveCfg = Release|x64
-		{78051F99-57FD-48BC-A263-4632C9469CFF}.Release|x86.Build.0 = Release|x64
+		{78051F99-57FD-48BC-A263-4632C9469CFF}.Release|x86.ActiveCfg = Release|x86
+		{78051F99-57FD-48BC-A263-4632C9469CFF}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
