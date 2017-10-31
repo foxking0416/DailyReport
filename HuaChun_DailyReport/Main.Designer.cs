@@ -34,8 +34,12 @@
             this.MenuItemLogout = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemSelectProject = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemBasicInfo = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemProjectManage = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemProjectIncrease = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemProjectEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemTenderManage = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemTendorIncrease = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemTendorEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.MenuItemVendorManage = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemVendorIncrease = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,7 +61,6 @@
             this.MenuItemEmployeeEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.MenuItemHolidayManage = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuItemTenderManage = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemDailyReport = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemDailyReportBuild = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemDailyReportEdit = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,7 +94,6 @@
             this.button3 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.labelProject = new System.Windows.Forms.Label();
-            this.MenuItemProjectManage = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -144,10 +146,8 @@
             // MenuItemBasicInfo
             // 
             this.MenuItemBasicInfo.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.MenuItemProjectIncrease,
             this.MenuItemProjectManage,
             this.MenuItemTenderManage,
-            this.MenuItemProjectEdit,
             this.toolStripSeparator1,
             this.MenuItemVendorManage,
             this.MenuItemMaterialManage,
@@ -162,19 +162,51 @@
             this.MenuItemBasicInfo.Size = new System.Drawing.Size(97, 20);
             this.MenuItemBasicInfo.Text = "基本資料維護";
             // 
+            // MenuItemProjectManage
+            // 
+            this.MenuItemProjectManage.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuItemProjectIncrease,
+            this.MenuItemProjectEdit});
+            this.MenuItemProjectManage.Name = "MenuItemProjectManage";
+            this.MenuItemProjectManage.Size = new System.Drawing.Size(178, 22);
+            this.MenuItemProjectManage.Text = "工程檔管理作業";
+            // 
             // MenuItemProjectIncrease
             // 
             this.MenuItemProjectIncrease.Name = "MenuItemProjectIncrease";
-            this.MenuItemProjectIncrease.Size = new System.Drawing.Size(178, 22);
+            this.MenuItemProjectIncrease.Size = new System.Drawing.Size(152, 22);
             this.MenuItemProjectIncrease.Text = "新增工程檔";
             this.MenuItemProjectIncrease.Click += new System.EventHandler(this.EventMainProjectIncrease_Click);
             // 
             // MenuItemProjectEdit
             // 
             this.MenuItemProjectEdit.Name = "MenuItemProjectEdit";
-            this.MenuItemProjectEdit.Size = new System.Drawing.Size(178, 22);
+            this.MenuItemProjectEdit.Size = new System.Drawing.Size(152, 22);
             this.MenuItemProjectEdit.Text = "編輯工程檔";
             this.MenuItemProjectEdit.Click += new System.EventHandler(this.EventMainProjectEdit_Click);
+            // 
+            // MenuItemTenderManage
+            // 
+            this.MenuItemTenderManage.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuItemTendorIncrease,
+            this.MenuItemTendorEdit});
+            this.MenuItemTenderManage.Name = "MenuItemTenderManage";
+            this.MenuItemTenderManage.Size = new System.Drawing.Size(178, 22);
+            this.MenuItemTenderManage.Text = "標單處理";
+            // 
+            // MenuItemTendorIncrease
+            // 
+            this.MenuItemTendorIncrease.Name = "MenuItemTendorIncrease";
+            this.MenuItemTendorIncrease.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemTendorIncrease.Text = "新增標單";
+            this.MenuItemTendorIncrease.Click += new System.EventHandler(this.EventMainTendorIncrease_Click);
+            // 
+            // MenuItemTendorEdit
+            // 
+            this.MenuItemTendorEdit.Name = "MenuItemTendorEdit";
+            this.MenuItemTendorEdit.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemTendorEdit.Text = "編輯標單";
+            this.MenuItemTendorEdit.Click += new System.EventHandler(this.EventMainTendorEdit_Click);
             // 
             // toolStripSeparator1
             // 
@@ -330,13 +362,6 @@
             this.MenuItemHolidayManage.Size = new System.Drawing.Size(178, 22);
             this.MenuItemHolidayManage.Text = "例假日管理作業";
             this.MenuItemHolidayManage.Click += new System.EventHandler(this.EventMainHolidayManage_Click);
-            // 
-            // MenuItemTenderManage
-            // 
-            this.MenuItemTenderManage.Name = "MenuItemTenderManage";
-            this.MenuItemTenderManage.Size = new System.Drawing.Size(178, 22);
-            this.MenuItemTenderManage.Text = "標單處理";
-            this.MenuItemTenderManage.Click += new System.EventHandler(this.EventMainTenderManage_Click);
             // 
             // MenuItemDailyReport
             // 
@@ -601,15 +626,6 @@
             this.labelProject.TabIndex = 6;
             this.labelProject.Text = "無";
             // 
-            // MenuItemProjectManage
-            // 
-            this.MenuItemProjectManage.DropDownItems.AddRange( new System.Windows.Forms.ToolStripItem [] {
-            this.MenuItemProjectIncrease,
-            this.MenuItemProjectEdit} );
-            this.MenuItemProjectManage.Name = "MenuItemProjectManage";
-            this.MenuItemProjectManage.Size = new System.Drawing.Size(178, 22);
-            this.MenuItemProjectManage.Text = "工程檔管理作業";
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -648,8 +664,6 @@
         private System.Windows.Forms.ToolStripMenuItem MenuItemLogout;
         private System.Drawing.Printing.PrintDocument printDocument1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.ToolStripMenuItem MenuItemProjectIncrease;
-        private System.Windows.Forms.ToolStripMenuItem MenuItemProjectEdit;
         private System.Windows.Forms.ToolStripMenuItem MenuItemVendorManage;
         private System.Windows.Forms.ToolStripMenuItem MenuItemMaterialManage;
         private System.Windows.Forms.ToolStripMenuItem MenuItemLaborManage;
@@ -698,6 +712,10 @@
         private System.Windows.Forms.ToolStripMenuItem MenuItemEepectFinishChart;
         private System.Windows.Forms.ToolStripMenuItem MenuItemTenderManage;
         private System.Windows.Forms.ToolStripMenuItem MenuItemProjectManage;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemProjectIncrease;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemProjectEdit;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemTendorIncrease;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemTendorEdit;
     }
 }
 

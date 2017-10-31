@@ -58,6 +58,19 @@ namespace HuaChun_DailyReport
             formProjectEdit.ShowDialog();
         }
 
+        //新增標單
+        private void EventMainTendorIncrease_Click( object sender, EventArgs e )
+        {
+
+        }
+
+        //編輯標單
+        private void EventMainTendorEdit_Click( object sender, EventArgs e )
+        {
+
+        }
+
+
         private void EventMainVendorIncrease_Click(object sender, EventArgs e)
         {
             VendorIncreaseForm formVendorIncrease = new VendorIncreaseForm(g_Sql);
@@ -339,14 +352,6 @@ namespace HuaChun_DailyReport
             this.MenuItemDailyReport.Enabled = true;
             this.MenuItemQuery.Enabled = true;
         }
-
-        private void EventMainTenderManage_Click(object sender, EventArgs e)
-        {
-            bool b = true;
-
-
-        }
-
 
 
  
