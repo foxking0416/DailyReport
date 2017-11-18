@@ -27,13 +27,14 @@ namespace HuaChun_DailyReport
 
         }
 
-        //登入登出
+        #region 登入/登出
+        //登入
         private void EventMainLogin_Click(object sender, EventArgs e)
         {
             formLogin = new LoginForm(this, g_Sql);
             formLogin.ShowDialog();
         }
-
+        //登出
         private void EventMainLogout_Click(object sender, EventArgs e)
         {
             Logout();
@@ -44,119 +45,137 @@ namespace HuaChun_DailyReport
             ProjectSearchForm formProjectSearch = new ProjectSearchForm(this, g_Sql);
             formProjectSearch.ShowDialog();
         }
+        #endregion
 
+        #region 基本資料維護
         //基本資料維護
+        //新增工程
         private void EventMainProjectIncrease_Click(object sender, EventArgs e)
         {
             ProjectIncreaseForm formProjectIncrease = new ProjectIncreaseForm(g_Sql);
             formProjectIncrease.ShowDialog();
         }
-
+        //編輯工程
         private void EventMainProjectEdit_Click(object sender, EventArgs e)
         {
             ProjectEditForm formProjectEdit = new ProjectEditForm(g_Sql);
             formProjectEdit.ShowDialog();
         }
-
         //新增標單
         private void EventMainTendorIncrease_Click( object sender, EventArgs e )
         {
-
+            TendorManageForm formTendorManage = new TendorManageForm( g_Sql );
+            formTendorManage.ShowDialog();
         }
-
         //編輯標單
         private void EventMainTendorEdit_Click( object sender, EventArgs e )
         {
 
         }
-
-
+        //新增廠商
         private void EventMainVendorIncrease_Click(object sender, EventArgs e)
         {
             VendorIncreaseForm formVendorIncrease = new VendorIncreaseForm(g_Sql);
             formVendorIncrease.ShowDialog();
         }
-
+        //編輯廠商
         private void EventMainVendorEdit_Click(object sender, EventArgs e)
         {
             VendorEditForm formVendorEdit = new VendorEditForm(g_Sql);
             formVendorEdit.ShowDialog();
         }
-
+        //新增材料
         private void EventMainMaterialIncrease_Click(object sender, EventArgs e)
         {
             MaterialIncreaseForm formMaterialIncrease = new MaterialIncreaseForm(g_Sql);
             formMaterialIncrease.ShowDialog();
         }
-
+        //編輯材料
         private void EventMainMaterialEdit_Click(object sender, EventArgs e)
         {
             MaterialEditForm formMaterialEdit = new MaterialEditForm(g_Sql);
             formMaterialEdit.ShowDialog();
         }
-
+        //新增機具
         private void EventMainToolIncrease_Click(object sender, EventArgs e)
         {
             ToolIncreaseForm formToolIncrease = new ToolIncreaseForm(g_Sql);
             formToolIncrease.ShowDialog();
         }
-
+        //編輯機具
         private void EventMainToolEdit_Click(object sender, EventArgs e)
         {
             ToolEditForm formToolEdit = new ToolEditForm(g_Sql);
             formToolEdit.ShowDialog();
         }
-
+        //新增工人別
         private void EventMainLaborIncrease_Click(object sender, EventArgs e)
         {
             //新增工人別
             LaborIncreaseForm formLaborIncrease = new LaborIncreaseForm(g_Sql);
             formLaborIncrease.ShowDialog();
         }
-
+        //編輯工人別
         private void EventMainLaborEdit_Click(object sender, EventArgs e)
         {
             LaborEditForm formLaborEdit = new LaborEditForm(g_Sql);
             formLaborEdit.ShowDialog();
         }
-
+        //新增人事
         private void EventMainEmployeeIncrease_Click(object sender, EventArgs e)
         {
             MemberIncreaseForm formMemberIncrease = new MemberIncreaseForm(g_Sql);
             formMemberIncrease.ShowDialog();
         }
-
+        //編輯現有人事
         private void EventMainEmployeeEdit_Click(object sender, EventArgs e)
         {
             MemberEditForm formMemberEdit = new MemberEditForm(g_Sql);
             formMemberEdit.ShowDialog();
         }
-
-        private void EventMainHolidayManage_Click(object sender, EventArgs e)
-        {
-            HolidaySettingForm formHolidaySetting = new HolidaySettingForm(g_Sql);
-            formHolidaySetting.ShowDialog();
-        }
-
+        //新增施工項目編碼
         private void EventMainProcessCodeIncrease_Click(object sender, EventArgs e)
         {
             ProcessCodeIncreaseForm formProcessCodeIncrease = new ProcessCodeIncreaseForm(g_Sql);
             formProcessCodeIncrease.ShowDialog();
         }
-
+        //編輯施工項目編碼
         private void EventMainProcessCodeEdit_Click(object sender, EventArgs e)
         {
             ProcessCodeEditForm formProcessCodeEdit = new ProcessCodeEditForm(g_Sql);
             formProcessCodeEdit.ShowDialog();
         }
+        //編輯假日
+        private void EventMainHolidayManage_Click( object sender, EventArgs e )
+        {
+            HolidaySettingForm formHolidaySetting = new HolidaySettingForm( g_Sql );
+            formHolidaySetting.ShowDialog();
+        }
+        #endregion
 
-        //日報表作業
-        private void EventMainDailyReportBuild_Click(object sender, EventArgs e)
+        #region 工程資料維護
+        //工程資料維護
+        private void EventVeriedFactor_Click( object sender, EventArgs e )
+        {
+            VariedFactorSettingForm formVariedFactorSetting = new VariedFactorSettingForm( g_Sql );
+            formVariedFactorSetting.ShowDialog();
+        }
+
+        private void EventConstantFactor_Click( object sender, EventArgs e )
+        {
+            ConstantFactorSettingForm formConstantFactorSetting = new ConstantFactorSettingForm( g_Sql );
+            formConstantFactorSetting.ShowDialog();
+        }
+        #endregion
+
+        #region 日報表作業
+        //新增日報表
+        private void EventMainDailyReportIncrease_Click(object sender, EventArgs e)
         {
             DailyReportIncreaseForm formDailyReportIncrease = new DailyReportIncreaseForm(g_strProjectNo, g_Sql);
             formDailyReportIncrease.ShowDialog();
         }
-
+        //編輯日報表
         private void EventMainDailyReportEdit_Click(object sender, EventArgs e)
         {
             string[] reportDates = g_Sql.Read1DArray_SQL_Data("date", "dailyreport", "project_no ='" + g_strProjectNo + "' ORDER BY date DESC");
@@ -170,13 +189,14 @@ namespace HuaChun_DailyReport
                 reportEditForm.ShowDialog();
             }
         }
-
+        //檢查日報表
         private void EventMainDailyReportCheck_Click(object sender, EventArgs e)
         {
 
         }
-        
+        #endregion
 
+        #region 查詢
         //查詢廠商明細表
         private void EventMainVendorList_Click(object sender, EventArgs e)
         {
@@ -260,6 +280,7 @@ namespace HuaChun_DailyReport
             QueryFinishForm queryFinishChartForm = new QueryFinishForm(g_strProjectNo, g_Sql);
             queryFinishChartForm.ShowDialog();
         }
+        #endregion
 
         private static void OnColumnChanged(object sender, DataColumnChangeEventArgs e)
         {
@@ -352,6 +373,8 @@ namespace HuaChun_DailyReport
             this.MenuItemDailyReport.Enabled = true;
             this.MenuItemQuery.Enabled = true;
         }
+
+ 
 
 
  
