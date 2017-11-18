@@ -12,7 +12,7 @@ namespace HuaChun_DailyReport
 {
     public partial class VariedFactorSettingForm : Form
     {
-        public VariedFactorSettingForm( MySQL Sql )
+        public VariedFactorSettingForm( string strProjectNo, MySQL Sql )
         {
             InitializeComponent();
         }

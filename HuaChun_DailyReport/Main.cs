@@ -157,13 +157,13 @@ namespace HuaChun_DailyReport
         //工程資料維護
         private void EventVeriedFactor_Click( object sender, EventArgs e )
         {
-            VariedFactorSettingForm formVariedFactorSetting = new VariedFactorSettingForm( g_Sql );
+            VariedFactorSettingForm formVariedFactorSetting = new VariedFactorSettingForm( g_strProjectNo, g_Sql );
             formVariedFactorSetting.ShowDialog();
         }
 
         private void EventConstantFactor_Click( object sender, EventArgs e )
         {
-            ConstantFactorSettingForm formConstantFactorSetting = new ConstantFactorSettingForm( g_Sql );
+            ConstantFactorSettingForm formConstantFactorSetting = new ConstantFactorSettingForm( g_strProjectNo, g_Sql );
             formConstantFactorSetting.ShowDialog();
         }
         #endregion
@@ -172,7 +172,7 @@ namespace HuaChun_DailyReport
         //新增日報表
         private void EventMainDailyReportIncrease_Click(object sender, EventArgs e)
         {
-            DailyReportIncreaseForm formDailyReportIncrease = new DailyReportIncreaseForm(g_strProjectNo, g_Sql);
+            DailyReportIncreaseForm formDailyReportIncrease = new DailyReportIncreaseForm( g_strProjectNo, g_Sql );
             formDailyReportIncrease.ShowDialog();
         }
         //編輯日報表

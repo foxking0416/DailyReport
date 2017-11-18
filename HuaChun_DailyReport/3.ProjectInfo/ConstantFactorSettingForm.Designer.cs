@@ -45,6 +45,7 @@
             this.btnExit = new System.Windows.Forms.Button();
             this.btnSaveExit = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -224,11 +225,21 @@
             this.label3.TabIndex = 6;
             this.label3.Text = "工程名稱";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(74, 23);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(35, 13);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "label4";
+            // 
             // ConstantFactorSettingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(655, 581);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.groupBox2);
@@ -269,6 +280,7 @@
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Button btnSaveExit;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
 
     }
 }

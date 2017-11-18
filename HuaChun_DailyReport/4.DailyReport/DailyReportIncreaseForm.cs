@@ -32,12 +32,12 @@ namespace HuaChun_DailyReport
         protected bool bDisableComboBoxWeatherAndCondition = false;
         protected bool bDisableDateToday = false;
 
-        public DailyReportIncreaseForm(string projectNo, MySQL Sql)
+        public DailyReportIncreaseForm( string strProjectNo, MySQL Sql )
         {
             m_Sql = Sql;
             InitializeComponent();
             Initialize();
-            LoadProjectInfo(projectNo);
+            LoadProjectInfo( strProjectNo );
         }
 
         public DailyReportIncreaseForm(bool lockDate, MySQL Sql)

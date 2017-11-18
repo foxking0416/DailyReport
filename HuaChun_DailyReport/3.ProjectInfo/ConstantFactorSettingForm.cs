@@ -11,9 +11,11 @@ namespace HuaChun_DailyReport
 {
     public partial class ConstantFactorSettingForm : Form
     {
-        public ConstantFactorSettingForm( MySQL Sql )
+        public ConstantFactorSettingForm( string strProjectNo, MySQL Sql )
         {
             InitializeComponent();
+
+
         }
 
         private void btnSave_Click( object sender, EventArgs e )
