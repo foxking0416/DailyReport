@@ -463,7 +463,7 @@
             this.btnSave.TabIndex = 50;
             this.btnSave.Text = "存檔";
             this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnSearchSponsor
             // 

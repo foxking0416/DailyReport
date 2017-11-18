@@ -129,14 +129,14 @@
             // MenuItemLogin
             // 
             this.MenuItemLogin.Name = "MenuItemLogin";
-            this.MenuItemLogin.Size = new System.Drawing.Size(126, 22);
+            this.MenuItemLogin.Size = new System.Drawing.Size(152, 22);
             this.MenuItemLogin.Text = "登入";
             this.MenuItemLogin.Click += new System.EventHandler(this.EventMainLogin_Click);
             // 
             // MenuItemLogout
             // 
             this.MenuItemLogout.Name = "MenuItemLogout";
-            this.MenuItemLogout.Size = new System.Drawing.Size(126, 22);
+            this.MenuItemLogout.Size = new System.Drawing.Size(152, 22);
             this.MenuItemLogout.Text = "登出";
             this.MenuItemLogout.Click += new System.EventHandler(this.EventMainLogout_Click);
             // 
@@ -144,7 +144,7 @@
             // 
             this.MenuItemSelectProject.Enabled = false;
             this.MenuItemSelectProject.Name = "MenuItemSelectProject";
-            this.MenuItemSelectProject.Size = new System.Drawing.Size(126, 22);
+            this.MenuItemSelectProject.Size = new System.Drawing.Size(152, 22);
             this.MenuItemSelectProject.Text = "選擇專案";
             this.MenuItemSelectProject.Click += new System.EventHandler(this.EventMainSelectProject_Click);
             // 
@@ -372,6 +372,7 @@
             // 
             this.MenuItemProjectInfo.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.工程工期計算規定ToolStripMenuItem});
+            this.MenuItemProjectInfo.Enabled = false;
             this.MenuItemProjectInfo.Name = "MenuItemProjectInfo";
             this.MenuItemProjectInfo.Size = new System.Drawing.Size(97, 20);
             this.MenuItemProjectInfo.Text = "工程資料維護";
@@ -388,14 +389,14 @@
             // MenuItemConstantFactor
             // 
             this.MenuItemConstantFactor.Name = "MenuItemConstantFactor";
-            this.MenuItemConstantFactor.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemConstantFactor.Size = new System.Drawing.Size(126, 22);
             this.MenuItemConstantFactor.Text = "固定因素";
             this.MenuItemConstantFactor.Click += new System.EventHandler(this.EventConstantFactor_Click);
             // 
             // MenuItemVeriedFactor
             // 
             this.MenuItemVeriedFactor.Name = "MenuItemVeriedFactor";
-            this.MenuItemVeriedFactor.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemVeriedFactor.Size = new System.Drawing.Size(126, 22);
             this.MenuItemVeriedFactor.Text = "變動因素";
             this.MenuItemVeriedFactor.Click += new System.EventHandler(this.EventVeriedFactor_Click);
             // 

@@ -320,12 +320,15 @@ namespace HuaChun_DailyReport
         {
             this.MenuItemLogin.Enabled = true;
             this.MenuItemLogout.Enabled = false;
-            this.MenuItemBasicInfo.Enabled = false;
-            this.MenuItemSystem.Enabled = false;
             this.MenuItemSelectProject.Enabled = false;
 
+
+            this.MenuItemBasicInfo.Enabled = false;
+            this.MenuItemProjectInfo.Enabled = false;
             this.MenuItemDailyReport.Enabled = false;
             this.MenuItemQuery.Enabled = false;
+            this.MenuItemSystem.Enabled = false;
+
             this.labelProject.Text = "";
             g_strProjectNo = "";
         }
@@ -372,6 +375,8 @@ namespace HuaChun_DailyReport
 
             this.MenuItemDailyReport.Enabled = true;
             this.MenuItemQuery.Enabled = true;
+
+            this.MenuItemProjectInfo.Enabled = true;
         }
 
  

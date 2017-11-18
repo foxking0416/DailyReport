@@ -30,22 +30,20 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.radioButton5 = new System.Windows.Forms.RadioButton();
-            this.button1 = new System.Windows.Forms.Button();
-            this.radioButton6 = new System.Windows.Forms.RadioButton();
+            this.uiRadioBtnCalenderDay = new System.Windows.Forms.RadioButton();
+            this.uiRadioBtnWorkingDay = new System.Windows.Forms.RadioButton();
+            this.uiRadioBtnSatSun = new System.Windows.Forms.RadioButton();
+            this.uiRadioBtnSun = new System.Windows.Forms.RadioButton();
+            this.uiRadioBtnNoWeekend = new System.Windows.Forms.RadioButton();
+            this.btnCopy = new System.Windows.Forms.Button();
+            this.uiRadioBtnRestrictSchedule = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnDelete = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
-            this.btnExit = new System.Windows.Forms.Button();
-            this.btnSaveExit = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.labelProjectName = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -69,88 +67,93 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "星期例假日";
             // 
-            // radioButton1
+            // radioBtnCalenderDay
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(154, 42);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(61, 17);
-            this.radioButton1.TabIndex = 1;
-            this.radioButton1.Text = "日曆天";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.uiRadioBtnCalenderDay.AutoSize = true;
+            this.uiRadioBtnCalenderDay.Location = new System.Drawing.Point(154, 42);
+            this.uiRadioBtnCalenderDay.Name = "radioBtnCalenderDay";
+            this.uiRadioBtnCalenderDay.Size = new System.Drawing.Size(61, 17);
+            this.uiRadioBtnCalenderDay.TabIndex = 1;
+            this.uiRadioBtnCalenderDay.Text = "日曆天";
+            this.uiRadioBtnCalenderDay.UseVisualStyleBackColor = true;
+            this.uiRadioBtnCalenderDay.CheckedChanged += new System.EventHandler(this.radioBtnWorkingCondition_CheckedChanged);
             // 
-            // radioButton2
+            // radioBtnWorkingDay
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Checked = true;
-            this.radioButton2.Location = new System.Drawing.Point(154, 19);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(61, 17);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "工作天";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.uiRadioBtnWorkingDay.AutoSize = true;
+            this.uiRadioBtnWorkingDay.Checked = true;
+            this.uiRadioBtnWorkingDay.Location = new System.Drawing.Point(154, 19);
+            this.uiRadioBtnWorkingDay.Name = "radioBtnWorkingDay";
+            this.uiRadioBtnWorkingDay.Size = new System.Drawing.Size(61, 17);
+            this.uiRadioBtnWorkingDay.TabIndex = 1;
+            this.uiRadioBtnWorkingDay.TabStop = true;
+            this.uiRadioBtnWorkingDay.Text = "工作天";
+            this.uiRadioBtnWorkingDay.UseVisualStyleBackColor = true;
+            this.uiRadioBtnWorkingDay.CheckedChanged += new System.EventHandler(this.radioBtnWorkingCondition_CheckedChanged);
             // 
-            // radioButton3
+            // radioBtnSatSun
             // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Checked = true;
-            this.radioButton3.Location = new System.Drawing.Point(170, 36);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(73, 17);
-            this.radioButton3.TabIndex = 1;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "周休二日";
-            this.radioButton3.UseVisualStyleBackColor = true;
+            this.uiRadioBtnSatSun.AutoSize = true;
+            this.uiRadioBtnSatSun.Checked = true;
+            this.uiRadioBtnSatSun.Location = new System.Drawing.Point(170, 36);
+            this.uiRadioBtnSatSun.Name = "radioBtnSatSun";
+            this.uiRadioBtnSatSun.Size = new System.Drawing.Size(73, 17);
+            this.uiRadioBtnSatSun.TabIndex = 1;
+            this.uiRadioBtnSatSun.TabStop = true;
+            this.uiRadioBtnSatSun.Text = "周休二日";
+            this.uiRadioBtnSatSun.UseVisualStyleBackColor = true;
+            this.uiRadioBtnSatSun.CheckedChanged += new System.EventHandler(this.radioBtnHolidayCondition_CheckedChanged);
             // 
-            // radioButton4
+            // radioBtnSun
             // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(170, 59);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(73, 17);
-            this.radioButton4.TabIndex = 1;
-            this.radioButton4.TabStop = true;
-            this.radioButton4.Text = "周休一日";
-            this.radioButton4.UseVisualStyleBackColor = true;
+            this.uiRadioBtnSun.AutoSize = true;
+            this.uiRadioBtnSun.Location = new System.Drawing.Point(170, 59);
+            this.uiRadioBtnSun.Name = "radioBtnSun";
+            this.uiRadioBtnSun.Size = new System.Drawing.Size(73, 17);
+            this.uiRadioBtnSun.TabIndex = 1;
+            this.uiRadioBtnSun.TabStop = true;
+            this.uiRadioBtnSun.Text = "周休一日";
+            this.uiRadioBtnSun.UseVisualStyleBackColor = true;
             // 
-            // radioButton5
+            // radioBtnNoWeekend
             // 
-            this.radioButton5.AutoSize = true;
-            this.radioButton5.Location = new System.Drawing.Point(170, 82);
-            this.radioButton5.Name = "radioButton5";
-            this.radioButton5.Size = new System.Drawing.Size(37, 17);
-            this.radioButton5.TabIndex = 1;
-            this.radioButton5.TabStop = true;
-            this.radioButton5.Text = "無";
-            this.radioButton5.UseVisualStyleBackColor = true;
+            this.uiRadioBtnNoWeekend.AutoSize = true;
+            this.uiRadioBtnNoWeekend.Location = new System.Drawing.Point(170, 82);
+            this.uiRadioBtnNoWeekend.Name = "radioBtnNoWeekend";
+            this.uiRadioBtnNoWeekend.Size = new System.Drawing.Size(37, 17);
+            this.uiRadioBtnNoWeekend.TabIndex = 1;
+            this.uiRadioBtnNoWeekend.TabStop = true;
+            this.uiRadioBtnNoWeekend.Text = "無";
+            this.uiRadioBtnNoWeekend.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // btnCopy
             // 
-            this.button1.Location = new System.Drawing.Point(335, 24);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(296, 29);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "從主資料庫複製";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnCopy.Location = new System.Drawing.Point(335, 24);
+            this.btnCopy.Name = "btnCopy";
+            this.btnCopy.Size = new System.Drawing.Size(296, 29);
+            this.btnCopy.TabIndex = 2;
+            this.btnCopy.Text = "從主資料庫複製";
+            this.btnCopy.UseVisualStyleBackColor = true;
+            this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
             // 
-            // radioButton6
+            // radioBtnRestrictSchedule
             // 
-            this.radioButton6.AutoSize = true;
-            this.radioButton6.Location = new System.Drawing.Point(154, 65);
-            this.radioButton6.Name = "radioButton6";
-            this.radioButton6.Size = new System.Drawing.Size(73, 17);
-            this.radioButton6.TabIndex = 1;
-            this.radioButton6.TabStop = true;
-            this.radioButton6.Text = "限期完工";
-            this.radioButton6.UseVisualStyleBackColor = true;
+            this.uiRadioBtnRestrictSchedule.AutoSize = true;
+            this.uiRadioBtnRestrictSchedule.Location = new System.Drawing.Point(154, 65);
+            this.uiRadioBtnRestrictSchedule.Name = "radioBtnRestrictSchedule";
+            this.uiRadioBtnRestrictSchedule.Size = new System.Drawing.Size(73, 17);
+            this.uiRadioBtnRestrictSchedule.TabIndex = 1;
+            this.uiRadioBtnRestrictSchedule.TabStop = true;
+            this.uiRadioBtnRestrictSchedule.Text = "限期完工";
+            this.uiRadioBtnRestrictSchedule.UseVisualStyleBackColor = true;
+            this.uiRadioBtnRestrictSchedule.CheckedChanged += new System.EventHandler(this.radioBtnWorkingCondition_CheckedChanged);
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.radioButton2);
+            this.groupBox1.Controls.Add(this.uiRadioBtnWorkingDay);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.radioButton1);
-            this.groupBox1.Controls.Add(this.radioButton6);
+            this.groupBox1.Controls.Add(this.uiRadioBtnCalenderDay);
+            this.groupBox1.Controls.Add(this.uiRadioBtnRestrictSchedule);
             this.groupBox1.Location = new System.Drawing.Point(12, 97);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(276, 100);
@@ -160,9 +163,9 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Controls.Add(this.radioButton3);
-            this.groupBox2.Controls.Add(this.radioButton4);
-            this.groupBox2.Controls.Add(this.radioButton5);
+            this.groupBox2.Controls.Add(this.uiRadioBtnSatSun);
+            this.groupBox2.Controls.Add(this.uiRadioBtnSun);
+            this.groupBox2.Controls.Add(this.uiRadioBtnNoWeekend);
             this.groupBox2.Location = new System.Drawing.Point(12, 203);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(288, 134);
@@ -177,44 +180,25 @@
             this.dataGridView1.Size = new System.Drawing.Size(296, 422);
             this.dataGridView1.TabIndex = 5;
             // 
-            // button2
+            // btnDelete
             // 
-            this.button2.Location = new System.Drawing.Point(335, 487);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(296, 29);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "刪除此日期";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnDelete.Location = new System.Drawing.Point(335, 487);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(296, 29);
+            this.btnDelete.TabIndex = 2;
+            this.btnDelete.Text = "刪除此日期";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(25, 540);
+            this.btnSave.Location = new System.Drawing.Point(77, 343);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(202, 29);
             this.btnSave.TabIndex = 2;
             this.btnSave.Text = "儲存";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // btnExit
-            // 
-            this.btnExit.Location = new System.Drawing.Point(434, 540);
-            this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(197, 29);
-            this.btnExit.TabIndex = 2;
-            this.btnExit.Text = "離開";
-            this.btnExit.UseVisualStyleBackColor = true;
-            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
-            // 
-            // btnSaveExit
-            // 
-            this.btnSaveExit.Location = new System.Drawing.Point(226, 540);
-            this.btnSaveExit.Name = "btnSaveExit";
-            this.btnSaveExit.Size = new System.Drawing.Size(202, 29);
-            this.btnSaveExit.TabIndex = 2;
-            this.btnSaveExit.Text = "儲存後離開";
-            this.btnSaveExit.UseVisualStyleBackColor = true;
-            this.btnSaveExit.Click += new System.EventHandler(this.btnSaveExit_Click);
             // 
             // label3
             // 
@@ -225,30 +209,28 @@
             this.label3.TabIndex = 6;
             this.label3.Text = "工程名稱";
             // 
-            // label4
+            // labelProjectName
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(74, 23);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(35, 13);
-            this.label4.TabIndex = 7;
-            this.label4.Text = "label4";
+            this.labelProjectName.AutoSize = true;
+            this.labelProjectName.Location = new System.Drawing.Point(74, 23);
+            this.labelProjectName.Name = "labelProjectName";
+            this.labelProjectName.Size = new System.Drawing.Size(35, 13);
+            this.labelProjectName.TabIndex = 7;
+            this.labelProjectName.Text = "label4";
             // 
             // ConstantFactorSettingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(655, 581);
-            this.Controls.Add(this.label4);
+            this.ClientSize = new System.Drawing.Size(655, 524);
+            this.Controls.Add(this.labelProjectName);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.btnExit);
-            this.Controls.Add(this.btnSaveExit);
             this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnDelete);
+            this.Controls.Add(this.btnCopy);
             this.Name = "ConstantFactorSettingForm";
             this.Text = "編輯固定因素";
             this.groupBox1.ResumeLayout(false);
@@ -265,22 +247,20 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton4;
-        private System.Windows.Forms.RadioButton radioButton5;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.RadioButton radioButton6;
+        private System.Windows.Forms.RadioButton uiRadioBtnCalenderDay;
+        private System.Windows.Forms.RadioButton uiRadioBtnWorkingDay;
+        private System.Windows.Forms.RadioButton uiRadioBtnSatSun;
+        private System.Windows.Forms.RadioButton uiRadioBtnSun;
+        private System.Windows.Forms.RadioButton uiRadioBtnNoWeekend;
+        private System.Windows.Forms.Button btnCopy;
+        private System.Windows.Forms.RadioButton uiRadioBtnRestrictSchedule;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.Button btnExit;
-        private System.Windows.Forms.Button btnSaveExit;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label labelProjectName;
 
     }
 }

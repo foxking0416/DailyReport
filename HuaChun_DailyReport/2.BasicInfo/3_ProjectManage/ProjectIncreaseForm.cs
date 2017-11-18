@@ -298,7 +298,7 @@ namespace HuaChun_DailyReport
             searchForm.ShowDialog();
         }
 
-        protected virtual void BtnSave_Click(object sender, EventArgs e)
+        protected virtual void btnSave_Click(object sender, EventArgs e)
         {
             label28.Visible = false;
             label29.Visible = false;

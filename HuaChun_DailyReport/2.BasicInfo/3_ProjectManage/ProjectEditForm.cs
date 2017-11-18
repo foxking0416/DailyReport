@@ -157,7 +157,7 @@ namespace HuaChun_DailyReport
             }
         }
 
-        protected override void BtnSave_Click(object sender, EventArgs e)
+        protected override void btnSave_Click(object sender, EventArgs e)
         {
             label28.Visible = false;
             label29.Visible = false;
