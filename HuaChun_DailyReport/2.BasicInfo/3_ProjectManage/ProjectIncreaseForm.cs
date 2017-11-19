@@ -36,6 +36,7 @@ namespace HuaChun_DailyReport
             uiDateTimeFinish.Enabled = true;
             groupBox2.Enabled = false;
             radioBtnHolidayNeedWorking.Checked = true;
+            UpdateUI();
         }
 
         protected void InsertIntoDB()
@@ -442,6 +443,7 @@ namespace HuaChun_DailyReport
                     this.uiNumericDuration.Value = Convert.ToDecimal(iDuration) + 1;
                 }
             }
+            UpdateUI();
         }
 
         private void DateTimeStart_ValueChanged(object sender, EventArgs e)
@@ -458,6 +460,7 @@ namespace HuaChun_DailyReport
                 this.uiNumericDays.Value = Convert.ToDecimal(duration) + 1;
                 this.uiNumericDuration.Value = Convert.ToDecimal(duration) + 1;
             }
+            UpdateUI();
         }
 
         protected virtual void btnConfirmFinish_Click(object sender, EventArgs e)
@@ -470,6 +473,16 @@ namespace HuaChun_DailyReport
 
         }
 
+        private void uiDateTimeBid_ValueChanged( object sender, EventArgs e )
+        {
+            UpdateUI();
+        }
 
+        private void UpdateUI()
+        {
+            this.textBoxBidWeekday.Text = Functions.ComputeDayOfWeek( uiDateTimeBid.Value );
+            this.textBoxStartWeekday.Text = Functions.ComputeDayOfWeek( uiDateTimeStart.Value );
+            this.textBoxFinishWeekday.Text = Functions.ComputeDayOfWeek( uiDateTimeFinish.Value );
+        }
     }
 }

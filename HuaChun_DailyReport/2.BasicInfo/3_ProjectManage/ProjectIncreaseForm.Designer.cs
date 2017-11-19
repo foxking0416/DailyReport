@@ -368,6 +368,7 @@
             this.uiDateTimeBid.Name = "uiDateTimeBid";
             this.uiDateTimeBid.Size = new System.Drawing.Size(170, 22);
             this.uiDateTimeBid.TabIndex = 22;
+            this.uiDateTimeBid.ValueChanged += new System.EventHandler(this.uiDateTimeBid_ValueChanged);
             // 
             // uiDateTimeStart
             // 
