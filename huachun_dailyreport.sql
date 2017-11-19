@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.2
+-- version 4.6.6
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Oct 10, 2016 at 02:29 AM
--- Server version: 5.7.13-log
--- PHP Version: 5.6.22
+-- 主機: localhost
+-- 產生時間： 2017-11-19 15:52:07
+-- 伺服器版本: 5.7.17-log
+-- PHP 版本： 5.6.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,16 +14,16 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `huachun`
+-- 資料庫： `huachunsystem`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `city`
+-- 資料表結構 `city`
 --
 
 CREATE TABLE `city` (
@@ -35,7 +35,7 @@ CREATE TABLE `city` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `city`
+-- 資料表的匯出資料 `city`
 --
 
 INSERT INTO `city` (`PK_`, `sort`, `city`, `district`, `code`) VALUES
@@ -411,7 +411,7 @@ INSERT INTO `city` (`PK_`, `sort`, `city`, `district`, `code`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `dailyreport`
+-- 資料表結構 `dailyreport`
 --
 
 CREATE TABLE `dailyreport` (
@@ -427,7 +427,7 @@ CREATE TABLE `dailyreport` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `dailyreport`
+-- 資料表的匯出資料 `dailyreport`
 --
 
 INSERT INTO `dailyreport` (`PK_`, `project_no`, `date`, `morning_weather`, `afternoon_weather`, `interference`, `morning_condition`, `afternoon_condition`, `nonecounting`) VALUES
@@ -436,7 +436,7 @@ INSERT INTO `dailyreport` (`PK_`, `project_no`, `date`, `morning_weather`, `afte
 -- --------------------------------------------------------
 
 --
--- Table structure for table `dailyreport_manpower`
+-- 資料表結構 `dailyreport_manpower`
 --
 
 CREATE TABLE `dailyreport_manpower` (
@@ -455,7 +455,7 @@ CREATE TABLE `dailyreport_manpower` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `dailyreport_manpower`
+-- 資料表的匯出資料 `dailyreport_manpower`
 --
 
 INSERT INTO `dailyreport_manpower` (`PK_`, `project_no`, `date`, `data_index`, `vendor_no`, `vendor_name`, `manpower_no`, `manpower_name`, `amount`, `hour`, `amount_today`, `ps`) VALUES
@@ -464,7 +464,7 @@ INSERT INTO `dailyreport_manpower` (`PK_`, `project_no`, `date`, `data_index`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `dailyreport_material`
+-- 資料表結構 `dailyreport_material`
 --
 
 CREATE TABLE `dailyreport_material` (
@@ -488,7 +488,7 @@ CREATE TABLE `dailyreport_material` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `dailyreport_material`
+-- 資料表的匯出資料 `dailyreport_material`
 --
 
 INSERT INTO `dailyreport_material` (`PK_`, `project_no`, `date`, `data_index`, `vendor_no`, `vendor_name`, `material_no`, `material_name`, `unit`, `location`, `amount_past`, `amount_today`, `amount_all`, `used_past`, `used_today`, `used_all`, `storage`) VALUES
@@ -499,7 +499,7 @@ INSERT INTO `dailyreport_material` (`PK_`, `project_no`, `date`, `data_index`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `dailyreport_outsourcing`
+-- 資料表結構 `dailyreport_outsourcing`
 --
 
 CREATE TABLE `dailyreport_outsourcing` (
@@ -524,7 +524,7 @@ CREATE TABLE `dailyreport_outsourcing` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `dailyreport_tool`
+-- 資料表結構 `dailyreport_tool`
 --
 
 CREATE TABLE `dailyreport_tool` (
@@ -545,7 +545,7 @@ CREATE TABLE `dailyreport_tool` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `dailyreport_vacation`
+-- 資料表結構 `dailyreport_vacation`
 --
 
 CREATE TABLE `dailyreport_vacation` (
@@ -562,7 +562,7 @@ CREATE TABLE `dailyreport_vacation` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `extendduration`
+-- 資料表結構 `extendduration`
 --
 
 CREATE TABLE `extendduration` (
@@ -577,7 +577,7 @@ CREATE TABLE `extendduration` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `extendduration`
+-- 資料表的匯出資料 `extendduration`
 --
 
 INSERT INTO `extendduration` (`PK_`, `project_no`, `grantdate`, `grantnumber`, `extendvalue`, `extendstartdate`, `extendduration`, `writedate`) VALUES
@@ -586,7 +586,7 @@ INSERT INTO `extendduration` (`PK_`, `project_no`, `grantdate`, `grantnumber`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `holiday`
+-- 資料表結構 `holiday`
 --
 
 CREATE TABLE `holiday` (
@@ -597,7 +597,7 @@ CREATE TABLE `holiday` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `holiday`
+-- 資料表的匯出資料 `holiday`
 --
 
 INSERT INTO `holiday` (`PK_`, `date`, `reason`, `working`) VALUES
@@ -665,7 +665,7 @@ INSERT INTO `holiday` (`PK_`, `date`, `reason`, `working`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `labor`
+-- 資料表結構 `labor`
 --
 
 CREATE TABLE `labor` (
@@ -675,7 +675,7 @@ CREATE TABLE `labor` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `labor`
+-- 資料表的匯出資料 `labor`
 --
 
 INSERT INTO `labor` (`PK_`, `number`, `name`) VALUES
@@ -685,7 +685,7 @@ INSERT INTO `labor` (`PK_`, `number`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `material`
+-- 資料表結構 `material`
 --
 
 CREATE TABLE `material` (
@@ -696,7 +696,7 @@ CREATE TABLE `material` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `material`
+-- 資料表的匯出資料 `material`
 --
 
 INSERT INTO `material` (`PK_`, `number`, `name`, `unit`) VALUES
@@ -710,7 +710,7 @@ INSERT INTO `material` (`PK_`, `number`, `name`, `unit`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `member`
+-- 資料表結構 `member`
 --
 
 CREATE TABLE `member` (
@@ -745,7 +745,7 @@ CREATE TABLE `member` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `member`
+-- 資料表的匯出資料 `member`
 --
 
 INSERT INTO `member` (`PK_`, `account`, `name`, `password`, `level`, `dayoff`, `id`, `sex`, `birthdate`, `degree`, `resident_city`, `resident_district`, `resident_address`, `living_city`, `living_district`, `living_address`, `phone`, `cell`, `startdate`, `insurancedate`, `enddate`, `position`, `serviceyear`, `relative`, `bank_name`, `bank_account`, `workingtype`, `onjob`) VALUES
@@ -756,7 +756,7 @@ INSERT INTO `member` (`PK_`, `account`, `name`, `password`, `level`, `dayoff`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `processcode`
+-- 資料表結構 `processcode`
 --
 
 CREATE TABLE `processcode` (
@@ -767,7 +767,7 @@ CREATE TABLE `processcode` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `processcode`
+-- 資料表的匯出資料 `processcode`
 --
 
 INSERT INTO `processcode` (`PK_`, `number`, `name`, `unit`) VALUES
@@ -776,7 +776,165 @@ INSERT INTO `processcode` (`PK_`, `number`, `name`, `unit`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `project_info`
+-- 資料表結構 `project_constant_condition`
+--
+
+CREATE TABLE `project_constant_condition` (
+  `PK_` int(11) NOT NULL,
+  `project_no` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `compute_type` int(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- 資料表的匯出資料 `project_constant_condition`
+--
+
+INSERT INTO `project_constant_condition` (`PK_`, `project_no`, `compute_type`) VALUES
+(1, 'A01', 1);
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `project_holiday`
+--
+
+CREATE TABLE `project_holiday` (
+  `PK_` int(5) NOT NULL,
+  `project_no` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `date` date NOT NULL,
+  `reason` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `working` int(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- 資料表的匯出資料 `project_holiday`
+--
+
+INSERT INTO `project_holiday` (`PK_`, `project_no`, `date`, `reason`, `working`) VALUES
+(121, 'A01', '2013-04-04', '清明', 1),
+(122, 'A01', '2013-04-05', '清明', 1),
+(123, 'A01', '2013-05-01', '勞動節', 1),
+(124, 'A01', '2013-06-12', '端午節', 1),
+(125, 'A01', '2013-09-19', '中秋', 1),
+(126, 'A01', '2013-09-20', '中秋', 1),
+(127, 'A01', '2013-10-10', '國慶', 1),
+(128, 'A01', '2014-01-01', '元旦', 1),
+(129, 'A01', '2014-01-30', '春節', 1),
+(130, 'A01', '2014-01-31', '春節', 1),
+(131, 'A01', '2014-02-03', '春節', 1),
+(132, 'A01', '2014-02-04', '春節', 1),
+(133, 'A01', '2014-02-28', '228', 1),
+(134, 'A01', '2016-01-01', '元旦連假', 1),
+(135, 'A01', '2016-01-02', '元旦連假', 1),
+(136, 'A01', '2016-01-03', '元旦連假', 1),
+(137, 'A01', '2016-02-06', '春節', 1),
+(138, 'A01', '2016-02-07', '春節', 1),
+(139, 'A01', '2016-02-08', '春節', 1),
+(140, 'A01', '2016-02-09', '春節', 1),
+(141, 'A01', '2016-02-10', '春節', 1),
+(142, 'A01', '2016-02-11', '春節', 1),
+(143, 'A01', '2016-02-12', '春節', 1),
+(144, 'A01', '2016-02-13', '春節', 1),
+(145, 'A01', '2016-02-14', '春節', 1),
+(146, 'A01', '2016-02-29', '二二八補假', 1),
+(147, 'A01', '2016-04-02', '清明', 1),
+(148, 'A01', '2016-04-03', '清明', 1),
+(149, 'A01', '2016-04-04', '清明', 1),
+(150, 'A01', '2016-04-05', '清明', 1),
+(151, 'A01', '2016-06-04', '端午補班', 2),
+(152, 'A01', '2016-06-09', '端午節', 1),
+(153, 'A01', '2016-06-10', '端午節', 1),
+(154, 'A01', '2016-06-11', '端午節', 1),
+(155, 'A01', '2016-09-10', '中秋補班', 2),
+(156, 'A01', '2016-09-15', '中秋節', 1),
+(157, 'A01', '2016-09-16', '中秋節', 1),
+(158, 'A01', '2016-10-10', '國慶日', 1),
+(159, 'A01', '2016-10-25', '光復節', 1),
+(160, 'A01', '2016-10-31', '殺人魔破蛋', 1),
+(161, 'A01', '2017-01-02', '元旦補假', 1),
+(162, 'A01', '2017-01-27', '春節', 1),
+(163, 'A01', '2017-01-28', '春節', 1),
+(164, 'A01', '2017-01-29', '春節', 1),
+(165, 'A01', '2017-01-30', '春節', 1),
+(166, 'A01', '2017-01-31', '春節', 1),
+(167, 'A01', '2017-02-01', '春節', 1),
+(168, 'A01', '2017-02-18', '228連假補班', 2),
+(169, 'A01', '2017-02-27', '228', 1),
+(170, 'A01', '2017-02-28', '228', 1),
+(171, 'A01', '2017-04-03', '清明', 1),
+(172, 'A01', '2017-04-04', '清明', 1),
+(173, 'A01', '2017-05-01', '勞動節', 1),
+(174, 'A01', '2017-05-20', '端午補班', 2),
+(175, 'A01', '2017-05-29', '端午', 1),
+(176, 'A01', '2017-05-30', '端午', 1),
+(177, 'A01', '2017-09-30', '國慶補班', 2),
+(178, 'A01', '2017-10-04', '中秋', 1),
+(179, 'A01', '2017-10-09', '國慶', 1),
+(180, 'A01', '2017-10-10', '國慶', 1),
+(182, 'A02', '2013-04-05', '清明', 1),
+(183, 'A02', '2013-05-01', '勞動節', 1),
+(184, 'A02', '2013-06-12', '端午節', 1),
+(185, 'A02', '2013-09-19', '中秋', 1),
+(186, 'A02', '2013-09-20', '中秋', 1),
+(187, 'A02', '2013-10-10', '國慶', 1),
+(188, 'A02', '2014-01-01', '元旦', 1),
+(189, 'A02', '2014-01-30', '春節', 1),
+(190, 'A02', '2014-01-31', '春節', 1),
+(191, 'A02', '2014-02-03', '春節', 1),
+(192, 'A02', '2014-02-04', '春節', 1),
+(193, 'A02', '2014-02-28', '228', 1),
+(194, 'A02', '2016-01-01', '元旦連假', 1),
+(195, 'A02', '2016-01-02', '元旦連假', 1),
+(196, 'A02', '2016-01-03', '元旦連假', 1),
+(197, 'A02', '2016-02-06', '春節', 1),
+(198, 'A02', '2016-02-07', '春節', 1),
+(199, 'A02', '2016-02-08', '春節', 1),
+(200, 'A02', '2016-02-09', '春節', 1),
+(201, 'A02', '2016-02-10', '春節', 1),
+(202, 'A02', '2016-02-11', '春節', 1),
+(203, 'A02', '2016-02-12', '春節', 1),
+(204, 'A02', '2016-02-13', '春節', 1),
+(205, 'A02', '2016-02-14', '春節', 1),
+(206, 'A02', '2016-02-29', '二二八補假', 1),
+(207, 'A02', '2016-04-02', '清明', 1),
+(208, 'A02', '2016-04-03', '清明', 1),
+(209, 'A02', '2016-04-04', '清明', 1),
+(210, 'A02', '2016-04-05', '清明', 1),
+(211, 'A02', '2016-06-04', '端午補班', 2),
+(212, 'A02', '2016-06-09', '端午節', 1),
+(213, 'A02', '2016-06-10', '端午節', 1),
+(214, 'A02', '2016-06-11', '端午節', 1),
+(215, 'A02', '2016-09-10', '中秋補班', 2),
+(216, 'A02', '2016-09-15', '中秋節', 1),
+(217, 'A02', '2016-09-16', '中秋節', 1),
+(218, 'A02', '2016-10-10', '國慶日', 1),
+(219, 'A02', '2016-10-25', '光復節', 1),
+(220, 'A02', '2016-10-31', '殺人魔破蛋', 1),
+(221, 'A02', '2017-01-02', '元旦補假', 1),
+(222, 'A02', '2017-01-27', '春節', 1),
+(223, 'A02', '2017-01-28', '春節', 1),
+(224, 'A02', '2017-01-29', '春節', 1),
+(225, 'A02', '2017-01-30', '春節', 1),
+(226, 'A02', '2017-01-31', '春節', 1),
+(227, 'A02', '2017-02-01', '春節', 1),
+(228, 'A02', '2017-02-18', '228連假補班', 2),
+(229, 'A02', '2017-02-27', '228', 1),
+(230, 'A02', '2017-02-28', '228', 1),
+(231, 'A02', '2017-04-03', '清明', 1),
+(232, 'A02', '2017-04-04', '清明', 1),
+(233, 'A02', '2017-05-01', '勞動節', 1),
+(234, 'A02', '2017-05-20', '端午補班', 2),
+(235, 'A02', '2017-05-29', '端午', 1),
+(236, 'A02', '2017-05-30', '端午', 1),
+(237, 'A02', '2017-09-30', '國慶補班', 2),
+(238, 'A02', '2017-10-04', '中秋', 1),
+(239, 'A02', '2017-10-09', '國慶', 1),
+(240, 'A02', '2017-10-10', '國慶', 1);
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `project_info`
 --
 
 CREATE TABLE `project_info` (
@@ -811,22 +969,48 @@ CREATE TABLE `project_info` (
   `security` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `computetype` int(2) NOT NULL,
   `holiday` int(1) NOT NULL,
-  `rainyday` int(1) NOT NULL,
   `confirm_finishdate` date NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `project_info`
+-- 資料表的匯出資料 `project_info`
 --
 
-INSERT INTO `project_info` (`PK_`, `project_no`, `contract_no`, `project_name`, `project_location`, `contractor`, `owner`, `manage`, `design`, `supervise`, `responsible`, `quality`, `biddate`, `startdate`, `contract_finishdate`, `modified_finishdate`, `contractamount`, `contractduration`, `contractdays`, `handle1`, `phone1`, `handle2`, `phone2`, `handle3`, `phone3`, `handle4`, `phone4`, `onsite`, `security`, `computetype`, `holiday`, `rainyday`, `confirm_finishdate`) VALUES
-(18, 'A01', 'A01', '東尼史塔克的家', '紐約市', '華春營造', '東尼史塔克', '神盾局', '神盾局特工', '鋼鐵人', '黑寡婦', '鷹眼', '2016-10-08', '2016-10-05', '2016-11-04', '2016-11-07', '9,527,000.0000', '20.0', 31, '蟻人', '1234', '索爾', '4321', '蜘蛛人', '5678', '戰爭機器', '8765', '浩克', '美國隊長', 5, 1, 0, '0000-00-00'),
-(19, 'A02', 'A02', '蝙蝠俠的巢穴', '高譚市', '華春營造', '布魯斯偉恩', '非正義聯盟', '超人', '神力女超人', '綠光戰警', '閃電俠', '2016-10-09', '2016-10-19', '2016-12-27', '2016-12-27', '3,939,889.0000', '60.0', 70, '火風暴', '', '', '', '', '', '', '', '小丑', '', 4, 0, 0, '0000-00-00');
+INSERT INTO `project_info` (`PK_`, `project_no`, `contract_no`, `project_name`, `project_location`, `contractor`, `owner`, `manage`, `design`, `supervise`, `responsible`, `quality`, `biddate`, `startdate`, `contract_finishdate`, `modified_finishdate`, `contractamount`, `contractduration`, `contractdays`, `handle1`, `phone1`, `handle2`, `phone2`, `handle3`, `phone3`, `handle4`, `phone4`, `onsite`, `security`, `computetype`, `holiday`, `confirm_finishdate`) VALUES
+(18, 'A01', 'A01', '東尼史塔克的家2', '紐約市', '華春營造', '東尼史塔克', '神盾局', '神盾局特工', '鋼鐵人', '黑寡婦', '鷹眼', '2016-10-08', '2016-10-05', '2016-11-04', '2016-11-07', '9,527,000.0000', '20.0', 31, '蟻人', '1234', '索爾', '4321', '蜘蛛人', '5678', '戰爭機器', '8765', '浩克', '美國隊長', 1, 1, '0000-00-00'),
+(19, 'A02', 'A02', '蝙蝠俠的巢穴', '高譚市', '華春營造', '布魯斯偉恩', '非正義聯盟', '超人', '神力女超人', '綠光戰警', '閃電俠', '2016-10-09', '2016-10-19', '2016-12-27', '2016-12-27', '3,939,889.0000', '60.0', 70, '火風暴', '', '', '', '', '', '', '', '小丑', '', 4, 0, '0000-00-00');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `test`
+-- 資料表結構 `project_varied_condition`
+--
+
+CREATE TABLE `project_varied_condition` (
+  `PK_` int(11) NOT NULL,
+  `project_no` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `morning_rainy` int(1) NOT NULL,
+  `afternoon_raint` int(1) NOT NULL,
+  `morning_heavyrain` int(1) NOT NULL,
+  `afternoon_heavyrain` int(1) NOT NULL,
+  `morning_typhoon` int(1) NOT NULL,
+  `afternoon_typhoon` int(1) NOT NULL,
+  `morning_hot` int(1) NOT NULL,
+  `afternoon_hot` int(1) NOT NULL,
+  `morning_muddy` int(1) NOT NULL,
+  `afternoon_muddy` int(1) NOT NULL,
+  `morning_powershutdown` int(1) NOT NULL,
+  `afternoon_powershutdown` int(1) NOT NULL,
+  `morning_pauseworking` int(1) NOT NULL,
+  `afternoon_pauseworking` int(1) NOT NULL,
+  `morning_other` int(1) NOT NULL,
+  `afternoon_other` int(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `test`
 --
 
 CREATE TABLE `test` (
@@ -836,7 +1020,7 @@ CREATE TABLE `test` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `test`
+-- 資料表的匯出資料 `test`
 --
 
 INSERT INTO `test` (`PK_`, `num`, `count`) VALUES
@@ -847,7 +1031,7 @@ INSERT INTO `test` (`PK_`, `num`, `count`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tool`
+-- 資料表結構 `tool`
 --
 
 CREATE TABLE `tool` (
@@ -857,7 +1041,7 @@ CREATE TABLE `tool` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `tool`
+-- 資料表的匯出資料 `tool`
 --
 
 INSERT INTO `tool` (`PK_`, `number`, `name`) VALUES
@@ -867,7 +1051,7 @@ INSERT INTO `tool` (`PK_`, `number`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `vendor`
+-- 資料表結構 `vendor`
 --
 
 CREATE TABLE `vendor` (
@@ -894,7 +1078,7 @@ CREATE TABLE `vendor` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `vendor`
+-- 資料表的匯出資料 `vendor`
 --
 
 INSERT INTO `vendor` (`PK_`, `vendor_no`, `vendor_name`, `vendor_abbre`, `contact1`, `contact2`, `phone1`, `phone2`, `cell`, `email`, `fax`, `code3`, `code2`, `address_city`, `address_district`, `address_road`, `id`, `taxtitle`, `businessitems`, `other`) VALUES
@@ -904,197 +1088,230 @@ INSERT INTO `vendor` (`PK_`, `vendor_no`, `vendor_name`, `vendor_abbre`, `contac
 (4, '12345', 'test', 'te', '', '', '', '', '', '', '', '200', '', '基隆市', '仁愛區', '', '', '', '', '');
 
 --
--- Indexes for dumped tables
+-- 已匯出資料表的索引
 --
 
 --
--- Indexes for table `city`
+-- 資料表索引 `city`
 --
 ALTER TABLE `city`
   ADD PRIMARY KEY (`PK_`);
 
 --
--- Indexes for table `dailyreport`
+-- 資料表索引 `dailyreport`
 --
 ALTER TABLE `dailyreport`
   ADD PRIMARY KEY (`PK_`);
 
 --
--- Indexes for table `dailyreport_manpower`
+-- 資料表索引 `dailyreport_manpower`
 --
 ALTER TABLE `dailyreport_manpower`
   ADD PRIMARY KEY (`PK_`);
 
 --
--- Indexes for table `dailyreport_material`
+-- 資料表索引 `dailyreport_material`
 --
 ALTER TABLE `dailyreport_material`
   ADD PRIMARY KEY (`PK_`);
 
 --
--- Indexes for table `dailyreport_outsourcing`
+-- 資料表索引 `dailyreport_outsourcing`
 --
 ALTER TABLE `dailyreport_outsourcing`
   ADD PRIMARY KEY (`PK_`);
 
 --
--- Indexes for table `dailyreport_tool`
+-- 資料表索引 `dailyreport_tool`
 --
 ALTER TABLE `dailyreport_tool`
   ADD PRIMARY KEY (`PK_`);
 
 --
--- Indexes for table `dailyreport_vacation`
+-- 資料表索引 `dailyreport_vacation`
 --
 ALTER TABLE `dailyreport_vacation`
   ADD PRIMARY KEY (`PK_`);
 
 --
--- Indexes for table `extendduration`
+-- 資料表索引 `extendduration`
 --
 ALTER TABLE `extendduration`
   ADD PRIMARY KEY (`PK_`);
 
 --
--- Indexes for table `holiday`
+-- 資料表索引 `holiday`
 --
 ALTER TABLE `holiday`
   ADD PRIMARY KEY (`PK_`);
 
 --
--- Indexes for table `labor`
+-- 資料表索引 `labor`
 --
 ALTER TABLE `labor`
   ADD PRIMARY KEY (`PK_`);
 
 --
--- Indexes for table `material`
+-- 資料表索引 `material`
 --
 ALTER TABLE `material`
   ADD PRIMARY KEY (`PK_`);
 
 --
--- Indexes for table `member`
+-- 資料表索引 `member`
 --
 ALTER TABLE `member`
   ADD PRIMARY KEY (`PK_`);
 
 --
--- Indexes for table `processcode`
+-- 資料表索引 `processcode`
 --
 ALTER TABLE `processcode`
   ADD PRIMARY KEY (`PK_`);
 
 --
--- Indexes for table `project_info`
+-- 資料表索引 `project_constant_condition`
+--
+ALTER TABLE `project_constant_condition`
+  ADD PRIMARY KEY (`PK_`);
+
+--
+-- 資料表索引 `project_holiday`
+--
+ALTER TABLE `project_holiday`
+  ADD PRIMARY KEY (`PK_`);
+
+--
+-- 資料表索引 `project_info`
 --
 ALTER TABLE `project_info`
   ADD PRIMARY KEY (`PK_`);
 
 --
--- Indexes for table `test`
+-- 資料表索引 `project_varied_condition`
+--
+ALTER TABLE `project_varied_condition`
+  ADD PRIMARY KEY (`PK_`);
+
+--
+-- 資料表索引 `test`
 --
 ALTER TABLE `test`
   ADD PRIMARY KEY (`PK_`);
 
 --
--- Indexes for table `tool`
+-- 資料表索引 `tool`
 --
 ALTER TABLE `tool`
   ADD PRIMARY KEY (`PK_`);
 
 --
--- Indexes for table `vendor`
+-- 資料表索引 `vendor`
 --
 ALTER TABLE `vendor`
   ADD PRIMARY KEY (`PK_`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- 在匯出的資料表使用 AUTO_INCREMENT
 --
 
 --
--- AUTO_INCREMENT for table `city`
+-- 使用資料表 AUTO_INCREMENT `city`
 --
 ALTER TABLE `city`
   MODIFY `PK_` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=369;
 --
--- AUTO_INCREMENT for table `dailyreport`
+-- 使用資料表 AUTO_INCREMENT `dailyreport`
 --
 ALTER TABLE `dailyreport`
   MODIFY `PK_` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 --
--- AUTO_INCREMENT for table `dailyreport_manpower`
+-- 使用資料表 AUTO_INCREMENT `dailyreport_manpower`
 --
 ALTER TABLE `dailyreport_manpower`
   MODIFY `PK_` int(7) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
--- AUTO_INCREMENT for table `dailyreport_material`
+-- 使用資料表 AUTO_INCREMENT `dailyreport_material`
 --
 ALTER TABLE `dailyreport_material`
   MODIFY `PK_` int(7) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
--- AUTO_INCREMENT for table `dailyreport_outsourcing`
+-- 使用資料表 AUTO_INCREMENT `dailyreport_outsourcing`
 --
 ALTER TABLE `dailyreport_outsourcing`
   MODIFY `PK_` int(7) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `dailyreport_tool`
+-- 使用資料表 AUTO_INCREMENT `dailyreport_tool`
 --
 ALTER TABLE `dailyreport_tool`
   MODIFY `PK_` int(7) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `dailyreport_vacation`
+-- 使用資料表 AUTO_INCREMENT `dailyreport_vacation`
 --
 ALTER TABLE `dailyreport_vacation`
   MODIFY `PK_` int(7) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `extendduration`
+-- 使用資料表 AUTO_INCREMENT `extendduration`
 --
 ALTER TABLE `extendduration`
   MODIFY `PK_` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
--- AUTO_INCREMENT for table `holiday`
+-- 使用資料表 AUTO_INCREMENT `holiday`
 --
 ALTER TABLE `holiday`
   MODIFY `PK_` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 --
--- AUTO_INCREMENT for table `labor`
+-- 使用資料表 AUTO_INCREMENT `labor`
 --
 ALTER TABLE `labor`
   MODIFY `PK_` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
--- AUTO_INCREMENT for table `material`
+-- 使用資料表 AUTO_INCREMENT `material`
 --
 ALTER TABLE `material`
   MODIFY `PK_` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
--- AUTO_INCREMENT for table `member`
+-- 使用資料表 AUTO_INCREMENT `member`
 --
 ALTER TABLE `member`
   MODIFY `PK_` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
--- AUTO_INCREMENT for table `processcode`
+-- 使用資料表 AUTO_INCREMENT `processcode`
 --
 ALTER TABLE `processcode`
   MODIFY `PK_` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
--- AUTO_INCREMENT for table `project_info`
+-- 使用資料表 AUTO_INCREMENT `project_constant_condition`
+--
+ALTER TABLE `project_constant_condition`
+  MODIFY `PK_` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- 使用資料表 AUTO_INCREMENT `project_holiday`
+--
+ALTER TABLE `project_holiday`
+  MODIFY `PK_` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=241;
+--
+-- 使用資料表 AUTO_INCREMENT `project_info`
 --
 ALTER TABLE `project_info`
   MODIFY `PK_` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 --
--- AUTO_INCREMENT for table `test`
+-- 使用資料表 AUTO_INCREMENT `project_varied_condition`
+--
+ALTER TABLE `project_varied_condition`
+  MODIFY `PK_` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- 使用資料表 AUTO_INCREMENT `test`
 --
 ALTER TABLE `test`
   MODIFY `PK_` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
--- AUTO_INCREMENT for table `tool`
+-- 使用資料表 AUTO_INCREMENT `tool`
 --
 ALTER TABLE `tool`
   MODIFY `PK_` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
--- AUTO_INCREMENT for table `vendor`
+-- 使用資料表 AUTO_INCREMENT `vendor`
 --
 ALTER TABLE `vendor`
   MODIFY `PK_` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
