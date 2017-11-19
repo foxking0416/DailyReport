@@ -155,16 +155,16 @@ namespace HuaChun_DailyReport
 
         #region 工程資料維護
         //工程資料維護
-        private void EventVeriedFactor_Click( object sender, EventArgs e )
-        {
-            VariedFactorSettingForm formVariedFactorSetting = new VariedFactorSettingForm( g_strProjectNo, g_Sql );
-            formVariedFactorSetting.ShowDialog();
-        }
-
         private void EventConstantFactor_Click( object sender, EventArgs e )
         {
             ConstantFactorSettingForm formConstantFactorSetting = new ConstantFactorSettingForm( g_strProjectNo, g_Sql );
             formConstantFactorSetting.ShowDialog();
+        }
+
+        private void EventVeriedFactor_Click( object sender, EventArgs e )
+        {
+            VariedFactorSettingForm formVariedFactorSetting = new VariedFactorSettingForm( g_strProjectNo, g_Sql );
+            formVariedFactorSetting.ShowDialog();
         }
         #endregion
 

@@ -103,32 +103,54 @@ namespace HuaChun_DailyReport
         //以下為UI操作
         private void btnSave_Click( object sender, EventArgs e )
         {
+            Cursor.Current = Cursors.WaitCursor;
             m_Sql.OpenSqlChannel();
+
+            string strExistComputeType = m_Sql.ReadSqlDataWithoutOpenClose( "compute_type", "project_constant_condition", "project_no = '" + this.m_strProjectNumber + "'" );
+            string strNewComputeType = "";
+
             if ( uiRadioBtnRestrictSchedule.Checked == true )
             {
-                m_Sql.SetSqlDataWithoutOpenClose( "computetype", "project_info", "project_no = '" + this.m_strProjectNumber + "'", ( ( int )ConstantCondition.RestrictSchedule ).ToString() );
+                strNewComputeType = ( ( int )ConstantCondition.RestrictSchedule ).ToString();
             }
             else if ( uiRadioBtnCalenderDay.Checked == true )
             {
-                m_Sql.SetSqlDataWithoutOpenClose( "computetype", "project_info", "project_no = '" + this.m_strProjectNumber + "'", ( ( int )ConstantCondition.CalenderDay ).ToString() );
+                strNewComputeType = ( ( int )ConstantCondition.CalenderDay ).ToString();
             }
             else if ( uiRadioBtnWorkingDay.Checked == true )
             {
                 if ( uiRadioBtnNoWeekend.Checked == true )
                 {
-                    m_Sql.SetSqlDataWithoutOpenClose( "computetype", "project_info", "project_no = '" + this.m_strProjectNumber + "'", ( ( int )ConstantCondition.WorkingDayNoWeekend ).ToString() );
+                    strNewComputeType = ( ( int )ConstantCondition.WorkingDayNoWeekend ).ToString();
                 }
                 else if ( uiRadioBtnSun.Checked == true )
                 {
-                    m_Sql.SetSqlDataWithoutOpenClose( "computetype", "project_info", "project_no = '" + this.m_strProjectNumber + "'", ( ( int )ConstantCondition.WorkingDaySun ).ToString() );
+                    strNewComputeType = ( ( int )ConstantCondition.WorkingDaySun ).ToString();
                 }
                 else if ( uiRadioBtnSatSun.Checked == true )
                 {
-                    m_Sql.SetSqlDataWithoutOpenClose( "computetype", "project_info", "project_no = '" + this.m_strProjectNumber + "'", ( ( int )ConstantCondition.WorkingDaySatSun ).ToString() );
+                    strNewComputeType = ( ( int )ConstantCondition.WorkingDaySatSun ).ToString();
                 }
             }
 
+            if ( strExistComputeType == string.Empty )
+            {
+                string commandStr = "INSERT INTO project_constant_condition(";
+                commandStr += "project_no,";
+                commandStr += "compute_type";
+                commandStr += ") VALUES('";
+                commandStr += this.m_strProjectNumber + "','";
+                commandStr += strNewComputeType;
+                commandStr += "')";
+
+                m_Sql.ExecuteNonQueryCommand( commandStr );
+            }
+            else
+            {
+                m_Sql.SetSqlDataWithoutOpenClose( "compute_type", "project_constant_condition", "project_no = '" + this.m_strProjectNumber + "'", strNewComputeType );
+            }
             m_Sql.CloseSqlChannel();
+            Cursor.Current = Cursors.Default;     
         }
 
         private void btnCopy_Click( object sender, EventArgs e )
