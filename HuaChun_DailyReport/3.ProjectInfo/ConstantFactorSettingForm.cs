@@ -11,42 +11,120 @@ namespace HuaChun_DailyReport
 {
     public partial class ConstantFactorSettingForm : Form
     {
-        protected string g_ProjectNumber;
+        protected string m_strProjectNumber;
         protected MySQL m_Sql;
-        protected DataTable dataTable;
+        protected DataTable m_kDataTable;
 
         public ConstantFactorSettingForm( string strProjectNo, MySQL Sql )
         {
             m_Sql = Sql;
             InitializeComponent();
-            this.labelProjectName.Text = Sql.Read_SQL_data( "project_name", "project_info", "project_no = '" + strProjectNo + "'" );
-            this.g_ProjectNumber = strProjectNo;
+            m_uiLabelProjectName.Text = Sql.Read_SQL_data( "project_name", "project_info", "project_no = '" + strProjectNo + "'" );
+            m_strProjectNumber = strProjectNo;
+            InitializeDataTable();
+            RefreshDatagridview();
+            UpdateUI();
         }
 
+        private void InitializeDataTable()
+        {
+            m_kDataTable = new DataTable( "MyNewTable" );
+            m_kDataTable.Columns.Add( "日期", typeof( String ) );
+            m_kDataTable.Columns.Add( "星期", typeof( String ) );
+            m_kDataTable.Columns.Add( "理由", typeof( String ) );
+            m_kDataTable.Columns.Add( "放假/補班", typeof( String ) );
+            m_uiDataGridView.DataSource = m_kDataTable;
+            m_uiDataGridView.ReadOnly = true;
+            m_uiDataGridView.AllowUserToAddRows = false;
+            m_uiDataGridView.MultiSelect = false;
+        }
+
+        private void RefreshDatagridview()
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            m_kDataTable.Clear();
+
+            string [] arrDate = m_Sql.Read1DArray_SQL_Data( "date", "project_holiday", "project_no = '" + m_strProjectNumber + "'" );
+            DateTime [] dates = new DateTime [ arrDate.Length ];
+            for ( int i = 0; i < arrDate.Length; i++ )
+            {
+                dates [ i ] = Functions.TransferSQLDateToDateTime( arrDate [ i ] );
+            }
+            Array.Sort( dates );
+
+            DataRow kDataRow;
+            m_Sql.OpenSqlChannel();
+            for ( int i = 0; i < dates.Length; i++ )
+            {
+                kDataRow = m_kDataTable.NewRow();
+                kDataRow [ "日期" ] = dates [ i ].Year.ToString() + "/" + dates [ i ].Month.ToString() + "/" + dates [ i ].Day.ToString();
+                kDataRow [ "星期" ] = Functions.ComputeDayOfWeek( dates [ i ] );
+                kDataRow [ "理由" ] = m_Sql.ReadSqlDataWithoutOpenClose( "reason", "project_holiday", "date = '" + dates [ i ].Year.ToString() + "-" + dates [ i ].Month.ToString() + "-" + dates [ i ].Day.ToString() + "'" );
+                string working = m_Sql.ReadSqlDataWithoutOpenClose( "working", "project_holiday", "date = '" + dates [ i ].Year.ToString() + "-" + dates [ i ].Month.ToString() + "-" + dates [ i ].Day.ToString() + "'" );
+                if ( working == "1" )
+                    kDataRow [ "放假/補班" ] = "放假";
+                else
+                    kDataRow [ "放假/補班" ] = "補班";
+                m_kDataTable.Rows.Add( kDataRow );
+            }
+            m_Sql.CloseSqlChannel();
+            Cursor.Current = Cursors.Default;
+        }
+
+        private void DeleteExistDB()
+        {
+            string strDate = m_uiDataGridView [ 0, m_uiDataGridView.CurrentRow.Index ].Value.ToString();
+            int nFirstIndex = strDate.IndexOf( "/" );
+            int nSecondIndex = strDate.IndexOf( "/", nFirstIndex + 1 );
+
+            string strCurrentCellYear = strDate.Substring( 0, nFirstIndex );
+            string strCurrentCellMonth = strDate.Substring( nFirstIndex + 1, nSecondIndex - nFirstIndex - 1 );
+            string strCurrentCellDate = strDate.Substring( nSecondIndex + 1 );
+
+            m_Sql.NoHistoryDelete_SQL( "project_holiday", "project_no = '" + m_strProjectNumber + "' AND date = '" + strCurrentCellYear + "-" + strCurrentCellMonth + "-" + strCurrentCellDate + "'" );
+        }
+
+        private void UpdateUI()
+        {
+            if ( uiRadioBtnRestrictSchedule.Checked || uiRadioBtnCalenderDay.Checked )
+            {
+                uiRadioBtnNoWeekend.Enabled = false;
+                uiRadioBtnSatSun.Enabled = false;
+                uiRadioBtnSun.Enabled = false;
+            }
+            else 
+            {
+                uiRadioBtnNoWeekend.Enabled = true;
+                uiRadioBtnSatSun.Enabled = true;
+                uiRadioBtnSun.Enabled = true;
+            }
+        }
+
+        //以下為UI操作
         private void btnSave_Click( object sender, EventArgs e )
         {
             m_Sql.OpenSqlChannel();
             if ( uiRadioBtnRestrictSchedule.Checked == true )
             {
-                m_Sql.SetSqlDataWithoutOpenClose( "computetype", "project_info", "project_no = '" + this.g_ProjectNumber + "'", "1" );
+                m_Sql.SetSqlDataWithoutOpenClose( "computetype", "project_info", "project_no = '" + this.m_strProjectNumber + "'", ( ( int )ConstantCondition.RestrictSchedule ).ToString() );
             }
             else if ( uiRadioBtnCalenderDay.Checked == true )
             {
-                m_Sql.SetSqlDataWithoutOpenClose( "computetype", "project_info", "project_no = '" + this.g_ProjectNumber + "'", "2" );
+                m_Sql.SetSqlDataWithoutOpenClose( "computetype", "project_info", "project_no = '" + this.m_strProjectNumber + "'", ( ( int )ConstantCondition.CalenderDay ).ToString() );
             }
             else if ( uiRadioBtnWorkingDay.Checked == true )
             {
                 if ( uiRadioBtnNoWeekend.Checked == true )
                 {
-                    m_Sql.SetSqlDataWithoutOpenClose( "computetype", "project_info", "project_no = '" + this.g_ProjectNumber + "'", "3" );
+                    m_Sql.SetSqlDataWithoutOpenClose( "computetype", "project_info", "project_no = '" + this.m_strProjectNumber + "'", ( ( int )ConstantCondition.WorkingDayNoWeekend ).ToString() );
                 }
                 else if ( uiRadioBtnSun.Checked == true )
                 {
-                    m_Sql.SetSqlDataWithoutOpenClose( "computetype", "project_info", "project_no = '" + this.g_ProjectNumber + "'", "4" );
+                    m_Sql.SetSqlDataWithoutOpenClose( "computetype", "project_info", "project_no = '" + this.m_strProjectNumber + "'", ( ( int )ConstantCondition.WorkingDaySun ).ToString() );
                 }
                 else if ( uiRadioBtnSatSun.Checked == true )
                 {
-                    m_Sql.SetSqlDataWithoutOpenClose( "computetype", "project_info", "project_no = '" + this.g_ProjectNumber + "'", "5" );
+                    m_Sql.SetSqlDataWithoutOpenClose( "computetype", "project_info", "project_no = '" + this.m_strProjectNumber + "'", ( ( int )ConstantCondition.WorkingDaySatSun ).ToString() );
                 }
             }
 
@@ -55,125 +133,63 @@ namespace HuaChun_DailyReport
 
         private void btnCopy_Click( object sender, EventArgs e )
         {
+            Cursor.Current = Cursors.WaitCursor;
+            m_kDataTable.Clear();
+            //清掉舊有資料
+            m_Sql.NoHistoryDelete_SQL( "project_holiday", "project_no = '" + m_strProjectNumber + "'" );
 
+            //從主檔案讀取資料
+            string [] dateArr = m_Sql.Read1DArrayNoCondition_SQL_Data( "date", "holiday" );
+            DateTime [] dates = new DateTime [ dateArr.Length ];
+            for ( int i = 0; i < dateArr.Length; i++ )
+            {
+                dates [ i ] = Functions.TransferSQLDateToDateTime( dateArr [ i ] );
+            }
+            Array.Sort( dates );
+
+
+            m_Sql.OpenSqlChannel();
+
+            for ( int j = 0; j < dateArr.Length; j++ )
+            {
+                string commandStr = "Insert into project_holiday(";
+                commandStr += "project_no,";
+                commandStr += "date,";
+                commandStr += "reason,";
+                commandStr += "working";
+                commandStr += ") values('";
+                commandStr += m_strProjectNumber + "','";
+                commandStr += dates [ j ].Year.ToString() + "-" + dates [ j ].Month.ToString() + "-" + dates [ j ].Day.ToString() + "','";
+                string strReason = m_Sql.ReadSqlDataWithoutOpenClose( "reason", "holiday", "date = '" + dates [ j ].Year.ToString() + "-" + dates [ j ].Month.ToString() + "-" + dates [ j ].Day.ToString() + "'" );
+                string strWorking = m_Sql.ReadSqlDataWithoutOpenClose( "working", "holiday", "date = '" + dates [ j ].Year.ToString() + "-" + dates [ j ].Month.ToString() + "-" + dates [ j ].Day.ToString() + "'" );
+
+                commandStr += strReason + "','";
+                commandStr += strWorking;//放假
+                commandStr += "')";
+
+
+                m_Sql.ExecuteNonQueryCommand( commandStr );
+            }
+            m_Sql.CloseSqlChannel();
+            Cursor.Current = Cursors.Default;
+
+
+            RefreshDatagridview();
         }
 
         private void btnDelete_Click( object sender, EventArgs e )
         {
-
-        }
-
-        private void dataGridView1_CurrentCellChanged( object sender, EventArgs e )
-        {
-            //try
-            //{
-            //    string date = dataGridView1 [ 0, dataGridView1.CurrentRow.Index ].Value.ToString();
-            //    int firstIndex = date.IndexOf( "/" );
-            //    int secondIndex = date.IndexOf( "/", firstIndex + 1 );
-
-            //    string Year = date.Substring( 0, firstIndex );
-            //    string Month = date.Substring( firstIndex + 1, secondIndex - firstIndex - 1 );
-            //    string Day = date.Substring( secondIndex + 1 );
-            //    this.dateTimeHoliday.Value = new DateTime( Convert.ToInt32( Year ), Convert.ToInt32( Month ), Convert.ToInt32( Day ) );
-            //    this.textBoxReason.Text = m_Sql.Read_SQL_data( "reason", "holiday", "date = '" + Year + "-" + Month + "-" + Day + "'" );
-            //    string working = m_Sql.Read_SQL_data( "working", "holiday", "date = '" + Year + "-" + Month + "-" + Day + "'" );
-            //    if ( working == "1" )
-            //    {
-            //        uiRadioBtnCalenderDay.Checked = true;
-            //        uiRadioBtnWorkingDay.Checked = false;
-            //    }
-            //    else
-            //    {
-            //        uiRadioBtnCalenderDay.Checked = false;
-            //        uiRadioBtnWorkingDay.Checked = true;
-            //    }
-
-            //}
-            //catch
-            //{ }
-        }
-
-
-        private void RefreshDatagridview()
-        {
-            //Cursor.Current = Cursors.WaitCursor;
-            //dataTable.Clear();
-
-            //string [] dateArr = m_Sql.Read1DArrayNoCondition_SQL_Data( "date", "holiday" );
-            //DateTime [] dates = new DateTime [ dateArr.Length ];
-            //for ( int i = 0; i < dateArr.Length; i++ )
-            //{
-            //    dates [ i ] = Functions.TransferSQLDateToDateTime( dateArr [ i ] );
-            //}
-            //Array.Sort( dates );
-
-            //DataRow dataRow;
-            //m_Sql.OpenSqlChannel();
-            //for ( int i = 0; i < dates.Length; i++ )
-            //{
-            //    dataRow = dataTable.NewRow();
-            //    dataRow [ "日期" ] = dates [ i ].Year.ToString() + "/" + dates [ i ].Month.ToString() + "/" + dates [ i ].Day.ToString();
-            //    dataRow [ "星期" ] = Functions.ComputeDayOfWeek( dates [ i ] );
-            //    dataRow [ "理由" ] = m_Sql.ReadSqlDataWithoutOpenClose( "reason", "holiday", "date = '" + dates [ i ].Year.ToString() + "-" + dates [ i ].Month.ToString() + "-" + dates [ i ].Day.ToString() + "'" );
-            //    string working = m_Sql.ReadSqlDataWithoutOpenClose( "working", "holiday", "date = '" + dates [ i ].Year.ToString() + "-" + dates [ i ].Month.ToString() + "-" + dates [ i ].Day.ToString() + "'" );
-            //    if ( working == "1" )
-            //        dataRow [ "放假/補班" ] = "放假";
-            //    else
-            //        dataRow [ "放假/補班" ] = "補班";
-            //    dataTable.Rows.Add( dataRow );
-            //}
-            //m_Sql.CloseSqlChannel();
-            //Cursor.Current = Cursors.Default;
-        }
-
-        private void InsertIntoDB()
-        {
-            //Cursor.Current = Cursors.WaitCursor;
-            //m_Sql.OpenSqlChannel();
-
-            //string commandStr = "Insert into holiday(";
-            //commandStr = commandStr + "date,";
-            //commandStr = commandStr + "reason,";
-            //commandStr = commandStr + "working";
-            //commandStr = commandStr + ") values('";
-            //int holidayYear = dateTimeHoliday.Value.Year;
-            //int holidayMonth = dateTimeHoliday.Value.Month;
-            //int holidayDay = dateTimeHoliday.Value.Day;
-            //commandStr = commandStr + holidayYear.ToString() + "-" + holidayMonth.ToString() + "-" + holidayDay.ToString() + "','";
-
-
-            //commandStr = commandStr + textBoxReason.Text + "','";
-            //if ( uiRadioBtnCalenderDay.Checked )
-            //    commandStr = commandStr + "1";//放假
-            //else
-            //    commandStr = commandStr + "2";//補班
-            //commandStr = commandStr + "')";
-
-
-            //m_Sql.ExecuteNonQueryCommand( commandStr );
-            //m_Sql.CloseSqlChannel();
-            //Cursor.Current = Cursors.Default;
-        }
-
-        private void DeleteExistDB()
-        {
-            //int holidayYear = dateTimeHoliday.Value.Year;
-            //int holidayMonth = dateTimeHoliday.Value.Month;
-            //int holidayDay = dateTimeHoliday.Value.Day;
-            //m_Sql.NoHistoryDelete_SQL( "holiday", "date = '" + holidayYear.ToString() + "-" + holidayMonth.ToString() + "-" + holidayDay.ToString() + "'" );
+            DialogResult result = MessageBox.Show( "確定要刪除此日期?", "確定", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation );
+            if ( result == DialogResult.Yes )
+            {
+                DeleteExistDB();
+                RefreshDatagridview();
+            }
         }
 
         private void radioBtnWorkingCondition_CheckedChanged( object sender, EventArgs e )
         {
-
+            UpdateUI();
         }
-
-        private void radioBtnHolidayCondition_CheckedChanged( object sender, EventArgs e )
-        {
-
-        }
-
-
-
     }
 }
