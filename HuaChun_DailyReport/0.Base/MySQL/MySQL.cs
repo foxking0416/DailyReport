@@ -183,7 +183,16 @@ namespace HuaChun_DailyReport
             CloseSqlChannel();
             return data_array.ToArray();
         }
-       
+        public void ClearEntireTable( string table )
+        {
+            OpenSqlChannel();
+            MySqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "TRUNCATE " + table;
+            cmd.ExecuteNonQuery();
+            CloseSqlChannel();
+        }
+
+
         //===================================Basic function=============================================
     }
 }
