@@ -32,11 +32,11 @@
             this.RBtnMNRainyNoCountHalf = new System.Windows.Forms.RadioButton();
             this.RBtnMNRainyNoCountAll = new System.Windows.Forms.RadioButton();
             this.groupBoxRainy = new System.Windows.Forms.GroupBox();
-            this.groupBoxMorningRainy = new System.Windows.Forms.GroupBox();
             this.groupBoxAfternoonRainy = new System.Windows.Forms.GroupBox();
             this.RBtnANRainyNoCountAll = new System.Windows.Forms.RadioButton();
             this.RBtnANRainyStillCount = new System.Windows.Forms.RadioButton();
             this.RBtnANRainyNoCountHalf = new System.Windows.Forms.RadioButton();
+            this.groupBoxMorningRainy = new System.Windows.Forms.GroupBox();
             this.groupBoxHeavyRain = new System.Windows.Forms.GroupBox();
             this.groupBoxAfternoonHeavyRain = new System.Windows.Forms.GroupBox();
             this.RBtnANHeavyRainNoCountAll = new System.Windows.Forms.RadioButton();
@@ -66,9 +66,9 @@
             this.RBtnMNMuddyNoCountHalf = new System.Windows.Forms.RadioButton();
             this.groupBoxPowerShutdown = new System.Windows.Forms.GroupBox();
             this.groupBoxAfternoonPowerShutdown = new System.Windows.Forms.GroupBox();
-            this.radioButton19 = new System.Windows.Forms.RadioButton();
+            this.RBtnANPowerShutdownNoCountAll = new System.Windows.Forms.RadioButton();
             this.RBtnANPowerShutdownStillCount = new System.Windows.Forms.RadioButton();
-            this.radioButton21 = new System.Windows.Forms.RadioButton();
+            this.RBtnANPowerShutdownNoCountHalf = new System.Windows.Forms.RadioButton();
             this.groupBoxMorningPowerShutdown = new System.Windows.Forms.GroupBox();
             this.RBtnMNPowerShutdownNoCountAll = new System.Windows.Forms.RadioButton();
             this.RBtnMNPowerShutdownStillCount = new System.Windows.Forms.RadioButton();
@@ -106,8 +106,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.m_uiLabelProjectName = new System.Windows.Forms.Label();
             this.groupBoxRainy.SuspendLayout();
-            this.groupBoxMorningRainy.SuspendLayout();
             this.groupBoxAfternoonRainy.SuspendLayout();
+            this.groupBoxMorningRainy.SuspendLayout();
             this.groupBoxHeavyRain.SuspendLayout();
             this.groupBoxAfternoonHeavyRain.SuspendLayout();
             this.groupBoxMorningHeavyRaing.SuspendLayout();
@@ -174,18 +174,6 @@
             this.groupBoxRainy.TabStop = false;
             this.groupBoxRainy.Text = "下雨";
             // 
-            // groupBoxMorningRainy
-            // 
-            this.groupBoxMorningRainy.Controls.Add(this.RBtnMNRainyNoCountAll);
-            this.groupBoxMorningRainy.Controls.Add(this.RBtnMNRainyStillCount);
-            this.groupBoxMorningRainy.Controls.Add(this.RBtnMNRainyNoCountHalf);
-            this.groupBoxMorningRainy.Location = new System.Drawing.Point(16, 19);
-            this.groupBoxMorningRainy.Name = "groupBoxMorningRainy";
-            this.groupBoxMorningRainy.Size = new System.Drawing.Size(120, 100);
-            this.groupBoxMorningRainy.TabIndex = 2;
-            this.groupBoxMorningRainy.TabStop = false;
-            this.groupBoxMorningRainy.Text = "上午下雨";
-            // 
             // groupBoxAfternoonRainy
             // 
             this.groupBoxAfternoonRainy.Controls.Add(this.RBtnANRainyNoCountAll);
@@ -229,6 +217,18 @@
             this.RBtnANRainyNoCountHalf.TabStop = true;
             this.RBtnANRainyNoCountHalf.Text = "不計工期0.5天";
             this.RBtnANRainyNoCountHalf.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxMorningRainy
+            // 
+            this.groupBoxMorningRainy.Controls.Add(this.RBtnMNRainyNoCountAll);
+            this.groupBoxMorningRainy.Controls.Add(this.RBtnMNRainyStillCount);
+            this.groupBoxMorningRainy.Controls.Add(this.RBtnMNRainyNoCountHalf);
+            this.groupBoxMorningRainy.Location = new System.Drawing.Point(16, 19);
+            this.groupBoxMorningRainy.Name = "groupBoxMorningRainy";
+            this.groupBoxMorningRainy.Size = new System.Drawing.Size(120, 100);
+            this.groupBoxMorningRainy.TabIndex = 2;
+            this.groupBoxMorningRainy.TabStop = false;
+            this.groupBoxMorningRainy.Text = "上午下雨";
             // 
             // groupBoxHeavyRain
             // 
@@ -540,9 +540,9 @@
             // 
             // groupBoxAfternoonPowerShutdown
             // 
-            this.groupBoxAfternoonPowerShutdown.Controls.Add(this.radioButton19);
+            this.groupBoxAfternoonPowerShutdown.Controls.Add(this.RBtnANPowerShutdownNoCountAll);
             this.groupBoxAfternoonPowerShutdown.Controls.Add(this.RBtnANPowerShutdownStillCount);
-            this.groupBoxAfternoonPowerShutdown.Controls.Add(this.radioButton21);
+            this.groupBoxAfternoonPowerShutdown.Controls.Add(this.RBtnANPowerShutdownNoCountHalf);
             this.groupBoxAfternoonPowerShutdown.Location = new System.Drawing.Point(16, 125);
             this.groupBoxAfternoonPowerShutdown.Name = "groupBoxAfternoonPowerShutdown";
             this.groupBoxAfternoonPowerShutdown.Size = new System.Drawing.Size(120, 100);
@@ -550,15 +550,15 @@
             this.groupBoxAfternoonPowerShutdown.TabStop = false;
             this.groupBoxAfternoonPowerShutdown.Text = "下午停電";
             // 
-            // radioButton19
+            // RBtnANPowerShutdownNoCountAll
             // 
-            this.radioButton19.AutoSize = true;
-            this.radioButton19.Location = new System.Drawing.Point(6, 19);
-            this.radioButton19.Name = "radioButton19";
-            this.radioButton19.Size = new System.Drawing.Size(91, 17);
-            this.radioButton19.TabIndex = 0;
-            this.radioButton19.Text = "不計工期1天";
-            this.radioButton19.UseVisualStyleBackColor = true;
+            this.RBtnANPowerShutdownNoCountAll.AutoSize = true;
+            this.RBtnANPowerShutdownNoCountAll.Location = new System.Drawing.Point(6, 19);
+            this.RBtnANPowerShutdownNoCountAll.Name = "RBtnANPowerShutdownNoCountAll";
+            this.RBtnANPowerShutdownNoCountAll.Size = new System.Drawing.Size(91, 17);
+            this.RBtnANPowerShutdownNoCountAll.TabIndex = 0;
+            this.RBtnANPowerShutdownNoCountAll.Text = "不計工期1天";
+            this.RBtnANPowerShutdownNoCountAll.UseVisualStyleBackColor = true;
             // 
             // RBtnANPowerShutdownStillCount
             // 
@@ -570,17 +570,17 @@
             this.RBtnANPowerShutdownStillCount.Text = "照計工期";
             this.RBtnANPowerShutdownStillCount.UseVisualStyleBackColor = true;
             // 
-            // radioButton21
+            // RBtnANPowerShutdownNoCountHalf
             // 
-            this.radioButton21.AutoSize = true;
-            this.radioButton21.Checked = true;
-            this.radioButton21.Location = new System.Drawing.Point(6, 42);
-            this.radioButton21.Name = "radioButton21";
-            this.radioButton21.Size = new System.Drawing.Size(100, 17);
-            this.radioButton21.TabIndex = 0;
-            this.radioButton21.TabStop = true;
-            this.radioButton21.Text = "不計工期0.5天";
-            this.radioButton21.UseVisualStyleBackColor = true;
+            this.RBtnANPowerShutdownNoCountHalf.AutoSize = true;
+            this.RBtnANPowerShutdownNoCountHalf.Checked = true;
+            this.RBtnANPowerShutdownNoCountHalf.Location = new System.Drawing.Point(6, 42);
+            this.RBtnANPowerShutdownNoCountHalf.Name = "RBtnANPowerShutdownNoCountHalf";
+            this.RBtnANPowerShutdownNoCountHalf.Size = new System.Drawing.Size(100, 17);
+            this.RBtnANPowerShutdownNoCountHalf.TabIndex = 0;
+            this.RBtnANPowerShutdownNoCountHalf.TabStop = true;
+            this.RBtnANPowerShutdownNoCountHalf.Text = "不計工期0.5天";
+            this.RBtnANPowerShutdownNoCountHalf.UseVisualStyleBackColor = true;
             // 
             // groupBoxMorningPowerShutdown
             // 
@@ -962,11 +962,11 @@
             this.label1.TabIndex = 3;
             this.label1.Text = "工程名稱：";
             // 
-            // labelProjectName
+            // m_uiLabelProjectName
             // 
             this.m_uiLabelProjectName.AutoSize = true;
             this.m_uiLabelProjectName.Location = new System.Drawing.Point(86, 12);
-            this.m_uiLabelProjectName.Name = "labelProjectName";
+            this.m_uiLabelProjectName.Name = "m_uiLabelProjectName";
             this.m_uiLabelProjectName.Size = new System.Drawing.Size(35, 13);
             this.m_uiLabelProjectName.TabIndex = 4;
             this.m_uiLabelProjectName.Text = "label2";
@@ -992,10 +992,10 @@
             this.Name = "VariedFactorSettingForm";
             this.Text = "編輯變動因素";
             this.groupBoxRainy.ResumeLayout(false);
-            this.groupBoxMorningRainy.ResumeLayout(false);
-            this.groupBoxMorningRainy.PerformLayout();
             this.groupBoxAfternoonRainy.ResumeLayout(false);
             this.groupBoxAfternoonRainy.PerformLayout();
+            this.groupBoxMorningRainy.ResumeLayout(false);
+            this.groupBoxMorningRainy.PerformLayout();
             this.groupBoxHeavyRain.ResumeLayout(false);
             this.groupBoxAfternoonHeavyRain.ResumeLayout(false);
             this.groupBoxAfternoonHeavyRain.PerformLayout();
@@ -1076,9 +1076,9 @@
         private System.Windows.Forms.RadioButton RBtnMNMuddyNoCountHalf;
         private System.Windows.Forms.GroupBox groupBoxPowerShutdown;
         private System.Windows.Forms.GroupBox groupBoxAfternoonPowerShutdown;
-        private System.Windows.Forms.RadioButton radioButton19;
+        private System.Windows.Forms.RadioButton RBtnANPowerShutdownNoCountAll;
         private System.Windows.Forms.RadioButton RBtnANPowerShutdownStillCount;
-        private System.Windows.Forms.RadioButton radioButton21;
+        private System.Windows.Forms.RadioButton RBtnANPowerShutdownNoCountHalf;
         private System.Windows.Forms.GroupBox groupBoxMorningPowerShutdown;
         private System.Windows.Forms.RadioButton RBtnMNPowerShutdownNoCountAll;
         private System.Windows.Forms.RadioButton RBtnMNPowerShutdownStillCount;

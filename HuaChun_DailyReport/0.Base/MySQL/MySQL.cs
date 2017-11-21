@@ -192,6 +192,57 @@ namespace HuaChun_DailyReport
             CloseSqlChannel();
         }
 
+        public bool InsertSqlData( string strTable, string[] arrCellName, string[] arrValue )
+        {
+            if ( arrCellName.Length != arrValue.Length || arrCellName.Length == 0 )
+            {
+                return false;
+            }
+            
+            try
+            {
+                string strCommand = "Insert into " + strTable + "(";
+
+                for ( int i = 0; i < arrCellName.Length; ++i )
+                {
+                    strCommand += arrCellName[i];
+                    if ( i != arrCellName.Length - 1 )
+                    {
+                        strCommand += ",";
+                    }
+                    else
+                    {
+                        strCommand += ") values('";
+                    }
+                }
+
+                for ( int i = 0; i < arrValue.Length; ++i )
+                {
+                    strCommand += arrValue [ i ];
+                    if ( i != arrValue.Length - 1 )
+                    {
+                        strCommand += "','";
+                    }
+                    else
+                    {
+                        strCommand += "')";
+                    }
+                }
+
+                OpenSqlChannel();
+                MySqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = strCommand;
+                cmd.ExecuteNonQuery();
+                CloseSqlChannel();
+
+            }
+            catch
+            {
+            }
+
+
+            return true;
+        }
 
         //===================================Basic function=============================================
     }
