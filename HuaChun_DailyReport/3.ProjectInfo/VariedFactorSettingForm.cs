@@ -45,21 +45,21 @@ namespace HuaChun_DailyReport
             string strAfternoonOther = "";
             if ( strMorningRainy != string.Empty )
             {
-                strAfternoonRainy = m_Sql.ReadSqlDataWithoutOpenClose( "afternoon_rainy", "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
-                strMorningHeavyRain = m_Sql.ReadSqlDataWithoutOpenClose( "morning_heavyrain", "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
-                strAfternoonHeavyRain = m_Sql.ReadSqlDataWithoutOpenClose( "afternoon_heavyrain", "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
-                strMorningTyphoon = m_Sql.ReadSqlDataWithoutOpenClose( "morning_typhoon", "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
-                strAfternoonTyphoon = m_Sql.ReadSqlDataWithoutOpenClose( "afternoon_typhoon", "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
-                strMorningHot = m_Sql.ReadSqlDataWithoutOpenClose( "morning_hot", "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
-                strAfternoonHot = m_Sql.ReadSqlDataWithoutOpenClose( "afternoon_hot", "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
-                strMorningMuddy = m_Sql.ReadSqlDataWithoutOpenClose( "morning_muddy", "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
-                strAfternoonMuddy = m_Sql.ReadSqlDataWithoutOpenClose( "afternoon_muddy", "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
-                strMorningPowerShutdown = m_Sql.ReadSqlDataWithoutOpenClose( "morning_powershutdown", "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
+                strAfternoonRainy =         m_Sql.ReadSqlDataWithoutOpenClose( "afternoon_rainy",         "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
+                strMorningHeavyRain =       m_Sql.ReadSqlDataWithoutOpenClose( "morning_heavyrain",       "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
+                strAfternoonHeavyRain =     m_Sql.ReadSqlDataWithoutOpenClose( "afternoon_heavyrain",     "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
+                strMorningTyphoon =         m_Sql.ReadSqlDataWithoutOpenClose( "morning_typhoon",         "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
+                strAfternoonTyphoon =       m_Sql.ReadSqlDataWithoutOpenClose( "afternoon_typhoon",       "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
+                strMorningHot =             m_Sql.ReadSqlDataWithoutOpenClose( "morning_hot",             "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
+                strAfternoonHot =           m_Sql.ReadSqlDataWithoutOpenClose( "afternoon_hot",           "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
+                strMorningMuddy =           m_Sql.ReadSqlDataWithoutOpenClose( "morning_muddy",           "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
+                strAfternoonMuddy =         m_Sql.ReadSqlDataWithoutOpenClose( "afternoon_muddy",         "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
+                strMorningPowerShutdown =   m_Sql.ReadSqlDataWithoutOpenClose( "morning_powershutdown",   "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
                 strAfternoonPowerShutdown = m_Sql.ReadSqlDataWithoutOpenClose( "afternoon_powershutdown", "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
-                strMorningPauseWorking = m_Sql.ReadSqlDataWithoutOpenClose( "morning_pauseworking", "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
-                strAfternoonPauseWorking = m_Sql.ReadSqlDataWithoutOpenClose( "afternoon_pauseworking", "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" ); ;
-                strMorningOther = m_Sql.ReadSqlDataWithoutOpenClose( "morning_other", "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
-                strAfternoonOther = m_Sql.ReadSqlDataWithoutOpenClose( "afternoon_other", "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
+                strMorningPauseWorking =    m_Sql.ReadSqlDataWithoutOpenClose( "morning_pauseworking",    "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
+                strAfternoonPauseWorking =  m_Sql.ReadSqlDataWithoutOpenClose( "afternoon_pauseworking",  "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
+                strMorningOther =           m_Sql.ReadSqlDataWithoutOpenClose( "morning_other",           "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
+                strAfternoonOther =         m_Sql.ReadSqlDataWithoutOpenClose( "afternoon_other",         "project_varied_condition", "project_no = '" + m_strProjectNumber + "'" );
             }
 
             m_Sql.CloseSqlChannel();
