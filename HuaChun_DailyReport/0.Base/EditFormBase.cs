@@ -31,10 +31,10 @@ namespace HuaChun_DailyReport
             this.btnAddEdit.Size = new System.Drawing.Size(110, 23);
 
             this.btnExit.Size = new System.Drawing.Size(110, 23);
-            this.btnExit.Location = new System.Drawing.Point(250, 340);
+            this.btnExit.Location = new System.Drawing.Point(250, 380);
 
             this.btnDelete = new System.Windows.Forms.Button();
-            this.btnDelete.Location = new System.Drawing.Point(130, 340);
+            this.btnDelete.Location = new System.Drawing.Point(130, 380);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(110, 23);
             this.btnDelete.TabIndex = 5;

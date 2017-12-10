@@ -39,13 +39,16 @@
             this.dataGridView = new System.Windows.Forms.DataGridView();
             this.labelWarningNumber = new System.Windows.Forms.Label();
             this.labelWarningName = new System.Windows.Forms.Label();
-            this.labelWarning3 = new System.Windows.Forms.Label();
+            this.labelWarningUnit = new System.Windows.Forms.Label();
+            this.labelClass = new System.Windows.Forms.Label();
+            this.labelWarningClass = new System.Windows.Forms.Label();
+            this.textBox_Class = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // btnAddEdit
             // 
-            this.btnAddEdit.Location = new System.Drawing.Point(10, 340);
+            this.btnAddEdit.Location = new System.Drawing.Point(10, 380);
             this.btnAddEdit.Name = "btnAddEdit";
             this.btnAddEdit.Size = new System.Drawing.Size(170, 23);
             this.btnAddEdit.TabIndex = 3;
@@ -55,7 +58,7 @@
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(190, 340);
+            this.btnExit.Location = new System.Drawing.Point(190, 380);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(170, 23);
             this.btnExit.TabIndex = 4;
@@ -77,7 +80,7 @@
             // 
             this.labelName.AutoSize = true;
             this.labelName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelName.Location = new System.Drawing.Point(10, 50);
+            this.labelName.Location = new System.Drawing.Point(10, 90);
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(38, 16);
             this.labelName.TabIndex = 2;
@@ -87,7 +90,7 @@
             // 
             this.labelUnit.AutoSize = true;
             this.labelUnit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelUnit.Location = new System.Drawing.Point(10, 90);
+            this.labelUnit.Location = new System.Drawing.Point(10, 130);
             this.labelUnit.Name = "labelUnit";
             this.labelUnit.Size = new System.Drawing.Size(38, 16);
             this.labelUnit.TabIndex = 3;
@@ -104,68 +107,100 @@
             // textBox_Name
             // 
             this.textBox_Name.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_Name.Location = new System.Drawing.Point(97, 47);
+            this.textBox_Name.Location = new System.Drawing.Point(97, 87);
             this.textBox_Name.Name = "textBox_Name";
             this.textBox_Name.Size = new System.Drawing.Size(170, 22);
-            this.textBox_Name.TabIndex = 1;
+            this.textBox_Name.TabIndex = 2;
             // 
             // textBox_Unit
             // 
             this.textBox_Unit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_Unit.Location = new System.Drawing.Point(97, 87);
+            this.textBox_Unit.Location = new System.Drawing.Point(97, 127);
             this.textBox_Unit.Name = "textBox_Unit";
             this.textBox_Unit.Size = new System.Drawing.Size(170, 22);
-            this.textBox_Unit.TabIndex = 2;
+            this.textBox_Unit.TabIndex = 3;
             // 
-            // dataGridView1
+            // dataGridView
             // 
             this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Location = new System.Drawing.Point(10, 130);
-            this.dataGridView.Name = "dataGridView1";
+            this.dataGridView.Location = new System.Drawing.Point(10, 170);
+            this.dataGridView.Name = "dataGridView";
             this.dataGridView.Size = new System.Drawing.Size(350, 200);
             this.dataGridView.TabIndex = 5;
             this.dataGridView.SelectionChanged += new System.EventHandler(this.EventDataGridView_SelectionChanged);
             // 
-            // labelWarning1
+            // labelWarningNumber
             // 
             this.labelWarningNumber.AutoSize = true;
             this.labelWarningNumber.ForeColor = System.Drawing.Color.Red;
             this.labelWarningNumber.Location = new System.Drawing.Point(100, 30);
-            this.labelWarningNumber.Name = "labelWarning1";
+            this.labelWarningNumber.Name = "labelWarningNumber";
             this.labelWarningNumber.Size = new System.Drawing.Size(91, 13);
             this.labelWarningNumber.TabIndex = 6;
             this.labelWarningNumber.Text = "編號不可為空白";
             this.labelWarningNumber.Visible = false;
             // 
-            // labelWarning2
+            // labelWarningName
             // 
             this.labelWarningName.AutoSize = true;
             this.labelWarningName.ForeColor = System.Drawing.Color.Red;
-            this.labelWarningName.Location = new System.Drawing.Point(100, 70);
-            this.labelWarningName.Name = "labelWarning2";
+            this.labelWarningName.Location = new System.Drawing.Point(100, 110);
+            this.labelWarningName.Name = "labelWarningName";
             this.labelWarningName.Size = new System.Drawing.Size(91, 13);
             this.labelWarningName.TabIndex = 6;
             this.labelWarningName.Text = "名稱不可為空白";
             this.labelWarningName.Visible = false;
             // 
-            // labelWarning3
+            // labelWarningUnit
             // 
-            this.labelWarning3.AutoSize = true;
-            this.labelWarning3.ForeColor = System.Drawing.Color.Red;
-            this.labelWarning3.Location = new System.Drawing.Point(100, 110);
-            this.labelWarning3.Name = "labelWarning3";
-            this.labelWarning3.Size = new System.Drawing.Size(91, 13);
-            this.labelWarning3.TabIndex = 6;
-            this.labelWarning3.Text = "單位不可為空白";
-            this.labelWarning3.Visible = false;
+            this.labelWarningUnit.AutoSize = true;
+            this.labelWarningUnit.ForeColor = System.Drawing.Color.Red;
+            this.labelWarningUnit.Location = new System.Drawing.Point(100, 150);
+            this.labelWarningUnit.Name = "labelWarningUnit";
+            this.labelWarningUnit.Size = new System.Drawing.Size(91, 13);
+            this.labelWarningUnit.TabIndex = 6;
+            this.labelWarningUnit.Text = "單位不可為空白";
+            this.labelWarningUnit.Visible = false;
+            // 
+            // labelClass
+            // 
+            this.labelClass.AutoSize = true;
+            this.labelClass.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelClass.Location = new System.Drawing.Point(10, 50);
+            this.labelClass.Name = "labelClass";
+            this.labelClass.Size = new System.Drawing.Size(38, 16);
+            this.labelClass.TabIndex = 7;
+            this.labelClass.Text = "類別";
+            // 
+            // labelWarningClass
+            // 
+            this.labelWarningClass.AutoSize = true;
+            this.labelWarningClass.ForeColor = System.Drawing.Color.Red;
+            this.labelWarningClass.Location = new System.Drawing.Point(100, 70);
+            this.labelWarningClass.Name = "labelWarningClass";
+            this.labelWarningClass.Size = new System.Drawing.Size(91, 13);
+            this.labelWarningClass.TabIndex = 9;
+            this.labelWarningClass.Text = "類別不可為空白";
+            this.labelWarningClass.Visible = false;
+            // 
+            // textBox_Class
+            // 
+            this.textBox_Class.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox_Class.Location = new System.Drawing.Point(97, 47);
+            this.textBox_Class.Name = "textBox_Class";
+            this.textBox_Class.Size = new System.Drawing.Size(170, 22);
+            this.textBox_Class.TabIndex = 1;
             // 
             // IncreaseEditFormBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(370, 368);
-            this.Controls.Add(this.labelWarning3);
+            this.ClientSize = new System.Drawing.Size(370, 408);
+            this.Controls.Add(this.labelWarningClass);
+            this.Controls.Add(this.textBox_Class);
+            this.Controls.Add(this.labelClass);
+            this.Controls.Add(this.labelWarningUnit);
             this.Controls.Add(this.labelWarningName);
             this.Controls.Add(this.labelWarningNumber);
             this.Controls.Add(this.dataGridView);
@@ -199,6 +234,9 @@
         protected System.Windows.Forms.DataGridView dataGridView;
         protected System.Windows.Forms.Label labelWarningNumber;
         protected System.Windows.Forms.Label labelWarningName;
-        protected System.Windows.Forms.Label labelWarning3;
+        protected System.Windows.Forms.Label labelWarningUnit;
+        protected System.Windows.Forms.Label labelClass;
+        protected System.Windows.Forms.Label labelWarningClass;
+        protected System.Windows.Forms.TextBox textBox_Class;
     }
 }

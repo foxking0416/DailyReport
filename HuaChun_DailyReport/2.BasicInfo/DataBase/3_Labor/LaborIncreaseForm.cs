@@ -23,20 +23,18 @@ namespace HuaChun_DailyReport
 
             this.Text = "工人別新增作業";
             this.labelNumber.Text = strFunctionName + "編號";
-            this.labelName.Text = strFunctionName + "名稱";
-            this.labelUnit.Visible = false;
-            this.textBox_Unit.Visible = false;
+            this.labelName.Text = "名稱";
             this.btnAddEdit.Text = "新增";
-            this.dataGridView.Size = new System.Drawing.Size(350, 240);
-            this.dataGridView.Location = new System.Drawing.Point(10, 90);
             Initialize();
         }
 
         protected override void InitializeDataTable()
         {
             dataTable = new DataTable("MyNewTable");
-            dataTable.Columns.Add(strFunctionName + "編號", typeof(String));
-            dataTable.Columns.Add(strFunctionName + "名稱", typeof(String));
+            dataTable.Columns.Add( strFunctionName + "編號", typeof( String ) );
+            dataTable.Columns.Add( strFunctionName + "類別", typeof( String ) );
+            dataTable.Columns.Add( strFunctionName + "名稱", typeof( String ) );
+            dataTable.Columns.Add( "單位", typeof( String ) );
             dataGridView.DataSource = dataTable;
             dataGridView.ReadOnly = true;
             dataGridView.AllowUserToAddRows = false;
@@ -58,8 +56,10 @@ namespace HuaChun_DailyReport
             for (int i = 0; i < arrNumbers.Length; i++)
             {
                 dataRow = dataTable.NewRow();
-                dataRow[strFunctionName + "編號"] = arrNumbers[i];
-                dataRow[strFunctionName + "名稱"] = m_Sql.ReadSqlDataWithoutOpenClose("name", strFunctionNameEng, "number = '" + arrNumbers[i] + "'");
+                dataRow [ strFunctionName + "編號" ] = arrNumbers [ i ];
+                dataRow [ strFunctionName + "類別" ] = m_Sql.ReadSqlDataWithoutOpenClose( "class", strFunctionNameEng, "number = '" + arrNumbers [ i ] + "'" );
+                dataRow [ strFunctionName + "名稱" ] = m_Sql.ReadSqlDataWithoutOpenClose( "name", strFunctionNameEng, "number = '" + arrNumbers [ i ] + "'" );
+                dataRow [ "單位" ] = m_Sql.ReadSqlDataWithoutOpenClose( "unit", strFunctionNameEng, "number = '" + arrNumbers [ i ] + "'" );
                 dataTable.Rows.Add(dataRow);
             }
             m_Sql.CloseSqlChannel();
@@ -71,12 +71,16 @@ namespace HuaChun_DailyReport
             m_Sql.OpenSqlChannel();
 
             string commandStr = "Insert into " + strFunctionNameEng + "(";
-            commandStr = commandStr + "number,";
-            commandStr = commandStr + "name";
-            commandStr = commandStr + ") values('";
-            commandStr = commandStr + textBox_No.Text + "','";
-            commandStr = commandStr + textBox_Name.Text;
-            commandStr = commandStr + "')";
+            commandStr += "number,";
+            commandStr += "class,";
+            commandStr += "name,";
+            commandStr += "unit";
+            commandStr += ") values('";
+            commandStr += textBox_No.Text + "','";
+            commandStr += textBox_Class.Text + "','";
+            commandStr += textBox_Name.Text + "','";
+            commandStr += textBox_Unit.Text;
+            commandStr += "')";
 
             m_Sql.ExecuteNonQueryCommand(commandStr);
             m_Sql.CloseSqlChannel();
@@ -85,17 +89,34 @@ namespace HuaChun_DailyReport
         protected override void EventBtnAddEdit_Click(object sender, EventArgs e)
         {
             labelWarningNumber.Visible = false;
+            labelWarningClass.Visible = false;
             labelWarningName.Visible = false;
+            labelWarningUnit.Visible = false;
 
             if (textBox_No.Text == string.Empty)
             {
                 labelWarningNumber.Visible = true;
-                return;
             }
 
-            if (textBox_Name.Text == string.Empty)
+            if (textBox_Class.Text == string.Empty)
+            {
+                labelWarningClass.Visible = true;
+            }
+
+            if ( textBox_Name.Text == string.Empty )
             {
                 labelWarningName.Visible = true;
+            }
+            if ( textBox_Unit.Text == string.Empty )
+            {
+                labelWarningUnit.Visible = true;
+            }
+
+            if ( textBox_No.Text == string.Empty ||
+                 textBox_Class.Text == string.Empty ||
+                 textBox_Name.Text == string.Empty ||
+                 textBox_Unit.Text == string.Empty )
+            {
                 return;
             }
 
@@ -125,7 +146,9 @@ namespace HuaChun_DailyReport
             InsertIntoDB();
             RefreshDatagridview();
             textBox_No.Clear();
+            textBox_Class.Clear();
             textBox_Name.Clear();
+            textBox_Unit.Clear();
         }
     }
 }

@@ -53,7 +53,7 @@ namespace HuaChun_DailyReport
         protected override void Initialize()
         {
 
-            textBox2.Enabled = false;
+            textBox_Name.Enabled = false;
 
 
             arrNumbers = m_Sql.Read1DArrayNoCondition_SQL_Data(strDataBaseNumber, strDataBaseTableName);
@@ -106,7 +106,7 @@ namespace HuaChun_DailyReport
             ArrayList array = new ArrayList();
             for (int i = 0; i < arrNumbers.Length; i++)
             {
-                if (arrNumbers[i].Contains(textBox1.Text))
+                if (arrNumbers[i].Contains(textBox_No.Text))
                     array.Add(arrNumbers[i]);
             }
 
@@ -130,7 +130,7 @@ namespace HuaChun_DailyReport
             ArrayList array = new ArrayList();
             for (int i = 0; i < arrNames.Length; i++)
             {
-                if (arrNames[i].Contains(textBox2.Text))
+                if (arrNames[i].Contains(textBox_Name.Text))
                     array.Add(arrNames[i]);
             }
 

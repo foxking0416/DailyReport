@@ -45,33 +45,15 @@ namespace HuaChun_DailyReport
             ProjectSearchForm formProjectSearch = new ProjectSearchForm(this, g_Sql);
             formProjectSearch.ShowDialog();
         }
+
+        private void EventMainCreateProject_Click( object sender, EventArgs e )
+        {
+
+        }
         #endregion
 
         #region 基本資料維護
         //基本資料維護
-        //新增工程
-        private void EventMainProjectIncrease_Click(object sender, EventArgs e)
-        {
-            ProjectIncreaseForm formProjectIncrease = new ProjectIncreaseForm(g_Sql);
-            formProjectIncrease.ShowDialog();
-        }
-        //編輯工程
-        private void EventMainProjectEdit_Click(object sender, EventArgs e)
-        {
-            ProjectEditForm formProjectEdit = new ProjectEditForm(g_Sql);
-            formProjectEdit.ShowDialog();
-        }
-        //新增標單
-        private void EventMainTendorIncrease_Click( object sender, EventArgs e )
-        {
-            TendorManageForm formTendorManage = new TendorManageForm( g_Sql );
-            formTendorManage.ShowDialog();
-        }
-        //編輯標單
-        private void EventMainTendorEdit_Click( object sender, EventArgs e )
-        {
-
-        }
         //新增廠商
         private void EventMainVendorIncrease_Click(object sender, EventArgs e)
         {
@@ -121,6 +103,19 @@ namespace HuaChun_DailyReport
             LaborEditForm formLaborEdit = new LaborEditForm(g_Sql);
             formLaborEdit.ShowDialog();
         }
+        //新增外包
+        private void EventMainOutsourceIncrease_Click( object sender, EventArgs e )
+        {
+            OutsourceIncreaseForm formOutsourceIncrease = new OutsourceIncreaseForm( g_Sql );
+            formOutsourceIncrease.ShowDialog();
+        }
+        //編輯外包
+        private void EventMainOutsourceEdit_Click( object sender, EventArgs e )
+        {
+            OutsourceEditForm formOutsourceEdit = new OutsourceEditForm( g_Sql );
+            formOutsourceEdit.ShowDialog();
+        }
+        
         //新增人事
         private void EventMainEmployeeIncrease_Click(object sender, EventArgs e)
         {
@@ -153,8 +148,35 @@ namespace HuaChun_DailyReport
         }
         #endregion
 
+        #region 投標處理
+        //新增投標規格表
+        private void EventTendorIncrease_Click( object sender, EventArgs e )
+        {
+            TendorManageForm formTendorManage = new TendorManageForm( g_Sql );
+            formTendorManage.ShowDialog();
+        }
+        //編輯投標規格表
+        private void MenuItemTendorEdit_Click( object sender, EventArgs e )
+        {
+
+        }
+        #endregion
+
         #region 工程資料維護
         //工程資料維護
+        //新增工程
+        private void EventProjectIncrease_Click( object sender, EventArgs e )
+        {
+            ProjectIncreaseForm formProjectIncrease = new ProjectIncreaseForm( g_Sql );
+            formProjectIncrease.ShowDialog();
+        }
+        //編輯工程
+        private void EventProjectEdit_Click( object sender, EventArgs e )
+        {
+            ProjectEditForm formProjectEdit = new ProjectEditForm( g_Sql );
+            formProjectEdit.ShowDialog();
+        }
+
         private void EventConstantFactor_Click( object sender, EventArgs e )
         {
             ConstantFactorSettingForm formConstantFactorSetting = new ConstantFactorSettingForm( g_strProjectNo, g_Sql );
@@ -304,10 +326,12 @@ namespace HuaChun_DailyReport
                 case ( int )AuthorityLevle.MANAGER:
                     this.MenuItemSelectProject.Enabled = true;
                     this.MenuItemBasicInfo.Enabled = true;
+                    this.MenuItemProjectInfo.Enabled = true;
                     break;
                 case ( int )AuthorityLevle.POWER_USE:
                     this.MenuItemSelectProject.Enabled = true;
                     this.MenuItemBasicInfo.Enabled = true;
+                    this.MenuItemProjectInfo.Enabled = true;
                     break;
             }
 
@@ -375,9 +399,18 @@ namespace HuaChun_DailyReport
 
             this.MenuItemDailyReport.Enabled = true;
             this.MenuItemQuery.Enabled = true;
-
-            this.MenuItemProjectInfo.Enabled = true;
         }
+
+
+
+
+
+
+
+
+
+
+
 
  
 

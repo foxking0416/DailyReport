@@ -35,7 +35,8 @@ namespace HuaChun_DailyReport
 
         protected virtual void Initialize()
         {
-            textBox2.Enabled = false;
+            textBox_Name.Enabled = false;
+            textBox_Class.Enabled = false;
 
             arrNumbers = m_Sql.Read1DArrayNoCondition_SQL_Data(strDataBaseNumber, strDataBaseTableName);
             arrNames = m_Sql.Read1DArrayNoCondition_SQL_Data(strDataBaseName, strDataBaseTableName);
@@ -67,15 +68,21 @@ namespace HuaChun_DailyReport
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioBtnNo.Checked)
+            textBox_No.Enabled = false;
+            textBox_Name.Enabled = false;
+            textBox_Class.Enabled = false;
+
+            if ( radioBtnNo.Checked )
             {
-                textBox1.Enabled = true;
-                textBox2.Enabled = false;
+                textBox_No.Enabled = true;
+            }
+            else if ( radioBtnName.Checked )
+            {
+                textBox_Name.Enabled = true;
             }
             else
             {
-                textBox1.Enabled = false;
-                textBox2.Enabled = true;
+                textBox_Class.Enabled = true;
             }
         }
 
@@ -90,7 +97,7 @@ namespace HuaChun_DailyReport
             ArrayList array = new ArrayList();
             for (int i = 0; i < arrNumbers.Length; i++)
             {
-                if (arrNumbers[i].Contains(textBox1.Text))
+                if (arrNumbers[i].Contains(textBox_No.Text))
                     array.Add(arrNumbers[i]);
             }
 
@@ -114,7 +121,7 @@ namespace HuaChun_DailyReport
             ArrayList array = new ArrayList();
             for (int i = 0; i < arrNames.Length; i++)
             {
-                if (arrNames[i].Contains(textBox2.Text))
+                if (arrNames[i].Contains(textBox_Name.Text))
                     array.Add(arrNames[i]);
             }
 

@@ -38,14 +38,20 @@
             // 
             // label2
             // 
-            this.labelName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelName.Location = new System.Drawing.Point(10, 50);
-            this.labelName.Size = new System.Drawing.Size(45, 16);
+            this.labelClass.Font = new System.Drawing.Font( "Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ( ( byte )( 0 ) ) );
+            this.labelClass.Location = new System.Drawing.Point( 10, 50 );
+            this.labelClass.Size = new System.Drawing.Size( 45, 16 );
             // 
             // label3
             // 
+            this.labelName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelName.Location = new System.Drawing.Point(10, 90);
+            this.labelName.Size = new System.Drawing.Size(45, 16);
+            // 
+            // label4
+            // 
             this.labelUnit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelUnit.Location = new System.Drawing.Point(10, 90);
+            this.labelUnit.Location = new System.Drawing.Point(10, 130);
             this.labelUnit.Size = new System.Drawing.Size(38, 16);
             // 
             // textBox_No
@@ -54,16 +60,22 @@
             this.textBox_No.Location = new System.Drawing.Point(97, 7);
             this.textBox_No.Size = new System.Drawing.Size(170, 22);
             // 
+            // textBox_Class
+            // 
+            this.textBox_Class.Font = new System.Drawing.Font( "Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ( ( byte )( 0 ) ) );
+            this.textBox_Class.Location = new System.Drawing.Point( 97, 47 );
+            this.textBox_Class.Size = new System.Drawing.Size( 170, 22 );
+            // 
             // textBox_Name
             // 
             this.textBox_Name.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_Name.Location = new System.Drawing.Point(97, 47);
+            this.textBox_Name.Location = new System.Drawing.Point(97, 87);
             this.textBox_Name.Size = new System.Drawing.Size(170, 22);
             // 
             // textBox_Unit
             // 
             this.textBox_Unit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_Unit.Location = new System.Drawing.Point(97, 87);
+            this.textBox_Unit.Location = new System.Drawing.Point(97, 127);
             this.textBox_Unit.Size = new System.Drawing.Size(170, 22);
             // 
             // labelWarning1
@@ -72,17 +84,21 @@
             // 
             // labelWarning2
             // 
-            this.labelWarningName.Location = new System.Drawing.Point(100, 70);
+            this.labelWarningClass.Location = new System.Drawing.Point( 100, 70 );
             // 
             // labelWarning3
             // 
-            this.labelWarning3.Location = new System.Drawing.Point(100, 110);
+            this.labelWarningName.Location = new System.Drawing.Point(100, 110);
+            // 
+            // labelWarning4
+            // 
+            this.labelWarningUnit.Location = new System.Drawing.Point(100, 150);
             // 
             // EditFormBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(370, 368);
+            this.ClientSize = new System.Drawing.Size(370, 408);
             this.Name = "EditFormBase";
             this.Text = "EditFormBase";
             this.ResumeLayout(false);
