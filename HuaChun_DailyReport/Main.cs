@@ -188,6 +188,12 @@ namespace HuaChun_DailyReport
             VariedFactorSettingForm formVariedFactorSetting = new VariedFactorSettingForm( g_strProjectNo, g_Sql );
             formVariedFactorSetting.ShowDialog();
         }
+
+        private void EventCreateSubItem_Click( object sender, EventArgs e )
+        {
+            CreateSubItemForm formCreateSubItem = new CreateSubItemForm( g_Sql );
+            formCreateSubItem.ShowDialog();
+        }
         #endregion
 
         #region 日報表作業
@@ -400,6 +406,8 @@ namespace HuaChun_DailyReport
             this.MenuItemDailyReport.Enabled = true;
             this.MenuItemQuery.Enabled = true;
         }
+
+
 
 
 

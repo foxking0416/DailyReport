@@ -43,6 +43,9 @@
             this.MenuItemLaborManage = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemLaborIncrease = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemLaborEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemOutsource = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemOutsourceIncrease = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemOutsourceEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemToolManage = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemToolIncrease = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemToolEdit = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,6 +67,8 @@
             this.工程工期計算規定ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemConstantFactor = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemVeriedFactor = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.MenuItemCreateSubItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemDailyReport = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemDailyReportBuild = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemDailyReportEdit = new System.Windows.Forms.ToolStripMenuItem();
@@ -97,11 +102,6 @@
             this.button3 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.labelProject = new System.Windows.Forms.Label();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.MenuItemCreateSubItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuItemOutsource = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuItemOutsourceIncrease = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuItemOutsourceEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -239,6 +239,29 @@
             this.MenuItemLaborEdit.Text = "編輯現有人工";
             this.MenuItemLaborEdit.Click += new System.EventHandler(this.EventMainLaborEdit_Click);
             // 
+            // MenuItemOutsource
+            // 
+            this.MenuItemOutsource.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuItemOutsourceIncrease,
+            this.MenuItemOutsourceEdit});
+            this.MenuItemOutsource.Name = "MenuItemOutsource";
+            this.MenuItemOutsource.Size = new System.Drawing.Size(178, 22);
+            this.MenuItemOutsource.Text = "外包管理作業";
+            // 
+            // MenuItemOutsourceIncrease
+            // 
+            this.MenuItemOutsourceIncrease.Name = "MenuItemOutsourceIncrease";
+            this.MenuItemOutsourceIncrease.Size = new System.Drawing.Size(178, 22);
+            this.MenuItemOutsourceIncrease.Text = "新增外包作業";
+            this.MenuItemOutsourceIncrease.Click += new System.EventHandler(this.EventMainOutsourceIncrease_Click);
+            // 
+            // MenuItemOutsourceEdit
+            // 
+            this.MenuItemOutsourceEdit.Name = "MenuItemOutsourceEdit";
+            this.MenuItemOutsourceEdit.Size = new System.Drawing.Size(178, 22);
+            this.MenuItemOutsourceEdit.Text = "編輯現有外包作業";
+            this.MenuItemOutsourceEdit.Click += new System.EventHandler(this.EventMainOutsourceEdit_Click);
+            // 
             // MenuItemToolManage
             // 
             this.MenuItemToolManage.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -367,14 +390,14 @@
             // MenuItemProjectIncrease
             // 
             this.MenuItemProjectIncrease.Name = "MenuItemProjectIncrease";
-            this.MenuItemProjectIncrease.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemProjectIncrease.Size = new System.Drawing.Size(139, 22);
             this.MenuItemProjectIncrease.Text = "新增工程檔";
             this.MenuItemProjectIncrease.Click += new System.EventHandler(this.EventProjectIncrease_Click);
             // 
             // MenuItemProjectEdit
             // 
             this.MenuItemProjectEdit.Name = "MenuItemProjectEdit";
-            this.MenuItemProjectEdit.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemProjectEdit.Size = new System.Drawing.Size(139, 22);
             this.MenuItemProjectEdit.Text = "編輯工程檔";
             this.MenuItemProjectEdit.Click += new System.EventHandler(this.EventProjectEdit_Click);
             // 
@@ -390,16 +413,28 @@
             // MenuItemConstantFactor
             // 
             this.MenuItemConstantFactor.Name = "MenuItemConstantFactor";
-            this.MenuItemConstantFactor.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemConstantFactor.Size = new System.Drawing.Size(126, 22);
             this.MenuItemConstantFactor.Text = "固定因素";
             this.MenuItemConstantFactor.Click += new System.EventHandler(this.EventConstantFactor_Click);
             // 
             // MenuItemVeriedFactor
             // 
             this.MenuItemVeriedFactor.Name = "MenuItemVeriedFactor";
-            this.MenuItemVeriedFactor.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemVeriedFactor.Size = new System.Drawing.Size(126, 22);
             this.MenuItemVeriedFactor.Text = "變動因素";
             this.MenuItemVeriedFactor.Click += new System.EventHandler(this.EventVeriedFactor_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(175, 6);
+            // 
+            // MenuItemCreateSubItem
+            // 
+            this.MenuItemCreateSubItem.Name = "MenuItemCreateSubItem";
+            this.MenuItemCreateSubItem.Size = new System.Drawing.Size(178, 22);
+            this.MenuItemCreateSubItem.Text = "建立合約子項目";
+            this.MenuItemCreateSubItem.Click += new System.EventHandler(this.EventCreateSubItem_Click);
             // 
             // MenuItemDailyReport
             // 
@@ -663,40 +698,6 @@
             this.labelProject.Size = new System.Drawing.Size(19, 13);
             this.labelProject.TabIndex = 6;
             this.labelProject.Text = "無";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(175, 6);
-            // 
-            // MenuItemCreateSubItem
-            // 
-            this.MenuItemCreateSubItem.Name = "MenuItemCreateSubItem";
-            this.MenuItemCreateSubItem.Size = new System.Drawing.Size(178, 22);
-            this.MenuItemCreateSubItem.Text = "建立合約子項目";
-            // 
-            // MenuItemOutsource
-            // 
-            this.MenuItemOutsource.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.MenuItemOutsourceIncrease,
-            this.MenuItemOutsourceEdit});
-            this.MenuItemOutsource.Name = "MenuItemOutsource";
-            this.MenuItemOutsource.Size = new System.Drawing.Size(178, 22);
-            this.MenuItemOutsource.Text = "外包管理作業";
-            // 
-            // MenuItemOutsourceIncrease
-            // 
-            this.MenuItemOutsourceIncrease.Name = "MenuItemOutsourceIncrease";
-            this.MenuItemOutsourceIncrease.Size = new System.Drawing.Size(178, 22);
-            this.MenuItemOutsourceIncrease.Text = "新增外包作業";
-            this.MenuItemOutsourceIncrease.Click += new System.EventHandler(this.EventMainOutsourceIncrease_Click);
-            // 
-            // MenuItemOutsourceEdit
-            // 
-            this.MenuItemOutsourceEdit.Name = "MenuItemOutsourceEdit";
-            this.MenuItemOutsourceEdit.Size = new System.Drawing.Size(178, 22);
-            this.MenuItemOutsourceEdit.Text = "編輯現有外包作業";
-            this.MenuItemOutsourceEdit.Click += new System.EventHandler(this.EventMainOutsourceEdit_Click);
             // 
             // Main
             // 
