@@ -191,7 +191,7 @@ namespace HuaChun_DailyReport
 
         private void EventCreateSubItem_Click( object sender, EventArgs e )
         {
-            CreateSubItemForm formCreateSubItem = new CreateSubItemForm( g_Sql );
+            CreateSubItemForm formCreateSubItem = new CreateSubItemForm( g_strProjectNo, g_Sql );
             formCreateSubItem.ShowDialog();
         }
         #endregion

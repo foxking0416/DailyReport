@@ -13,7 +13,8 @@ namespace HuaChun_DailyReport
 {
     public partial class CreateSubItemForm : Form
     {
-        protected MySQL m_Sql;
+        private string m_strProjectNumber;
+        private MySQL m_Sql;
         private DataTable dataTableMaterialAll;
         private DataTable dataTableMaterialSelected;
         private DataTable dataTableLaborAll;
@@ -31,9 +32,10 @@ namespace HuaChun_DailyReport
         private ArrayList arrToolNumberAll = new ArrayList();
         private ArrayList arrToolNumberSelected = new ArrayList();
 
-        public CreateSubItemForm( MySQL Sql )
+        public CreateSubItemForm( string strProjectNo, MySQL Sql )
         {
             m_Sql = Sql;
+            m_strProjectNumber = strProjectNo;
             InitializeComponent();
             InitializeAllDataTable();
             RefreshMaterialAllList();
@@ -334,6 +336,90 @@ namespace HuaChun_DailyReport
         private void EventBtnSave_Click( object sender, EventArgs e )
         {
 
+            m_Sql.NoHistoryDelete_SQL( "project_material_contract_used", "project_no = '" + m_strProjectNumber + "'" );
+            m_Sql.NoHistoryDelete_SQL( "project_labor_contract_used", "project_no = '" + m_strProjectNumber + "'" );
+            m_Sql.NoHistoryDelete_SQL( "project_tool_contract_used", "project_no = '" + m_strProjectNumber + "'" );
+            m_Sql.NoHistoryDelete_SQL( "project_outsource_contract_used", "project_no = '" + m_strProjectNumber + "'" );
+
+            m_Sql.OpenSqlChannel();
+
+            for ( int i = 0; i < arrMaterialNumberSelected.Count; i++ )
+            {
+                string commandStr = "Insert into project_material_contract_used(";
+                commandStr += "project_no,";
+                commandStr += "number,";
+                commandStr += "class,";
+                commandStr += "name,";
+                commandStr += "quantity";
+                commandStr += ") values('";
+                commandStr += m_strProjectNumber + "','";
+                commandStr += arrMaterialNumberSelected [ i ] + "','";
+                commandStr += m_Sql.ReadSqlDataWithoutOpenClose( "class", "material", "number = '" + arrMaterialNumberSelected [ i ] + "'" ) + "','";
+                commandStr += m_Sql.ReadSqlDataWithoutOpenClose( "name", "material", "number = '" + arrMaterialNumberSelected [ i ] + "'" ) + "','";
+                commandStr += "0";
+                commandStr += "')";
+
+                m_Sql.ExecuteNonQueryCommand( commandStr );
+            }
+
+            for ( int i = 0; i < arrLaborNumberSelected.Count; i++ )
+            {
+                string commandStr = "Insert into project_labor_contract_used(";
+                commandStr += "project_no,";
+                commandStr += "number,";
+                commandStr += "class,";
+                commandStr += "name,";
+                commandStr += "quantity";
+                commandStr += ") values('";
+                commandStr += m_strProjectNumber + "','";
+                commandStr += arrLaborNumberSelected [ i ] + "','";
+                commandStr += m_Sql.ReadSqlDataWithoutOpenClose( "class", "labor", "number = '" + arrLaborNumberSelected [ i ] + "'" ) + "','";
+                commandStr += m_Sql.ReadSqlDataWithoutOpenClose( "name", "labor", "number = '" + arrLaborNumberSelected [ i ] + "'" ) + "','";
+                commandStr += "0";
+                commandStr += "')";
+
+                m_Sql.ExecuteNonQueryCommand( commandStr );
+            }
+
+            for ( int i = 0; i < arrOutsourceNumberSelected.Count; i++ )
+            {
+                string commandStr = "Insert into project_outsource_contract_used(";
+                commandStr += "project_no,";
+                commandStr += "number,";
+                commandStr += "class,";
+                commandStr += "name,";
+                commandStr += "quantity";
+                commandStr += ") values('";
+                commandStr += m_strProjectNumber + "','";
+                commandStr += arrOutsourceNumberSelected [ i ] + "','";
+                commandStr += m_Sql.ReadSqlDataWithoutOpenClose( "class", "outsource", "number = '" + arrOutsourceNumberSelected [ i ] + "'" ) + "','";
+                commandStr += m_Sql.ReadSqlDataWithoutOpenClose( "name", "outsource", "number = '" + arrOutsourceNumberSelected [ i ] + "'" ) + "','";
+                commandStr += "0";
+                commandStr += "')";
+
+                m_Sql.ExecuteNonQueryCommand( commandStr );
+            }
+
+            for ( int i = 0; i < arrToolNumberSelected.Count; i++ )
+            {
+                string commandStr = "Insert into project_tool_contract_used(";
+                commandStr += "project_no,";
+                commandStr += "number,";
+                commandStr += "class,";
+                commandStr += "name,";
+                commandStr += "quantity";
+                commandStr += ") values('";
+                commandStr += m_strProjectNumber + "','";
+                commandStr += arrToolNumberSelected [ i ] + "','";
+                commandStr += m_Sql.ReadSqlDataWithoutOpenClose( "class", "tool", "number = '" + arrToolNumberSelected [ i ] + "'" ) + "','";
+                commandStr += m_Sql.ReadSqlDataWithoutOpenClose( "name", "tool", "number = '" + arrToolNumberSelected [ i ] + "'" ) + "','";
+                commandStr += "0";
+                commandStr += "')";
+
+                m_Sql.ExecuteNonQueryCommand( commandStr );
+            }
+
+            m_Sql.CloseSqlChannel();
         }
 
         private void EventBtnMaterialImport_Click( object sender, EventArgs e )
