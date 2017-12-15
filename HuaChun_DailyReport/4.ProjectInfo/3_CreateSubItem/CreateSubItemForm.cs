@@ -43,6 +43,10 @@ namespace HuaChun_DailyReport
             RefreshOutsourceAllList();
             RefreshToolAllList();
 
+            LoadMaterialFromDataBase();
+            LoadLaborFromDataBase();
+            LoadOutsourceFromDataBase();
+            LoadToolFromDataBase();
         }
 
         private void InitializeAllDataTable()
@@ -159,6 +163,94 @@ namespace HuaChun_DailyReport
             dataGridViewToolSelected.ReadOnly = true;
             dataGridViewToolSelected.AllowUserToAddRows = false;
             dataGridViewToolSelected.MultiSelect = true;
+        }
+
+        private void LoadMaterialFromDataBase()
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            dataTableMaterialSelected.Clear();
+
+            arrMaterialNumberSelected.AddRange( m_Sql.Read1DArray_SQL_Data( "number", "project_material_contract_used", "project_no = '" + m_strProjectNumber + "'" ) );
+
+            DataRow dataRow;
+            m_Sql.OpenSqlChannel();
+            for ( int i = 0; i < arrMaterialNumberSelected.Count; i++ )
+            {
+                dataRow = dataTableMaterialSelected.NewRow();
+                dataRow [ "材料編號" ] = arrMaterialNumberSelected [ i ];
+                dataRow [ "材料類別" ] = m_Sql.ReadSqlDataWithoutOpenClose( "class", "material", "number = '" + arrMaterialNumberSelected [ i ] + "'" );
+                dataRow [ "材料名稱" ] = m_Sql.ReadSqlDataWithoutOpenClose( "name", "material", "number = '" + arrMaterialNumberSelected [ i ] + "'" );
+                dataRow [ "單位" ] = m_Sql.ReadSqlDataWithoutOpenClose( "unit", "material", "number = '" + arrMaterialNumberSelected [ i ] + "'" );
+                dataTableMaterialSelected.Rows.Add( dataRow );
+            }
+            m_Sql.CloseSqlChannel();
+            Cursor.Current = Cursors.Default;
+        }
+
+        private void LoadLaborFromDataBase()
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            dataTableLaborSelected.Clear();
+
+            arrLaborNumberSelected.AddRange( m_Sql.Read1DArray_SQL_Data( "number", "project_labor_contract_used", "project_no = '" + m_strProjectNumber + "'" ) );
+
+            DataRow dataRow;
+            m_Sql.OpenSqlChannel();
+            for ( int i = 0; i < arrLaborNumberSelected.Count; i++ )
+            {
+                dataRow = dataTableLaborSelected.NewRow();
+                dataRow [ "人工編號" ] = arrLaborNumberSelected [ i ];
+                dataRow [ "人工類別" ] = m_Sql.ReadSqlDataWithoutOpenClose( "class", "labor", "number = '" + arrLaborNumberSelected [ i ] + "'" );
+                dataRow [ "人工名稱" ] = m_Sql.ReadSqlDataWithoutOpenClose( "name", "labor", "number = '" + arrLaborNumberSelected [ i ] + "'" );
+                dataRow [ "單位" ] = m_Sql.ReadSqlDataWithoutOpenClose( "unit", "labor", "number = '" + arrLaborNumberSelected [ i ] + "'" );
+                dataTableLaborSelected.Rows.Add( dataRow );
+            }
+            m_Sql.CloseSqlChannel();
+            Cursor.Current = Cursors.Default;
+        }
+
+        private void LoadOutsourceFromDataBase()
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            dataTableOutsourceSelected.Clear();
+
+            arrOutsourceNumberSelected.AddRange( m_Sql.Read1DArray_SQL_Data( "number", "project_outsource_contract_used", "project_no = '" + m_strProjectNumber + "'" ) );
+
+            DataRow dataRow;
+            m_Sql.OpenSqlChannel();
+            for ( int i = 0; i < arrOutsourceNumberSelected.Count; i++ )
+            {
+                dataRow = dataTableOutsourceSelected.NewRow();
+                dataRow [ "外包編號" ] = arrOutsourceNumberSelected [ i ];
+                dataRow [ "外包類別" ] = m_Sql.ReadSqlDataWithoutOpenClose( "class", "outsource", "number = '" + arrOutsourceNumberSelected [ i ] + "'" );
+                dataRow [ "外包名稱" ] = m_Sql.ReadSqlDataWithoutOpenClose( "name", "outsource", "number = '" + arrOutsourceNumberSelected [ i ] + "'" );
+                dataRow [ "單位" ] = m_Sql.ReadSqlDataWithoutOpenClose( "unit", "outsource", "number = '" + arrOutsourceNumberSelected [ i ] + "'" );
+                dataTableOutsourceSelected.Rows.Add( dataRow );
+            }
+            m_Sql.CloseSqlChannel();
+            Cursor.Current = Cursors.Default;
+        }
+
+        private void LoadToolFromDataBase()
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            dataTableToolSelected.Clear();
+
+            arrToolNumberSelected.AddRange( m_Sql.Read1DArray_SQL_Data( "number", "project_tool_contract_used", "project_no = '" + m_strProjectNumber + "'" ) );
+
+            DataRow dataRow;
+            m_Sql.OpenSqlChannel();
+            for ( int i = 0; i < arrToolNumberSelected.Count; i++ )
+            {
+                dataRow = dataTableToolSelected.NewRow();
+                dataRow [ "機具編號" ] = arrToolNumberSelected [ i ];
+                dataRow [ "機具類別" ] = m_Sql.ReadSqlDataWithoutOpenClose( "class", "tool", "number = '" + arrToolNumberSelected [ i ] + "'" );
+                dataRow [ "機具名稱" ] = m_Sql.ReadSqlDataWithoutOpenClose( "name", "tool", "number = '" + arrToolNumberSelected [ i ] + "'" );
+                dataRow [ "單位" ] = m_Sql.ReadSqlDataWithoutOpenClose( "unit", "tool", "number = '" + arrToolNumberSelected [ i ] + "'" );
+                dataTableToolSelected.Rows.Add( dataRow );
+            }
+            m_Sql.CloseSqlChannel();
+            Cursor.Current = Cursors.Default;
         }
 
         private void RefreshMaterialAllList()
@@ -335,7 +427,7 @@ namespace HuaChun_DailyReport
 
         private void EventBtnSave_Click( object sender, EventArgs e )
         {
-
+            Cursor.Current = Cursors.WaitCursor;
             m_Sql.NoHistoryDelete_SQL( "project_material_contract_used", "project_no = '" + m_strProjectNumber + "'" );
             m_Sql.NoHistoryDelete_SQL( "project_labor_contract_used", "project_no = '" + m_strProjectNumber + "'" );
             m_Sql.NoHistoryDelete_SQL( "project_tool_contract_used", "project_no = '" + m_strProjectNumber + "'" );
@@ -420,15 +512,19 @@ namespace HuaChun_DailyReport
             }
 
             m_Sql.CloseSqlChannel();
+            Cursor.Current = Cursors.Default;
         }
 
         private void EventBtnMaterialImport_Click( object sender, EventArgs e )
         {
             string number = dataGridViewMaterialAll [ 0, dataGridViewMaterialAll.CurrentRow.Index ].Value.ToString();
 
-            arrMaterialNumberSelected.Add( number );
-            arrMaterialNumberSelected.Sort();
-            RefreshMaterialSelectedList();
+            if ( !arrMaterialNumberSelected.Contains( number ) )
+            {
+                arrMaterialNumberSelected.Add( number );
+                arrMaterialNumberSelected.Sort();
+                RefreshMaterialSelectedList();
+            }
         }
 
         private void EventBtnMaterialDelete_Click( object sender, EventArgs e )
@@ -443,10 +539,12 @@ namespace HuaChun_DailyReport
         private void EventBtnLaborImport_Click( object sender, EventArgs e )
         {
             string number = dataGridViewLaborAll [ 0, dataGridViewLaborAll.CurrentRow.Index ].Value.ToString();
-
-            arrLaborNumberSelected.Add( number );
-            arrLaborNumberSelected.Sort();
-            RefreshLaborSelectedList();
+            if ( !arrLaborNumberSelected.Contains( number ) )
+            {
+                arrLaborNumberSelected.Add( number );
+                arrLaborNumberSelected.Sort();
+                RefreshLaborSelectedList();
+            }
         }
 
         private void EventBtnLaborDelete_Click( object sender, EventArgs e )
@@ -461,10 +559,12 @@ namespace HuaChun_DailyReport
         private void EventBtnOutsourceImport_Click( object sender, EventArgs e )
         {
             string number = dataGridViewOutsourceAll [ 0, dataGridViewOutsourceAll.CurrentRow.Index ].Value.ToString();
-
-            arrOutsourceNumberSelected.Add( number );
-            arrOutsourceNumberSelected.Sort();
-            RefreshOutsourceSelectedList();
+            if ( !arrOutsourceNumberSelected.Contains( number ) )
+            {
+                arrOutsourceNumberSelected.Add( number );
+                arrOutsourceNumberSelected.Sort();
+                RefreshOutsourceSelectedList();
+            }
         }
 
         private void EventBtnOutsourceDelete_Click( object sender, EventArgs e )
@@ -479,10 +579,12 @@ namespace HuaChun_DailyReport
         private void EventBtnToolImport_Click( object sender, EventArgs e )
         {
             string number = dataGridViewToolAll [ 0, dataGridViewToolAll.CurrentRow.Index ].Value.ToString();
-
-            arrToolNumberSelected.Add( number );
-            arrToolNumberSelected.Sort();
-            RefreshToolSelectedList();
+            if ( !arrToolNumberSelected.Contains( number ) )
+            {
+                arrToolNumberSelected.Add( number );
+                arrToolNumberSelected.Sort();
+                RefreshToolSelectedList();
+            }
         }
 
         private void EventBtnToolDelete_Click( object sender, EventArgs e )
