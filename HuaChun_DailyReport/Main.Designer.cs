@@ -69,6 +69,7 @@
             this.MenuItemVeriedFactor = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.MenuItemCreateSubItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemCreateQuotation = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemDailyReport = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemDailyReportBuild = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemDailyReportEdit = new System.Windows.Forms.ToolStripMenuItem();
@@ -372,7 +373,8 @@
             this.MenuItemProjectManage,
             this.工程工期計算規定ToolStripMenuItem,
             this.toolStripSeparator1,
-            this.MenuItemCreateSubItem});
+            this.MenuItemCreateSubItem,
+            this.MenuItemCreateQuotation});
             this.MenuItemProjectInfo.Enabled = false;
             this.MenuItemProjectInfo.Name = "MenuItemProjectInfo";
             this.MenuItemProjectInfo.Size = new System.Drawing.Size(97, 20);
@@ -435,6 +437,13 @@
             this.MenuItemCreateSubItem.Size = new System.Drawing.Size(178, 22);
             this.MenuItemCreateSubItem.Text = "建立合約子項目";
             this.MenuItemCreateSubItem.Click += new System.EventHandler(this.EventCreateSubItem_Click);
+            // 
+            // MenuItemCreateQuotation
+            // 
+            this.MenuItemCreateQuotation.Name = "MenuItemCreateQuotation";
+            this.MenuItemCreateQuotation.Size = new System.Drawing.Size(178, 22);
+            this.MenuItemCreateQuotation.Text = "建立廠商報價單";
+            this.MenuItemCreateQuotation.Click += new System.EventHandler(this.EventCreateQuotation_Click);
             // 
             // MenuItemDailyReport
             // 
@@ -797,6 +806,7 @@
         private System.Windows.Forms.ToolStripMenuItem MenuItemOutsource;
         private System.Windows.Forms.ToolStripMenuItem MenuItemOutsourceIncrease;
         private System.Windows.Forms.ToolStripMenuItem MenuItemOutsourceEdit;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemCreateQuotation;
     }
 }
 

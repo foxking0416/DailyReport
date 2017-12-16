@@ -194,6 +194,12 @@ namespace HuaChun_DailyReport
             CreateSubItemForm formCreateSubItem = new CreateSubItemForm( g_strProjectNo, g_Sql );
             formCreateSubItem.ShowDialog();
         }
+
+        private void EventCreateQuotation_Click( object sender, EventArgs e )
+        {
+            CreateVendorQuotationForm formCreateQuotation = new CreateVendorQuotationForm( g_strProjectNo, g_Sql );
+            formCreateQuotation.ShowDialog();
+        }
         #endregion
 
         #region 日報表作業
