@@ -95,22 +95,24 @@
             // dataGridViewMaterialSelected
             // 
             this.dataGridViewMaterialSelected.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewMaterialSelected.Location = new System.Drawing.Point(463, 17);
+            this.dataGridViewMaterialSelected.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dataGridViewMaterialSelected.Location = new System.Drawing.Point(430, 6);
             this.dataGridViewMaterialSelected.Name = "dataGridViewMaterialSelected";
-            this.dataGridViewMaterialSelected.Size = new System.Drawing.Size(299, 213);
+            this.dataGridViewMaterialSelected.Size = new System.Drawing.Size(427, 348);
             this.dataGridViewMaterialSelected.TabIndex = 2;
+            this.dataGridViewMaterialSelected.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.EventDataGridViewSelected_CellMouseDoubleClick);
             // 
             // dataGridViewMaterialAll
             // 
             this.dataGridViewMaterialAll.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewMaterialAll.Location = new System.Drawing.Point(22, 17);
+            this.dataGridViewMaterialAll.Location = new System.Drawing.Point(6, 6);
             this.dataGridViewMaterialAll.Name = "dataGridViewMaterialAll";
-            this.dataGridViewMaterialAll.Size = new System.Drawing.Size(328, 222);
+            this.dataGridViewMaterialAll.Size = new System.Drawing.Size(418, 348);
             this.dataGridViewMaterialAll.TabIndex = 2;
             // 
             // btnMaterialDelete
             // 
-            this.btnMaterialDelete.Location = new System.Drawing.Point(561, 236);
+            this.btnMaterialDelete.Location = new System.Drawing.Point(637, 360);
             this.btnMaterialDelete.Name = "btnMaterialDelete";
             this.btnMaterialDelete.Size = new System.Drawing.Size(75, 23);
             this.btnMaterialDelete.TabIndex = 1;
@@ -120,7 +122,7 @@
             // 
             // btnMaterialImport
             // 
-            this.btnMaterialImport.Location = new System.Drawing.Point(356, 115);
+            this.btnMaterialImport.Location = new System.Drawing.Point(388, 360);
             this.btnMaterialImport.Name = "btnMaterialImport";
             this.btnMaterialImport.Size = new System.Drawing.Size(75, 23);
             this.btnMaterialImport.TabIndex = 1;
@@ -144,7 +146,7 @@
             // 
             // btnLaborDelete
             // 
-            this.btnLaborDelete.Location = new System.Drawing.Point(462, 222);
+            this.btnLaborDelete.Location = new System.Drawing.Point(699, 360);
             this.btnLaborDelete.Name = "btnLaborDelete";
             this.btnLaborDelete.Size = new System.Drawing.Size(75, 23);
             this.btnLaborDelete.TabIndex = 3;
@@ -154,7 +156,7 @@
             // 
             // btnLaborImport
             // 
-            this.btnLaborImport.Location = new System.Drawing.Point(328, 112);
+            this.btnLaborImport.Location = new System.Drawing.Point(383, 360);
             this.btnLaborImport.Name = "btnLaborImport";
             this.btnLaborImport.Size = new System.Drawing.Size(75, 23);
             this.btnLaborImport.TabIndex = 2;
@@ -165,17 +167,19 @@
             // dataGridViewLaborSelected
             // 
             this.dataGridViewLaborSelected.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewLaborSelected.Location = new System.Drawing.Point(420, 65);
+            this.dataGridViewLaborSelected.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dataGridViewLaborSelected.Location = new System.Drawing.Point(431, 6);
             this.dataGridViewLaborSelected.Name = "dataGridViewLaborSelected";
-            this.dataGridViewLaborSelected.Size = new System.Drawing.Size(240, 150);
+            this.dataGridViewLaborSelected.Size = new System.Drawing.Size(432, 348);
             this.dataGridViewLaborSelected.TabIndex = 1;
+            this.dataGridViewLaborSelected.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.EventDataGridViewSelected_CellMouseDoubleClick);
             // 
             // dataGridViewLaborAll
             // 
             this.dataGridViewLaborAll.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewLaborAll.Location = new System.Drawing.Point(81, 65);
+            this.dataGridViewLaborAll.Location = new System.Drawing.Point(6, 6);
             this.dataGridViewLaborAll.Name = "dataGridViewLaborAll";
-            this.dataGridViewLaborAll.Size = new System.Drawing.Size(240, 150);
+            this.dataGridViewLaborAll.Size = new System.Drawing.Size(416, 348);
             this.dataGridViewLaborAll.TabIndex = 0;
             // 
             // tabPageOutsource
@@ -194,7 +198,7 @@
             // 
             // btnOutsourceDelete
             // 
-            this.btnOutsourceDelete.Location = new System.Drawing.Point(469, 208);
+            this.btnOutsourceDelete.Location = new System.Drawing.Point(640, 360);
             this.btnOutsourceDelete.Name = "btnOutsourceDelete";
             this.btnOutsourceDelete.Size = new System.Drawing.Size(75, 23);
             this.btnOutsourceDelete.TabIndex = 2;
@@ -204,7 +208,7 @@
             // 
             // btnOutsourceImport
             // 
-            this.btnOutsourceImport.Location = new System.Drawing.Point(319, 71);
+            this.btnOutsourceImport.Location = new System.Drawing.Point(396, 360);
             this.btnOutsourceImport.Name = "btnOutsourceImport";
             this.btnOutsourceImport.Size = new System.Drawing.Size(75, 23);
             this.btnOutsourceImport.TabIndex = 1;
@@ -215,17 +219,19 @@
             // dataGridViewOutsourceSelected
             // 
             this.dataGridViewOutsourceSelected.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewOutsourceSelected.Location = new System.Drawing.Point(414, 37);
+            this.dataGridViewOutsourceSelected.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dataGridViewOutsourceSelected.Location = new System.Drawing.Point(438, 6);
             this.dataGridViewOutsourceSelected.Name = "dataGridViewOutsourceSelected";
-            this.dataGridViewOutsourceSelected.Size = new System.Drawing.Size(240, 150);
+            this.dataGridViewOutsourceSelected.Size = new System.Drawing.Size(419, 348);
             this.dataGridViewOutsourceSelected.TabIndex = 0;
+            this.dataGridViewOutsourceSelected.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.EventDataGridViewSelected_CellMouseDoubleClick);
             // 
             // dataGridViewOutsourceAll
             // 
             this.dataGridViewOutsourceAll.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewOutsourceAll.Location = new System.Drawing.Point(67, 37);
+            this.dataGridViewOutsourceAll.Location = new System.Drawing.Point(6, 6);
             this.dataGridViewOutsourceAll.Name = "dataGridViewOutsourceAll";
-            this.dataGridViewOutsourceAll.Size = new System.Drawing.Size(240, 150);
+            this.dataGridViewOutsourceAll.Size = new System.Drawing.Size(426, 348);
             this.dataGridViewOutsourceAll.TabIndex = 0;
             // 
             // tabPageTool
@@ -245,22 +251,24 @@
             // dataGridViewToolAll
             // 
             this.dataGridViewToolAll.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewToolAll.Location = new System.Drawing.Point(6, 50);
+            this.dataGridViewToolAll.Location = new System.Drawing.Point(3, 6);
             this.dataGridViewToolAll.Name = "dataGridViewToolAll";
-            this.dataGridViewToolAll.Size = new System.Drawing.Size(240, 150);
+            this.dataGridViewToolAll.Size = new System.Drawing.Size(438, 348);
             this.dataGridViewToolAll.TabIndex = 1;
             // 
             // dataGridViewToolSelected
             // 
             this.dataGridViewToolSelected.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewToolSelected.Location = new System.Drawing.Point(428, 50);
+            this.dataGridViewToolSelected.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dataGridViewToolSelected.Location = new System.Drawing.Point(447, 6);
             this.dataGridViewToolSelected.Name = "dataGridViewToolSelected";
-            this.dataGridViewToolSelected.Size = new System.Drawing.Size(240, 150);
+            this.dataGridViewToolSelected.Size = new System.Drawing.Size(410, 348);
             this.dataGridViewToolSelected.TabIndex = 1;
+            this.dataGridViewToolSelected.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.EventDataGridViewSelected_CellMouseDoubleClick);
             // 
             // btnToolDelete
             // 
-            this.btnToolDelete.Location = new System.Drawing.Point(497, 228);
+            this.btnToolDelete.Location = new System.Drawing.Point(670, 360);
             this.btnToolDelete.Name = "btnToolDelete";
             this.btnToolDelete.Size = new System.Drawing.Size(75, 23);
             this.btnToolDelete.TabIndex = 0;
@@ -270,7 +278,7 @@
             // 
             // btnToolImport
             // 
-            this.btnToolImport.Location = new System.Drawing.Point(304, 91);
+            this.btnToolImport.Location = new System.Drawing.Point(406, 360);
             this.btnToolImport.Name = "btnToolImport";
             this.btnToolImport.Size = new System.Drawing.Size(75, 23);
             this.btnToolImport.TabIndex = 0;
