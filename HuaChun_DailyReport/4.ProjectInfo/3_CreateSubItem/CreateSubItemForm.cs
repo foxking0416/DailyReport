@@ -521,83 +521,107 @@ namespace HuaChun_DailyReport
 
         private void EventBtnMaterialImport_Click( object sender, EventArgs e )
         {
-            string number = dataGridViewMaterialAll [ 0, dataGridViewMaterialAll.CurrentRow.Index ].Value.ToString();
-
-            if ( !arrMaterialNumberSelected.Contains( number ) )
+            if ( dataGridViewMaterialAll.CurrentRow != null )
             {
-                arrMaterialNumberSelected.Add( number );
-                arrMaterialNumberSelected.Sort();
-                RefreshMaterialSelectedList();
+                string number = dataGridViewMaterialAll [ 0, dataGridViewMaterialAll.CurrentRow.Index ].Value.ToString();
+
+                if ( !arrMaterialNumberSelected.Contains( number ) )
+                {
+                    arrMaterialNumberSelected.Add( number );
+                    arrMaterialNumberSelected.Sort();
+                    RefreshMaterialSelectedList();
+                }
             }
         }
 
         private void EventBtnMaterialDelete_Click( object sender, EventArgs e )
         {
-            string number = dataGridViewMaterialSelected [ 0, dataGridViewMaterialSelected.CurrentRow.Index ].Value.ToString();
+            if ( dataGridViewMaterialSelected.CurrentRow != null )
+            {
+                string number = dataGridViewMaterialSelected [ 0, dataGridViewMaterialSelected.CurrentRow.Index ].Value.ToString();
 
-            arrMaterialNumberSelected.Remove( number );
-            arrMaterialNumberSelected.Sort();
-            RefreshMaterialSelectedList();
+                arrMaterialNumberSelected.Remove( number );
+                arrMaterialNumberSelected.Sort();
+                RefreshMaterialSelectedList();
+            }
         }
 
         private void EventBtnLaborImport_Click( object sender, EventArgs e )
         {
-            string number = dataGridViewLaborAll [ 0, dataGridViewLaborAll.CurrentRow.Index ].Value.ToString();
-            if ( !arrLaborNumberSelected.Contains( number ) )
+            if ( dataGridViewLaborAll.CurrentRow != null )
             {
-                arrLaborNumberSelected.Add( number );
-                arrLaborNumberSelected.Sort();
-                RefreshLaborSelectedList();
+                string number = dataGridViewLaborAll [ 0, dataGridViewLaborAll.CurrentRow.Index ].Value.ToString();
+                if ( !arrLaborNumberSelected.Contains( number ) )
+                {
+                    arrLaborNumberSelected.Add( number );
+                    arrLaborNumberSelected.Sort();
+                    RefreshLaborSelectedList();
+                }
             }
         }
 
         private void EventBtnLaborDelete_Click( object sender, EventArgs e )
         {
-            string number = dataGridViewLaborSelected [ 0, dataGridViewLaborSelected.CurrentRow.Index ].Value.ToString();
+            if ( dataGridViewLaborSelected.CurrentRow != null )
+            {
+                string number = dataGridViewLaborSelected [ 0, dataGridViewLaborSelected.CurrentRow.Index ].Value.ToString();
 
-            arrLaborNumberSelected.Remove( number );
-            arrLaborNumberSelected.Sort();
-            RefreshLaborSelectedList();
+                arrLaborNumberSelected.Remove( number );
+                arrLaborNumberSelected.Sort();
+                RefreshLaborSelectedList();
+            }
         }
 
         private void EventBtnOutsourceImport_Click( object sender, EventArgs e )
         {
-            string number = dataGridViewOutsourceAll [ 0, dataGridViewOutsourceAll.CurrentRow.Index ].Value.ToString();
-            if ( !arrOutsourceNumberSelected.Contains( number ) )
+            if ( dataGridViewOutsourceAll.CurrentRow != null )
             {
-                arrOutsourceNumberSelected.Add( number );
-                arrOutsourceNumberSelected.Sort();
-                RefreshOutsourceSelectedList();
+                string number = dataGridViewOutsourceAll [ 0, dataGridViewOutsourceAll.CurrentRow.Index ].Value.ToString();
+                if ( !arrOutsourceNumberSelected.Contains( number ) )
+                {
+                    arrOutsourceNumberSelected.Add( number );
+                    arrOutsourceNumberSelected.Sort();
+                    RefreshOutsourceSelectedList();
+                }
             }
         }
 
         private void EventBtnOutsourceDelete_Click( object sender, EventArgs e )
         {
-            string number = dataGridViewOutsourceSelected [ 0, dataGridViewOutsourceSelected.CurrentRow.Index ].Value.ToString();
+            if ( dataGridViewOutsourceSelected.CurrentRow != null )
+            {
+                string number = dataGridViewOutsourceSelected [ 0, dataGridViewOutsourceSelected.CurrentRow.Index ].Value.ToString();
 
-            arrOutsourceNumberSelected.Remove( number );
-            arrOutsourceNumberSelected.Sort();
-            RefreshOutsourceSelectedList();
+                arrOutsourceNumberSelected.Remove( number );
+                arrOutsourceNumberSelected.Sort();
+                RefreshOutsourceSelectedList();
+            }
         }
 
         private void EventBtnToolImport_Click( object sender, EventArgs e )
         {
-            string number = dataGridViewToolAll [ 0, dataGridViewToolAll.CurrentRow.Index ].Value.ToString();
-            if ( !arrToolNumberSelected.Contains( number ) )
+            if ( dataGridViewToolAll.CurrentRow != null )
             {
-                arrToolNumberSelected.Add( number );
-                arrToolNumberSelected.Sort();
-                RefreshToolSelectedList();
+                string number = dataGridViewToolAll [ 0, dataGridViewToolAll.CurrentRow.Index ].Value.ToString();
+                if ( !arrToolNumberSelected.Contains( number ) )
+                {
+                    arrToolNumberSelected.Add( number );
+                    arrToolNumberSelected.Sort();
+                    RefreshToolSelectedList();
+                }
             }
         }
 
         private void EventBtnToolDelete_Click( object sender, EventArgs e )
         {
-            string number = dataGridViewToolSelected [ 0, dataGridViewToolSelected.CurrentRow.Index ].Value.ToString();
+            if ( dataGridViewToolSelected.CurrentRow != null )
+            {
+                string number = dataGridViewToolSelected [ 0, dataGridViewToolSelected.CurrentRow.Index ].Value.ToString();
 
-            arrToolNumberSelected.Remove( number );
-            arrToolNumberSelected.Sort();
-            RefreshToolSelectedList();
+                arrToolNumberSelected.Remove( number );
+                arrToolNumberSelected.Sort();
+                RefreshToolSelectedList();
+            }
         }
 
         private void EventBtnCancel_Click( object sender, EventArgs e )
