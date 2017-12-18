@@ -129,10 +129,10 @@
     <Compile Include="4.ProjectInfo\3_CreateSubItem\CreateSubItemForm.Designer.cs">
       <DependentUpon>CreateSubItemForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="4.ProjectInfo\4_CreanteTendor\CreateVendorQuotationForm.cs">
+    <Compile Include="4.ProjectInfo\4_CreanteQuotation\CreateVendorQuotationForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="4.ProjectInfo\4_CreanteTendor\CreateVendorQuotationForm.Designer.cs">
+    <Compile Include="4.ProjectInfo\4_CreanteQuotation\CreateVendorQuotationForm.Designer.cs">
       <DependentUpon>CreateVendorQuotationForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ClassExcelGenerator.cs" />
@@ -408,7 +408,7 @@
     <EmbeddedResource Include="4.ProjectInfo\3_CreateSubItem\CreateSubItemForm.resx">
       <DependentUpon>CreateSubItemForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="4.ProjectInfo\4_CreanteTendor\CreateVendorQuotationForm.resx">
+    <EmbeddedResource Include="4.ProjectInfo\4_CreanteQuotation\CreateVendorQuotationForm.resx">
       <DependentUpon>CreateVendorQuotationForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">

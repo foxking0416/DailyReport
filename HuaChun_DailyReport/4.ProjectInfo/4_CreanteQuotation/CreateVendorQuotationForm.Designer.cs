@@ -30,6 +30,8 @@
         {
             this.tabClass = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.labelMaterialVendorEmptyWarning = new System.Windows.Forms.Label();
+            this.labelMaterialItemEmptyWarning = new System.Windows.Forms.Label();
             this.DGVMaterialVendorSelected = new System.Windows.Forms.DataGridView();
             this.btnMaterialItemDelete = new System.Windows.Forms.Button();
             this.btnMaterialVendorDelete = new System.Windows.Forms.Button();
@@ -39,6 +41,8 @@
             this.DGVMaterialItemQuote = new System.Windows.Forms.DataGridView();
             this.DGVMaterialItemSelected = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.labelLaborItemEmptyWarning = new System.Windows.Forms.Label();
+            this.labelLaborVendorEmptyWarning = new System.Windows.Forms.Label();
             this.btnLaborVendorDelete = new System.Windows.Forms.Button();
             this.btnLaborVendorImport = new System.Windows.Forms.Button();
             this.btnLaborItemDelete = new System.Windows.Forms.Button();
@@ -48,6 +52,8 @@
             this.DGVLaborItemQuote = new System.Windows.Forms.DataGridView();
             this.DGVLaborItemSelected = new System.Windows.Forms.DataGridView();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.labelOutsourceVendorEmptyWarning = new System.Windows.Forms.Label();
+            this.labelOutsourceItemEmptyWarning = new System.Windows.Forms.Label();
             this.btnOutsourceVendorDelete = new System.Windows.Forms.Button();
             this.btnOutsourceVendorImport = new System.Windows.Forms.Button();
             this.btnOutsourceItemDelete = new System.Windows.Forms.Button();
@@ -57,16 +63,26 @@
             this.DGVOutsourceItemQuote = new System.Windows.Forms.DataGridView();
             this.DGVOutsourceItemSelected = new System.Windows.Forms.DataGridView();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.labelToolVendorEmptyWarning = new System.Windows.Forms.Label();
+            this.labelToolItemEmptyWarning = new System.Windows.Forms.Label();
+            this.btnToolVendorDelete = new System.Windows.Forms.Button();
+            this.btnToolVendorImport = new System.Windows.Forms.Button();
+            this.btnToolItemDelete = new System.Windows.Forms.Button();
+            this.btnToolItemImport = new System.Windows.Forms.Button();
+            this.DGVToolVendorSelected = new System.Windows.Forms.DataGridView();
+            this.DGVToolVendorAll = new System.Windows.Forms.DataGridView();
+            this.DGVToolItemQuote = new System.Windows.Forms.DataGridView();
+            this.DGVToolItemSelected = new System.Windows.Forms.DataGridView();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancle = new System.Windows.Forms.Button();
-            this.DGVToolItemSelected = new System.Windows.Forms.DataGridView();
-            this.DGVToolItemQuote = new System.Windows.Forms.DataGridView();
-            this.DGVToolVendorAll = new System.Windows.Forms.DataGridView();
-            this.DGVToolVendorSelected = new System.Windows.Forms.DataGridView();
-            this.btnToolItemImport = new System.Windows.Forms.Button();
-            this.btnToolItemDelete = new System.Windows.Forms.Button();
-            this.btnToolVendorImport = new System.Windows.Forms.Button();
-            this.btnToolVendorDelete = new System.Windows.Forms.Button();
+            this.textBoxQuoteName = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.labelProjectName = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBoxQuoteNo = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.labelNoEmptyWarning = new System.Windows.Forms.Label();
+            this.labelNameEmptyWarning = new System.Windows.Forms.Label();
             this.tabClass.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGVMaterialVendorSelected)).BeginInit();
@@ -84,10 +100,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.DGVOutsourceItemQuote)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DGVOutsourceItemSelected)).BeginInit();
             this.tabPage4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DGVToolItemSelected)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DGVToolItemQuote)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DGVToolVendorAll)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DGVToolVendorSelected)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DGVToolVendorAll)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DGVToolItemQuote)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DGVToolItemSelected)).BeginInit();
             this.SuspendLayout();
             // 
             // tabClass
@@ -96,14 +112,16 @@
             this.tabClass.Controls.Add(this.tabPage2);
             this.tabClass.Controls.Add(this.tabPage3);
             this.tabClass.Controls.Add(this.tabPage4);
-            this.tabClass.Location = new System.Drawing.Point(13, 12);
+            this.tabClass.Location = new System.Drawing.Point(13, 49);
             this.tabClass.Name = "tabClass";
             this.tabClass.SelectedIndex = 0;
-            this.tabClass.Size = new System.Drawing.Size(1245, 499);
+            this.tabClass.Size = new System.Drawing.Size(1245, 462);
             this.tabClass.TabIndex = 2;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.labelMaterialVendorEmptyWarning);
+            this.tabPage1.Controls.Add(this.labelMaterialItemEmptyWarning);
             this.tabPage1.Controls.Add(this.DGVMaterialVendorSelected);
             this.tabPage1.Controls.Add(this.btnMaterialItemDelete);
             this.tabPage1.Controls.Add(this.btnMaterialVendorDelete);
@@ -115,10 +133,32 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1237, 473);
+            this.tabPage1.Size = new System.Drawing.Size(1237, 436);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "材料";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // labelMaterialVendorEmptyWarning
+            // 
+            this.labelMaterialVendorEmptyWarning.AutoSize = true;
+            this.labelMaterialVendorEmptyWarning.ForeColor = System.Drawing.Color.Red;
+            this.labelMaterialVendorEmptyWarning.Location = new System.Drawing.Point(1002, 386);
+            this.labelMaterialVendorEmptyWarning.Name = "labelMaterialVendorEmptyWarning";
+            this.labelMaterialVendorEmptyWarning.Size = new System.Drawing.Size(79, 13);
+            this.labelMaterialVendorEmptyWarning.TabIndex = 4;
+            this.labelMaterialVendorEmptyWarning.Text = "沒有選擇廠商";
+            this.labelMaterialVendorEmptyWarning.Visible = false;
+            // 
+            // labelMaterialItemEmptyWarning
+            // 
+            this.labelMaterialItemEmptyWarning.AutoSize = true;
+            this.labelMaterialItemEmptyWarning.ForeColor = System.Drawing.Color.Red;
+            this.labelMaterialItemEmptyWarning.Location = new System.Drawing.Point(335, 386);
+            this.labelMaterialItemEmptyWarning.Name = "labelMaterialItemEmptyWarning";
+            this.labelMaterialItemEmptyWarning.Size = new System.Drawing.Size(79, 13);
+            this.labelMaterialItemEmptyWarning.TabIndex = 4;
+            this.labelMaterialItemEmptyWarning.Text = "沒有選擇材料";
+            this.labelMaterialItemEmptyWarning.Visible = false;
             // 
             // DGVMaterialVendorSelected
             // 
@@ -136,7 +176,7 @@
             this.btnMaterialItemDelete.TabIndex = 3;
             this.btnMaterialItemDelete.Text = "刪除";
             this.btnMaterialItemDelete.UseVisualStyleBackColor = true;
-            this.btnMaterialItemDelete.Click += new System.EventHandler(this.EventBtnMaterialItemDelete_Click);
+            this.btnMaterialItemDelete.Click += new System.EventHandler(this.EventBtnItemDelete_Click);
             // 
             // btnMaterialVendorDelete
             // 
@@ -146,7 +186,7 @@
             this.btnMaterialVendorDelete.TabIndex = 3;
             this.btnMaterialVendorDelete.Text = "刪除";
             this.btnMaterialVendorDelete.UseVisualStyleBackColor = true;
-            this.btnMaterialVendorDelete.Click += new System.EventHandler(this.EventBtnMaterialVendorDelete_Click);
+            this.btnMaterialVendorDelete.Click += new System.EventHandler(this.EventBtnVendorDelete_Click);
             // 
             // btnMaterialVendorImport
             // 
@@ -156,7 +196,7 @@
             this.btnMaterialVendorImport.TabIndex = 3;
             this.btnMaterialVendorImport.Text = "匯入";
             this.btnMaterialVendorImport.UseVisualStyleBackColor = true;
-            this.btnMaterialVendorImport.Click += new System.EventHandler(this.EventBtnMaterialVendorImport_Click);
+            this.btnMaterialVendorImport.Click += new System.EventHandler(this.EventBtnVendorImport_Click);
             // 
             // btnMaterialItemImport
             // 
@@ -166,7 +206,7 @@
             this.btnMaterialItemImport.TabIndex = 3;
             this.btnMaterialItemImport.Text = "匯入";
             this.btnMaterialItemImport.UseVisualStyleBackColor = true;
-            this.btnMaterialItemImport.Click += new System.EventHandler(this.EventBtnMaterialItemImport_Click);
+            this.btnMaterialItemImport.Click += new System.EventHandler(this.EventBtnlItemImport_Click);
             // 
             // DGVMaterialVendorAll
             // 
@@ -194,6 +234,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.labelLaborItemEmptyWarning);
+            this.tabPage2.Controls.Add(this.labelLaborVendorEmptyWarning);
             this.tabPage2.Controls.Add(this.btnLaborVendorDelete);
             this.tabPage2.Controls.Add(this.btnLaborVendorImport);
             this.tabPage2.Controls.Add(this.btnLaborItemDelete);
@@ -205,10 +247,32 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1237, 473);
+            this.tabPage2.Size = new System.Drawing.Size(1237, 436);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "人工";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // labelLaborItemEmptyWarning
+            // 
+            this.labelLaborItemEmptyWarning.AutoSize = true;
+            this.labelLaborItemEmptyWarning.ForeColor = System.Drawing.Color.Red;
+            this.labelLaborItemEmptyWarning.Location = new System.Drawing.Point(328, 361);
+            this.labelLaborItemEmptyWarning.Name = "labelLaborItemEmptyWarning";
+            this.labelLaborItemEmptyWarning.Size = new System.Drawing.Size(79, 13);
+            this.labelLaborItemEmptyWarning.TabIndex = 2;
+            this.labelLaborItemEmptyWarning.Text = "沒有選擇人工";
+            this.labelLaborItemEmptyWarning.Visible = false;
+            // 
+            // labelLaborVendorEmptyWarning
+            // 
+            this.labelLaborVendorEmptyWarning.AutoSize = true;
+            this.labelLaborVendorEmptyWarning.ForeColor = System.Drawing.Color.Red;
+            this.labelLaborVendorEmptyWarning.Location = new System.Drawing.Point(965, 361);
+            this.labelLaborVendorEmptyWarning.Name = "labelLaborVendorEmptyWarning";
+            this.labelLaborVendorEmptyWarning.Size = new System.Drawing.Size(79, 13);
+            this.labelLaborVendorEmptyWarning.TabIndex = 2;
+            this.labelLaborVendorEmptyWarning.Text = "沒有選擇廠商";
+            this.labelLaborVendorEmptyWarning.Visible = false;
             // 
             // btnLaborVendorDelete
             // 
@@ -218,7 +282,7 @@
             this.btnLaborVendorDelete.TabIndex = 1;
             this.btnLaborVendorDelete.Text = "刪除";
             this.btnLaborVendorDelete.UseVisualStyleBackColor = true;
-            this.btnLaborVendorDelete.Click += new System.EventHandler(this.EventBtnLaborVendorDelete_Click);
+            this.btnLaborVendorDelete.Click += new System.EventHandler(this.EventBtnVendorDelete_Click);
             // 
             // btnLaborVendorImport
             // 
@@ -228,7 +292,7 @@
             this.btnLaborVendorImport.TabIndex = 1;
             this.btnLaborVendorImport.Text = "匯入";
             this.btnLaborVendorImport.UseVisualStyleBackColor = true;
-            this.btnLaborVendorImport.Click += new System.EventHandler(this.EventBtnLaborVendorImport_Click);
+            this.btnLaborVendorImport.Click += new System.EventHandler(this.EventBtnVendorImport_Click);
             // 
             // btnLaborItemDelete
             // 
@@ -238,7 +302,7 @@
             this.btnLaborItemDelete.TabIndex = 1;
             this.btnLaborItemDelete.Text = "刪除";
             this.btnLaborItemDelete.UseVisualStyleBackColor = true;
-            this.btnLaborItemDelete.Click += new System.EventHandler(this.EventBtnLaborItemDelete_Click);
+            this.btnLaborItemDelete.Click += new System.EventHandler(this.EventBtnItemDelete_Click);
             // 
             // btnLaborItemImport
             // 
@@ -248,7 +312,7 @@
             this.btnLaborItemImport.TabIndex = 1;
             this.btnLaborItemImport.Text = "匯入";
             this.btnLaborItemImport.UseVisualStyleBackColor = true;
-            this.btnLaborItemImport.Click += new System.EventHandler(this.EventBtnLaborItemImport_Click);
+            this.btnLaborItemImport.Click += new System.EventHandler(this.EventBtnlItemImport_Click);
             // 
             // DGVLaborVendorSelected
             // 
@@ -284,6 +348,8 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.labelOutsourceVendorEmptyWarning);
+            this.tabPage3.Controls.Add(this.labelOutsourceItemEmptyWarning);
             this.tabPage3.Controls.Add(this.btnOutsourceVendorDelete);
             this.tabPage3.Controls.Add(this.btnOutsourceVendorImport);
             this.tabPage3.Controls.Add(this.btnOutsourceItemDelete);
@@ -295,10 +361,32 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1237, 473);
+            this.tabPage3.Size = new System.Drawing.Size(1237, 436);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "外包";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // labelOutsourceVendorEmptyWarning
+            // 
+            this.labelOutsourceVendorEmptyWarning.AutoSize = true;
+            this.labelOutsourceVendorEmptyWarning.ForeColor = System.Drawing.Color.Red;
+            this.labelOutsourceVendorEmptyWarning.Location = new System.Drawing.Point(973, 367);
+            this.labelOutsourceVendorEmptyWarning.Name = "labelOutsourceVendorEmptyWarning";
+            this.labelOutsourceVendorEmptyWarning.Size = new System.Drawing.Size(79, 13);
+            this.labelOutsourceVendorEmptyWarning.TabIndex = 2;
+            this.labelOutsourceVendorEmptyWarning.Text = "沒有選擇廠商";
+            this.labelOutsourceVendorEmptyWarning.Visible = false;
+            // 
+            // labelOutsourceItemEmptyWarning
+            // 
+            this.labelOutsourceItemEmptyWarning.AutoSize = true;
+            this.labelOutsourceItemEmptyWarning.ForeColor = System.Drawing.Color.Red;
+            this.labelOutsourceItemEmptyWarning.Location = new System.Drawing.Point(325, 367);
+            this.labelOutsourceItemEmptyWarning.Name = "labelOutsourceItemEmptyWarning";
+            this.labelOutsourceItemEmptyWarning.Size = new System.Drawing.Size(79, 13);
+            this.labelOutsourceItemEmptyWarning.TabIndex = 2;
+            this.labelOutsourceItemEmptyWarning.Text = "沒有選擇外包";
+            this.labelOutsourceItemEmptyWarning.Visible = false;
             // 
             // btnOutsourceVendorDelete
             // 
@@ -308,6 +396,7 @@
             this.btnOutsourceVendorDelete.TabIndex = 1;
             this.btnOutsourceVendorDelete.Text = "刪除";
             this.btnOutsourceVendorDelete.UseVisualStyleBackColor = true;
+            this.btnOutsourceVendorDelete.Click += new System.EventHandler(this.EventBtnVendorDelete_Click);
             // 
             // btnOutsourceVendorImport
             // 
@@ -317,6 +406,7 @@
             this.btnOutsourceVendorImport.TabIndex = 1;
             this.btnOutsourceVendorImport.Text = "匯入";
             this.btnOutsourceVendorImport.UseVisualStyleBackColor = true;
+            this.btnOutsourceVendorImport.Click += new System.EventHandler(this.EventBtnVendorImport_Click);
             // 
             // btnOutsourceItemDelete
             // 
@@ -326,6 +416,7 @@
             this.btnOutsourceItemDelete.TabIndex = 1;
             this.btnOutsourceItemDelete.Text = "刪除";
             this.btnOutsourceItemDelete.UseVisualStyleBackColor = true;
+            this.btnOutsourceItemDelete.Click += new System.EventHandler(this.EventBtnItemDelete_Click);
             // 
             // btnOutsourceItemImport
             // 
@@ -335,6 +426,7 @@
             this.btnOutsourceItemImport.TabIndex = 1;
             this.btnOutsourceItemImport.Text = "匯入";
             this.btnOutsourceItemImport.UseVisualStyleBackColor = true;
+            this.btnOutsourceItemImport.Click += new System.EventHandler(this.EventBtnlItemImport_Click);
             // 
             // DGVOutsourceVendorSelected
             // 
@@ -370,6 +462,8 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.labelToolVendorEmptyWarning);
+            this.tabPage4.Controls.Add(this.labelToolItemEmptyWarning);
             this.tabPage4.Controls.Add(this.btnToolVendorDelete);
             this.tabPage4.Controls.Add(this.btnToolVendorImport);
             this.tabPage4.Controls.Add(this.btnToolItemDelete);
@@ -381,10 +475,104 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1237, 473);
+            this.tabPage4.Size = new System.Drawing.Size(1237, 436);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "機具";
             this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // labelToolVendorEmptyWarning
+            // 
+            this.labelToolVendorEmptyWarning.AutoSize = true;
+            this.labelToolVendorEmptyWarning.ForeColor = System.Drawing.Color.Red;
+            this.labelToolVendorEmptyWarning.Location = new System.Drawing.Point(929, 387);
+            this.labelToolVendorEmptyWarning.Name = "labelToolVendorEmptyWarning";
+            this.labelToolVendorEmptyWarning.Size = new System.Drawing.Size(79, 13);
+            this.labelToolVendorEmptyWarning.TabIndex = 2;
+            this.labelToolVendorEmptyWarning.Text = "沒有選擇廠商";
+            this.labelToolVendorEmptyWarning.Visible = false;
+            // 
+            // labelToolItemEmptyWarning
+            // 
+            this.labelToolItemEmptyWarning.AutoSize = true;
+            this.labelToolItemEmptyWarning.ForeColor = System.Drawing.Color.Red;
+            this.labelToolItemEmptyWarning.Location = new System.Drawing.Point(325, 387);
+            this.labelToolItemEmptyWarning.Name = "labelToolItemEmptyWarning";
+            this.labelToolItemEmptyWarning.Size = new System.Drawing.Size(79, 13);
+            this.labelToolItemEmptyWarning.TabIndex = 2;
+            this.labelToolItemEmptyWarning.Text = "沒有選擇機具";
+            this.labelToolItemEmptyWarning.Visible = false;
+            // 
+            // btnToolVendorDelete
+            // 
+            this.btnToolVendorDelete.Location = new System.Drawing.Point(932, 357);
+            this.btnToolVendorDelete.Name = "btnToolVendorDelete";
+            this.btnToolVendorDelete.Size = new System.Drawing.Size(75, 23);
+            this.btnToolVendorDelete.TabIndex = 1;
+            this.btnToolVendorDelete.Text = "刪除";
+            this.btnToolVendorDelete.UseVisualStyleBackColor = true;
+            this.btnToolVendorDelete.Click += new System.EventHandler(this.EventBtnVendorDelete_Click);
+            // 
+            // btnToolVendorImport
+            // 
+            this.btnToolVendorImport.Location = new System.Drawing.Point(717, 357);
+            this.btnToolVendorImport.Name = "btnToolVendorImport";
+            this.btnToolVendorImport.Size = new System.Drawing.Size(75, 23);
+            this.btnToolVendorImport.TabIndex = 1;
+            this.btnToolVendorImport.Text = "匯入";
+            this.btnToolVendorImport.UseVisualStyleBackColor = true;
+            this.btnToolVendorImport.Click += new System.EventHandler(this.EventBtnVendorImport_Click);
+            // 
+            // btnToolItemDelete
+            // 
+            this.btnToolItemDelete.Location = new System.Drawing.Point(325, 357);
+            this.btnToolItemDelete.Name = "btnToolItemDelete";
+            this.btnToolItemDelete.Size = new System.Drawing.Size(75, 23);
+            this.btnToolItemDelete.TabIndex = 1;
+            this.btnToolItemDelete.Text = "刪除";
+            this.btnToolItemDelete.UseVisualStyleBackColor = true;
+            this.btnToolItemDelete.Click += new System.EventHandler(this.EventBtnItemDelete_Click);
+            // 
+            // btnToolItemImport
+            // 
+            this.btnToolItemImport.Location = new System.Drawing.Point(107, 357);
+            this.btnToolItemImport.Name = "btnToolItemImport";
+            this.btnToolItemImport.Size = new System.Drawing.Size(75, 23);
+            this.btnToolItemImport.TabIndex = 1;
+            this.btnToolItemImport.Text = "匯入";
+            this.btnToolItemImport.UseVisualStyleBackColor = true;
+            this.btnToolItemImport.Click += new System.EventHandler(this.EventBtnlItemImport_Click);
+            // 
+            // DGVToolVendorSelected
+            // 
+            this.DGVToolVendorSelected.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DGVToolVendorSelected.Location = new System.Drawing.Point(856, 7);
+            this.DGVToolVendorSelected.Name = "DGVToolVendorSelected";
+            this.DGVToolVendorSelected.Size = new System.Drawing.Size(240, 344);
+            this.DGVToolVendorSelected.TabIndex = 0;
+            // 
+            // DGVToolVendorAll
+            // 
+            this.DGVToolVendorAll.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DGVToolVendorAll.Location = new System.Drawing.Point(610, 7);
+            this.DGVToolVendorAll.Name = "DGVToolVendorAll";
+            this.DGVToolVendorAll.Size = new System.Drawing.Size(240, 344);
+            this.DGVToolVendorAll.TabIndex = 0;
+            // 
+            // DGVToolItemQuote
+            // 
+            this.DGVToolItemQuote.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DGVToolItemQuote.Location = new System.Drawing.Point(253, 7);
+            this.DGVToolItemQuote.Name = "DGVToolItemQuote";
+            this.DGVToolItemQuote.Size = new System.Drawing.Size(240, 344);
+            this.DGVToolItemQuote.TabIndex = 0;
+            // 
+            // DGVToolItemSelected
+            // 
+            this.DGVToolItemSelected.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DGVToolItemSelected.Location = new System.Drawing.Point(7, 7);
+            this.DGVToolItemSelected.Name = "DGVToolItemSelected";
+            this.DGVToolItemSelected.Size = new System.Drawing.Size(240, 344);
+            this.DGVToolItemSelected.TabIndex = 0;
             // 
             // btnSave
             // 
@@ -406,79 +594,91 @@
             this.btnCancle.UseVisualStyleBackColor = true;
             this.btnCancle.Click += new System.EventHandler(this.EventBtnCancle_Click);
             // 
-            // DGVToolItemSelected
+            // textBoxQuoteName
             // 
-            this.DGVToolItemSelected.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DGVToolItemSelected.Location = new System.Drawing.Point(7, 7);
-            this.DGVToolItemSelected.Name = "DGVToolItemSelected";
-            this.DGVToolItemSelected.Size = new System.Drawing.Size(240, 344);
-            this.DGVToolItemSelected.TabIndex = 0;
+            this.textBoxQuoteName.Location = new System.Drawing.Point(503, 9);
+            this.textBoxQuoteName.Name = "textBoxQuoteName";
+            this.textBoxQuoteName.Size = new System.Drawing.Size(100, 20);
+            this.textBoxQuoteName.TabIndex = 4;
             // 
-            // DGVToolItemQuote
+            // label1
             // 
-            this.DGVToolItemQuote.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DGVToolItemQuote.Location = new System.Drawing.Point(253, 7);
-            this.DGVToolItemQuote.Name = "DGVToolItemQuote";
-            this.DGVToolItemQuote.Size = new System.Drawing.Size(240, 344);
-            this.DGVToolItemQuote.TabIndex = 0;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(21, 13);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(67, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "工程名稱：";
             // 
-            // DGVToolVendorAll
+            // labelProjectName
             // 
-            this.DGVToolVendorAll.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DGVToolVendorAll.Location = new System.Drawing.Point(610, 7);
-            this.DGVToolVendorAll.Name = "DGVToolVendorAll";
-            this.DGVToolVendorAll.Size = new System.Drawing.Size(240, 344);
-            this.DGVToolVendorAll.TabIndex = 0;
+            this.labelProjectName.AutoSize = true;
+            this.labelProjectName.Location = new System.Drawing.Point(88, 13);
+            this.labelProjectName.Name = "labelProjectName";
+            this.labelProjectName.Size = new System.Drawing.Size(35, 13);
+            this.labelProjectName.TabIndex = 5;
+            this.labelProjectName.Text = "label1";
             // 
-            // DGVToolVendorSelected
+            // label2
             // 
-            this.DGVToolVendorSelected.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DGVToolVendorSelected.Location = new System.Drawing.Point(856, 7);
-            this.DGVToolVendorSelected.Name = "DGVToolVendorSelected";
-            this.DGVToolVendorSelected.Size = new System.Drawing.Size(240, 344);
-            this.DGVToolVendorSelected.TabIndex = 0;
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(430, 11);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(67, 13);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "估價單名稱";
             // 
-            // btnToolItemImport
+            // textBoxQuoteNo
             // 
-            this.btnToolItemImport.Location = new System.Drawing.Point(107, 357);
-            this.btnToolItemImport.Name = "btnToolItemImport";
-            this.btnToolItemImport.Size = new System.Drawing.Size(75, 23);
-            this.btnToolItemImport.TabIndex = 1;
-            this.btnToolItemImport.Text = "匯入";
-            this.btnToolItemImport.UseVisualStyleBackColor = true;
+            this.textBoxQuoteNo.Location = new System.Drawing.Point(284, 10);
+            this.textBoxQuoteNo.Name = "textBoxQuoteNo";
+            this.textBoxQuoteNo.Size = new System.Drawing.Size(100, 20);
+            this.textBoxQuoteNo.TabIndex = 4;
             // 
-            // btnToolItemDelete
+            // label3
             // 
-            this.btnToolItemDelete.Location = new System.Drawing.Point(325, 357);
-            this.btnToolItemDelete.Name = "btnToolItemDelete";
-            this.btnToolItemDelete.Size = new System.Drawing.Size(75, 23);
-            this.btnToolItemDelete.TabIndex = 1;
-            this.btnToolItemDelete.Text = "刪除";
-            this.btnToolItemDelete.UseVisualStyleBackColor = true;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(211, 12);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(67, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "估價單編號";
             // 
-            // btnToolVendorImport
+            // labelNoEmptyWarning
             // 
-            this.btnToolVendorImport.Location = new System.Drawing.Point(717, 357);
-            this.btnToolVendorImport.Name = "btnToolVendorImport";
-            this.btnToolVendorImport.Size = new System.Drawing.Size(75, 23);
-            this.btnToolVendorImport.TabIndex = 1;
-            this.btnToolVendorImport.Text = "button1";
-            this.btnToolVendorImport.UseVisualStyleBackColor = true;
+            this.labelNoEmptyWarning.AutoSize = true;
+            this.labelNoEmptyWarning.ForeColor = System.Drawing.Color.Red;
+            this.labelNoEmptyWarning.Location = new System.Drawing.Point(284, 37);
+            this.labelNoEmptyWarning.Name = "labelNoEmptyWarning";
+            this.labelNoEmptyWarning.Size = new System.Drawing.Size(91, 13);
+            this.labelNoEmptyWarning.TabIndex = 6;
+            this.labelNoEmptyWarning.Text = "編號不能是空白";
+            this.labelNoEmptyWarning.Visible = false;
             // 
-            // btnToolVendorDelete
+            // labelNameEmptyWarning
             // 
-            this.btnToolVendorDelete.Location = new System.Drawing.Point(932, 357);
-            this.btnToolVendorDelete.Name = "btnToolVendorDelete";
-            this.btnToolVendorDelete.Size = new System.Drawing.Size(75, 23);
-            this.btnToolVendorDelete.TabIndex = 1;
-            this.btnToolVendorDelete.Text = "button1";
-            this.btnToolVendorDelete.UseVisualStyleBackColor = true;
+            this.labelNameEmptyWarning.AutoSize = true;
+            this.labelNameEmptyWarning.ForeColor = System.Drawing.Color.Red;
+            this.labelNameEmptyWarning.Location = new System.Drawing.Point(503, 36);
+            this.labelNameEmptyWarning.Name = "labelNameEmptyWarning";
+            this.labelNameEmptyWarning.Size = new System.Drawing.Size(91, 13);
+            this.labelNameEmptyWarning.TabIndex = 7;
+            this.labelNameEmptyWarning.Text = "名稱不能是空白";
+            this.labelNameEmptyWarning.Visible = false;
             // 
             // CreateVendorQuotationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1270, 561);
+            this.Controls.Add(this.labelNameEmptyWarning);
+            this.Controls.Add(this.labelNoEmptyWarning);
+            this.Controls.Add(this.labelProjectName);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.textBoxQuoteNo);
+            this.Controls.Add(this.textBoxQuoteName);
             this.Controls.Add(this.btnCancle);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.tabClass);
@@ -486,26 +686,31 @@
             this.Text = "建立廠商報價單";
             this.tabClass.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGVMaterialVendorSelected)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DGVMaterialVendorAll)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DGVMaterialItemQuote)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DGVMaterialItemSelected)).EndInit();
             this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGVLaborVendorSelected)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DGVLaborVendorAll)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DGVLaborItemQuote)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DGVLaborItemSelected)).EndInit();
             this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGVOutsourceVendorSelected)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DGVOutsourceVendorAll)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DGVOutsourceItemQuote)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DGVOutsourceItemSelected)).EndInit();
             this.tabPage4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.DGVToolItemSelected)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DGVToolItemQuote)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DGVToolVendorAll)).EndInit();
+            this.tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGVToolVendorSelected)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DGVToolVendorAll)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DGVToolItemQuote)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DGVToolItemSelected)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -550,6 +755,22 @@
         private System.Windows.Forms.DataGridView DGVToolVendorAll;
         private System.Windows.Forms.DataGridView DGVToolItemQuote;
         private System.Windows.Forms.DataGridView DGVToolItemSelected;
+        private System.Windows.Forms.TextBox textBoxQuoteName;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelProjectName;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox textBoxQuoteNo;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label labelNoEmptyWarning;
+        private System.Windows.Forms.Label labelNameEmptyWarning;
+        private System.Windows.Forms.Label labelMaterialVendorEmptyWarning;
+        private System.Windows.Forms.Label labelMaterialItemEmptyWarning;
+        private System.Windows.Forms.Label labelLaborItemEmptyWarning;
+        private System.Windows.Forms.Label labelLaborVendorEmptyWarning;
+        private System.Windows.Forms.Label labelOutsourceVendorEmptyWarning;
+        private System.Windows.Forms.Label labelOutsourceItemEmptyWarning;
+        private System.Windows.Forms.Label labelToolVendorEmptyWarning;
+        private System.Windows.Forms.Label labelToolItemEmptyWarning;
 
     }
 }
